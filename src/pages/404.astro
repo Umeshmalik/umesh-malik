@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PAGE_FAULT - umesh.OS</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="bsod" id="bsod-screen">
+      <div class="bsod-title">umesh.OS</div>
+      <br />
+      A fatal exception 0x00000404 has occurred at 0028:C0011E36.<br />
+      The current page you requested does not exist or has been<br />
+      moved to another location. The system has been halted.<br />
+      <br />
+      <span style="font-family: 'VT323', monospace;">
+        ERROR_CODE: PAGE_NOT_FOUND<br />
+        REQUESTED_URL: <span id="url-display">unknown</span><br />
+        SYSTEM: umesh.OS v4.0<br />
+        TIMESTAMP: <span id="timestamp"></span><br />
+      </span>
+      <br />
+      *  Press any key to return to desktop.<br />
+      *  Or stare at this screen. Your choice.<br />
+      <br />
+      <a
+        href="/"
+        style="color: white; text-decoration: underline; cursor: pointer; font-family: 'VT323', monospace; font-size: 20px;"
+      >
+        [ Click here or press any key to reboot ]
+      </a>
+      <br /><br />
+      <span style="font-size: 12px; opacity: 0.5; font-family: 'VT323', monospace;">
+        (Don't worry, no actual computers were harmed. This is just a 404 page.)
+      </span>
+    </div>
+
+    <script>
+      document.getElementById('url-display')!.textContent = window.location.pathname;
+      document.getElementById('timestamp')!.textContent = new Date().toISOString();
+      document.addEventListener('keydown', () => { window.location.href = '/'; });
+    </script>
+  </body>
+</html>

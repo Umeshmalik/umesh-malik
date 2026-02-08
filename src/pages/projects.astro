@@ -1,0 +1,25 @@
+---
+import Desktop from '../layouts/Desktop.astro';
+import DesktopApp from '../components/DesktopApp';
+import DraggableWindow from '../components/windows/DraggableWindow';
+import ProjectsContent from '../components/pages/ProjectsContent';
+---
+
+<Desktop
+  title="projects.exe - Projects | umesh.OS"
+  description="Portfolio projects by Umesh Malik - Chat Application, Workflow Orchestration, Finance Module, and more."
+  currentPage="projects"
+>
+  <DesktopApp currentPage="projects" client:load>
+    <DraggableWindow
+      title="projects.exe - File Explorer"
+      icon="📁"
+      defaultWidth={750}
+      defaultHeight={520}
+      closeHref="/"
+      client:load
+    >
+      <ProjectsContent client:load />
+    </DraggableWindow>
+  </DesktopApp>
+</Desktop>
