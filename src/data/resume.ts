@@ -35,7 +35,7 @@ export const personalInfo = {
   email: 'lucky.umeshmalik@gmail.com',
   linkedin: 'https://linkedin.com/in/umesh-malik',
   github: 'https://github.com/Umeshmalik',
-  website: 'https://umesh-malik.in',
+  website: 'https://umesh-malik.com',
 };
 
 export const experiences: Experience[] = [
@@ -151,7 +151,7 @@ export const projects: Project[] = [
     name: 'umesh.OS - This Website',
     description: 'A retro Windows 95-themed portfolio OS built entirely with AI-assisted development using Cursor AI + Claude. Proves that AI + human creativity = 10x developer output.',
     tech: ['Astro 5', 'React 19', 'Three.js', 'TypeScript', 'Tailwind 4', 'Cursor AI', 'Claude'],
-    url: 'https://umesh-malik.in',
+    url: 'https://umesh-malik.com',
     highlights: [
       'Entire website scaffolded and built via AI pair programming in Cursor IDE',
       '3D interactive skill galaxy, boot sequences, and retro OS UI — all AI-generated with human direction',

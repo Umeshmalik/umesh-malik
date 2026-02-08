@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://umesh-malik.in/sitemap-index.xml
+Sitemap: https://umesh-malik.com/sitemap-index.xml

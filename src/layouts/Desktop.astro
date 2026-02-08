@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 
 interface Props {
   title: string;
@@ -7,29 +7,33 @@ interface Props {
   currentPage: string;
 }
 
-const { title, description = "Umesh Malik - Senior Frontend Engineer | Full-Stack Developer", currentPage } = Astro.props;
+const {
+  title,
+  description = "Umesh Malik - Senior Frontend Engineer | Full-Stack Developer",
+  currentPage,
+} = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    
+
     <!-- SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content="Umesh Malik - umesh.OS" />
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
@@ -39,7 +43,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- Easter Egg for developers who view source -->
-    <meta name="crafted-with" content="Cursor AI + Claude | Vibe-coded by Umesh Malik" />
+    <meta
+      name="crafted-with"
+      content="Cursor AI + Claude | Vibe-coded by Umesh Malik"
+    />
     <!--
     ╔══════════════════════════════════════════════════════════════╗
     ║                                                              ║
@@ -56,15 +63,38 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     ║                                                              ║
     ║   Tech: Astro + React 19 + TypeScript + Three.js + GSAP     ║
     ║   Source: github.com/Umeshmalik                              ║
-    ║   Website: umesh-malik.in | umesh-malik.com                  ║
+    ║   Website: umesh-malik.com | umesh-malik.com                  ║
     ║                                                              ║
     ║   Want to hire me? Open mail.exe on the desktop! 📧          ║
     ║                                                              ║
     ╚══════════════════════════════════════════════════════════════╝
     -->
-    
+
     <!-- Preconnect for fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Preload critical fonts to reduce CLS and speed up FCP -->
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isRFJXGdg.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/pressstart2p/v15/e3t4euO8T-267oIAQAu6jDQyK3nVivM.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
   </head>
   <body>
     <div id="desktop-root">

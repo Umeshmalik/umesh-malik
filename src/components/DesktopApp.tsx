@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, lazy, Suspense } from 'react';
 import BootSequence from './boot/BootSequence';
 import Taskbar from './desktop/Taskbar';
 import type { OpenWindow } from './desktop/Taskbar';
@@ -13,7 +13,6 @@ import PrintDialog from './ui/PrintDialog';
 import MatrixRain from './effects/MatrixRain';
 import ScreenSaver from './effects/ScreenSaver';
 import BSOD from './effects/BSOD';
-import FloatingShapes from './three/FloatingShapes';
 import Terminal from './terminal/Terminal';
 import Snake from './games/Snake';
 import AboutContent from './pages/AboutContent';
@@ -25,7 +24,10 @@ import NotepadContent from './pages/NotepadContent';
 import CodePlayground from './pages/CodePlayground';
 import KeyboardHelp from './pages/KeyboardHelp';
 import SystemProperties from './pages/SystemProperties';
-import SkillGalaxy from './three/SkillGalaxy';
+
+// Lazy-load Three.js components to reduce initial bundle size (~1MB+ savings)
+const FloatingShapes = lazy(() => import('./three/FloatingShapes'));
+const SkillGalaxy = lazy(() => import('./three/SkillGalaxy'));
 import { useCRT } from '../hooks/useCRT';
 import { useSound } from '../hooks/useSound';
 import { useAchievements } from '../hooks/useAchievements';
@@ -265,7 +267,7 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
       'color: #00ff41; background: #0a0a0a; font-family: monospace; font-size: 12px; padding: 8px;'
     );
     console.log(
-      '%cBuilt by Umesh Malik | umesh-malik.in',
+      '%cBuilt by Umesh Malik | umesh-malik.com',
       'color: #1084d0; font-size: 14px; font-weight: bold;'
     );
   }, []);
@@ -366,7 +368,18 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
       case 'skills':
         return (
           <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-            <SkillGalaxy />
+            <Suspense fallback={
+              <div style={{
+                width: '100%', height: '100%', display: 'flex',
+                alignItems: 'center', justifyContent: 'center',
+                fontFamily: "'VT323', monospace", color: '#00ff41',
+                fontSize: '18px', background: '#0a0a0a',
+              }}>
+                Loading Skill Galaxy...
+              </div>
+            }>
+              <SkillGalaxy />
+            </Suspense>
           </div>
         );
       case 'contact':
@@ -460,7 +473,9 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
           {/* 3D Background */}
           <div style={{ position: 'absolute', inset: 0, bottom: '36px', overflow: 'hidden' }}>
             {nightStars}
-            <FloatingShapes />
+            <Suspense fallback={null}>
+              <FloatingShapes />
+            </Suspense>
 
             {/* Desktop Icons */}
             <div

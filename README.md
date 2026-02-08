@@ -2,7 +2,7 @@
 
 A Windows 95-themed personal portfolio website that boots up like a retro operating system in your browser. Built with Astro 5, React 19, Three.js, TypeScript, and Tailwind CSS 4. Fully static, zero server cost, and packed with interactive gimmicks and easter eggs designed to keep visitors exploring for 5-10 minutes.
 
-**Live:** [umesh-malik.in](https://umesh-malik.in) | [umesh-malik.com](https://umesh-malik.com)
+**Live:** [umesh-malik.com](https://umesh-malik.com) | [umesh-malik.com](https://umesh-malik.com)
 
 ---
 
@@ -26,14 +26,18 @@ A Windows 95-themed personal portfolio website that boots up like a retro operat
 ## Pages (6 Total)
 
 ### 1. Home -- The Desktop (`/`)
+
 The landing experience. First-time visitors see a **BIOS boot sequence** (POST screen, memory check, OS loading bar) before arriving at a **Windows 95 desktop** with:
+
 - 3D floating geometric shapes in the background (React Three Fiber)
 - Desktop icons: `about.exe`, `career.exe`, `projects.exe`, `skills.exe`, `mail.exe`, `terminal.exe`, `README.md`
 - Centered welcome message with retro pixel font
 - Double-click any icon to navigate to its page
 
 ### 2. About -- `about.exe` (`/about`)
+
 A terminal-style biography in a draggable window:
+
 - **Typewriter animation** for the professional summary (character by character)
 - Education section (MCA + BCA from DCRUST, Sonipat)
 - Awards: "Performer of the Quarter" with a glowing gold border
@@ -41,7 +45,9 @@ A terminal-style biography in a draggable window:
 - ASCII art footer
 
 ### 3. Experience -- `career.exe` (`/experience`)
+
 Interactive vertical timeline of career progression:
+
 - **Animated stats counters** at the top: 4+ years, $10M+ transactions, 19,000+ zipcodes
 - Each role card has Win95 window chrome (title bar, min/max/close buttons)
 - Cards "install" with a progress bar animation when scrolled into view
@@ -49,7 +55,9 @@ Interactive vertical timeline of career progression:
 - Companies: Expedia Group, Tekion Corp, BYJU's (2 roles)
 
 ### 4. Projects -- `projects.exe` (`/projects`)
+
 A retro **Windows File Explorer** UI:
+
 - Address bar showing the current path
 - Folder tree sidebar with all projects listed
 - Double-click project folders to open them
@@ -58,7 +66,9 @@ A retro **Windows File Explorer** UI:
 - Status bar showing object count
 
 ### 5. Skills -- `skills.exe` (`/skills`)
+
 A **3D interactive skill galaxy** -- the showstopper page:
+
 - Each skill is a glowing orb floating in 3D space
 - Skills clustered by category with colored nebulae:
   - **Frontend Nebula** (green): React, TypeScript, JavaScript, Next.js, Vue.js, HTML5, CSS3, Tailwind
@@ -71,7 +81,9 @@ A **3D interactive skill galaxy** -- the showstopper page:
 - Color-coded legend in the bottom-left corner
 
 ### 6. Contact -- `mail.exe` (`/contact`)
+
 A retro **email client** (Outlook Express style):
+
 - **Compose tab**: Pre-filled "To" field, subject input, message textarea, Send button (opens `mailto:` link)
 - **Inbox tab**: 4 humorous fake emails from "recruiters" (NASA, Apple, BigTech, Startup)
 - Click any email to preview it
@@ -209,7 +221,8 @@ umesh-malik/
 ## Getting Started
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) v18+ 
+
+- [Node.js](https://nodejs.org/) v18+
 - [pnpm](https://pnpm.io/) v8+
 
 ### Install & Run
@@ -229,6 +242,7 @@ pnpm preview
 ```
 
 ### Build Output
+
 The `pnpm build` command generates a fully static site in the `dist/` directory. No server required. Deploy the `dist/` folder to any static hosting provider.
 
 ---
@@ -238,21 +252,24 @@ The `pnpm build` command generates a fully static site in the `dist/` directory.
 The site is configured for static output (`output: "static"` in `astro.config.mjs`) and can be deployed to any static hosting platform:
 
 ### Cloudflare Pages (Recommended)
+
 ```bash
 # Connect your repo on Cloudflare Pages dashboard
 # Build command: pnpm build
 # Build output directory: dist
-# Add custom domains: umesh-malik.in, umesh-malik.com
+# Add custom domains: umesh-malik.com, umesh-malik.com
 ```
 
 ### Vercel
+
 ```bash
 # Connect your repo on Vercel dashboard
 # Framework preset: Astro
-# Custom domains: umesh-malik.in, umesh-malik.com
+# Custom domains: umesh-malik.com, umesh-malik.com
 ```
 
 ### Netlify
+
 ```bash
 # Connect your repo on Netlify dashboard
 # Build command: pnpm build
@@ -265,7 +282,7 @@ The site is configured for static output (`output: "static"` in `astro.config.mj
 
 - Unique `<title>` and `<meta description>` on every page
 - Open Graph and Twitter Card meta tags
-- Canonical URLs pointing to `umesh-malik.in`
+- Canonical URLs pointing to `umesh-malik.com`
 - Auto-generated `sitemap-index.xml` via `@astrojs/sitemap`
 - `robots.txt` allowing all crawlers
 - SVG favicon with "UM" monogram
