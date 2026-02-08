@@ -7,6 +7,9 @@ import ContextMenu from './desktop/ContextMenu';
 import DraggableWindow from './windows/DraggableWindow';
 import AchievementToast from './ui/AchievementToast';
 import Clippy from './ui/Clippy';
+import CommandPalette from './ui/CommandPalette';
+import HireMeBadge from './ui/HireMeBadge';
+import PrintDialog from './ui/PrintDialog';
 import MatrixRain from './effects/MatrixRain';
 import ScreenSaver from './effects/ScreenSaver';
 import BSOD from './effects/BSOD';
@@ -17,12 +20,20 @@ import AboutContent from './pages/AboutContent';
 import ExperienceContent from './pages/ExperienceContent';
 import ProjectsContent from './pages/ProjectsContent';
 import ContactContent from './pages/ContactContent';
+import GitHubContent from './pages/GitHubContent';
+import NotepadContent from './pages/NotepadContent';
+import CodePlayground from './pages/CodePlayground';
+import KeyboardHelp from './pages/KeyboardHelp';
+import SystemProperties from './pages/SystemProperties';
 import SkillGalaxy from './three/SkillGalaxy';
 import { useCRT } from '../hooks/useCRT';
 import { useSound } from '../hooks/useSound';
 import { useAchievements } from '../hooks/useAchievements';
 import { useKonamiCode } from '../hooks/useKonamiCode';
 import { useIdleTimer } from '../hooks/useIdleTimer';
+import { getTimeGreeting, getDesktopTint, getTimePeriod } from '../data/dynamic';
+import { useTheme, type ThemeId } from '../hooks/useTheme';
+import ThemePicker from './ui/ThemePicker';
 
 // App definitions
 interface AppDef {
@@ -32,17 +43,27 @@ interface AppDef {
   label: string;
   width: number;
   height: number;
+  showOnDesktop?: boolean;
 }
 
 const APP_DEFS: AppDef[] = [
-  { id: 'about', title: 'about.exe - Umesh Malik', icon: '👤', label: 'about.exe', width: 700, height: 520 },
-  { id: 'experience', title: 'career.exe - Experience', icon: '💼', label: 'career.exe', width: 750, height: 550 },
-  { id: 'projects', title: 'projects.exe - File Explorer', icon: '📁', label: 'projects.exe', width: 750, height: 520 },
-  { id: 'skills', title: 'skills.exe - Skill Galaxy', icon: '🌌', label: 'skills.exe', width: 800, height: 560 },
-  { id: 'contact', title: 'mail.exe - umesh.OS Mail', icon: '📧', label: 'mail.exe', width: 700, height: 500 },
-  { id: 'terminal', title: 'terminal.exe', icon: '💻', label: 'terminal.exe', width: 650, height: 420 },
-  { id: 'snake', title: 'snake.exe', icon: '🐍', label: 'snake.exe', width: 420, height: 480 },
+  { id: 'about', title: 'about.exe - Umesh Malik', icon: '👤', label: 'about.exe', width: 700, height: 520, showOnDesktop: true },
+  { id: 'experience', title: 'career.exe - Experience', icon: '💼', label: 'career.exe', width: 750, height: 550, showOnDesktop: true },
+  { id: 'projects', title: 'projects.exe - File Explorer', icon: '📁', label: 'projects.exe', width: 750, height: 520, showOnDesktop: true },
+  { id: 'skills', title: 'skills.exe - Skill Galaxy', icon: '🌌', label: 'skills.exe', width: 800, height: 560, showOnDesktop: true },
+  { id: 'contact', title: 'mail.exe - umesh.OS Mail', icon: '📧', label: 'mail.exe', width: 700, height: 500, showOnDesktop: true },
+  { id: 'github', title: 'github.exe - System Monitor', icon: '🐙', label: 'github.exe', width: 600, height: 480, showOnDesktop: true },
+  { id: 'terminal', title: 'terminal.exe', icon: '💻', label: 'terminal.exe', width: 650, height: 420, showOnDesktop: true },
+  { id: 'snake', title: 'snake.exe', icon: '🐍', label: 'snake.exe', width: 420, height: 480, showOnDesktop: false },
+  { id: 'notepad', title: 'notepad.exe - Blog', icon: '📝', label: 'notepad.exe', width: 680, height: 520, showOnDesktop: true },
+  { id: 'code', title: 'code.exe - Playground', icon: '🧪', label: 'code.exe', width: 800, height: 520, showOnDesktop: true },
+  { id: 'keyboard', title: 'keyboard.exe - Shortcuts', icon: '⌨️', label: 'keyboard.exe', width: 500, height: 400, showOnDesktop: false },
+  { id: 'system', title: 'System Properties', icon: '🖥️', label: 'sysinfo.exe', width: 480, height: 540, showOnDesktop: false },
+  { id: 'theme', title: 'Display Properties', icon: '🎨', label: 'themes.exe', width: 400, height: 380, showOnDesktop: false },
+  { id: 'print', title: 'print.exe', icon: '🖨️', label: 'print.exe', width: 0, height: 0, showOnDesktop: true },
 ];
+
+const DESKTOP_APPS = APP_DEFS.filter((a) => a.showOnDesktop);
 
 interface WindowState {
   id: string;
@@ -56,11 +77,26 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
   const [nextZ, setNextZ] = useState(1000);
   const [showMatrix, setShowMatrix] = useState(false);
   const [showBSOD, setShowBSOD] = useState(false);
+  const [showPrintDialog, setShowPrintDialog] = useState(false);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [contextMenu, setContextMenu] = useState({ x: 0, y: 0, open: false });
   const { crtEnabled, toggle: toggleCRT } = useCRT();
   const { soundEnabled, toggle: toggleSound, playBoot, playClick, playWindowOpen, playWindowClose } = useSound();
   const { unlock, newAchievement } = useAchievements();
   const { isIdle, dismiss: dismissIdle } = useIdleTimer(60000);
+  const { themeId, theme, setTheme } = useTheme();
+
+  // Time-based personalization
+  const timePeriod = getTimePeriod();
+  const desktopBg = themeId === 'win95' ? getDesktopTint() : theme.desktopBg;
+  const greeting = getTimeGreeting();
+
+  // Night owl achievement
+  useEffect(() => {
+    if (timePeriod === 'night' && booted) {
+      unlock('night-owl');
+    }
+  }, [timePeriod, booted, unlock]);
 
   // Check if already booted
   useEffect(() => {
@@ -102,6 +138,12 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
 
   // Open an app
   const openApp = useCallback((appId: string) => {
+    // Special case: print opens a dialog, not a window
+    if (appId === 'print') {
+      setShowPrintDialog(true);
+      return;
+    }
+
     playWindowOpen();
     trackVisit(appId);
 
@@ -151,6 +193,83 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
     unlock('hacker');
   });
 
+  // Global keyboard shortcuts
+  useEffect(() => {
+    if (!booted) return;
+
+    const handler = (e: KeyboardEvent) => {
+      // Ctrl+K / Cmd+K -> Command Palette
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette((prev) => !prev);
+        unlock('keyboard-warrior');
+        return;
+      }
+
+      // Esc -> Close active window or command palette
+      if (e.key === 'Escape') {
+        if (showCommandPalette) {
+          setShowCommandPalette(false);
+          return;
+        }
+        // Close the top-most (highest z) window
+        if (openWindowIds.length > 0) {
+          const topWin = openWindowIds.reduce((a, b) => (a.zIndex > b.zIndex ? a : b));
+          closeApp(topWin.id);
+        }
+        return;
+      }
+
+      // Alt+F4 -> Close active window (retro!)
+      if (e.altKey && e.key === 'F4') {
+        e.preventDefault();
+        if (openWindowIds.length > 0) {
+          const topWin = openWindowIds.reduce((a, b) => (a.zIndex > b.zIndex ? a : b));
+          closeApp(topWin.id);
+        }
+        return;
+      }
+
+      // Alt+1 through Alt+9 -> Open app by position
+      if (e.altKey && e.key >= '1' && e.key <= '9') {
+        e.preventDefault();
+        const index = parseInt(e.key) - 1;
+        if (index < APP_DEFS.length) {
+          openApp(APP_DEFS[index].id);
+        }
+        return;
+      }
+    };
+
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [booted, openWindowIds, showCommandPalette, closeApp, openApp, unlock]);
+
+  // Console easter egg
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    console.log(
+      '%c\n' +
+      '  ╔══════════════════════════════════════╗\n' +
+      '  ║           umesh.OS v4.0              ║\n' +
+      '  ║                                      ║\n' +
+      '  ║  Hey developer! 👋                   ║\n' +
+      '  ║  Like what you see?                  ║\n' +
+      '  ║                                      ║\n' +
+      '  ║  This was vibe-coded with            ║\n' +
+      '  ║  Cursor AI + Claude.                 ║\n' +
+      '  ║                                      ║\n' +
+      '  ║  Check the source on GitHub:         ║\n' +
+      '  ║  github.com/Umeshmalik               ║\n' +
+      '  ╚══════════════════════════════════════╝\n',
+      'color: #00ff41; background: #0a0a0a; font-family: monospace; font-size: 12px; padding: 8px;'
+    );
+    console.log(
+      '%cBuilt by Umesh Malik | umesh-malik.in',
+      'color: #1084d0; font-size: 14px; font-weight: bold;'
+    );
+  }, []);
+
   // Context menu
   const handleContextMenu = useCallback(
     (e: React.MouseEvent) => {
@@ -166,6 +285,7 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
     setShowBSOD(true);
   }, []);
 
+
   // Active window = highest z-index
   const activeWindowId = openWindowIds.length > 0
     ? openWindowIds.reduce((a, b) => (a.zIndex > b.zIndex ? a : b)).id
@@ -180,6 +300,59 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
       icon: def?.icon || '📄',
     };
   });
+
+  // Command palette items
+  const paletteItems = [
+    ...APP_DEFS.filter((a) => a.id !== 'print').map((app) => ({
+      id: `open-${app.id}`,
+      label: `Open ${app.label}`,
+      icon: app.icon,
+      category: 'Applications',
+      action: () => openApp(app.id),
+    })),
+    {
+      id: 'print-resume',
+      label: 'Print / Download Resume',
+      icon: '🖨️',
+      category: 'Actions',
+      action: () => setShowPrintDialog(true),
+    },
+    {
+      id: 'toggle-crt',
+      label: `Toggle CRT Effect (${crtEnabled ? 'ON' : 'OFF'})`,
+      icon: '📺',
+      category: 'Settings',
+      action: toggleCRT,
+    },
+    {
+      id: 'toggle-sound',
+      label: `Toggle Sound (${soundEnabled ? 'ON' : 'OFF'})`,
+      icon: soundEnabled ? '🔊' : '🔇',
+      category: 'Settings',
+      action: toggleSound,
+    },
+    {
+      id: 'matrix',
+      label: 'Enter the Matrix',
+      icon: '🟢',
+      category: 'Easter Eggs',
+      action: () => { setShowMatrix(true); unlock('hacker'); },
+    },
+    {
+      id: 'change-theme',
+      label: 'Change Desktop Theme',
+      icon: '🎨',
+      category: 'Settings',
+      action: () => openApp('theme'),
+    },
+    {
+      id: 'shutdown',
+      label: 'Shut Down',
+      icon: '🔌',
+      category: 'System',
+      action: handleShutdown,
+    },
+  ];
 
   // Render app content by id
   const renderAppContent = (appId: string) => {
@@ -198,6 +371,18 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
         );
       case 'contact':
         return <ContactContent />;
+      case 'github':
+        return <GitHubContent />;
+      case 'notepad':
+        return <NotepadContent />;
+      case 'code':
+        return <CodePlayground />;
+      case 'keyboard':
+        return <KeyboardHelp />;
+      case 'system':
+        return <SystemProperties />;
+      case 'theme':
+        return <ThemePicker currentTheme={themeId} onChangeTheme={setTheme} />;
       case 'terminal':
         return (
           <Terminal
@@ -209,8 +394,8 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
                 '/skills': 'skills',
                 '/contact': 'contact',
               };
-              const appId = appMap[path];
-              if (appId) openApp(appId);
+              const id = appMap[path];
+              if (id) openApp(id);
             }}
             onMatrix={() => {
               setShowMatrix(true);
@@ -232,6 +417,28 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
     }
   };
 
+  // Night-time stars background
+  const nightStars = timePeriod === 'night' ? (
+    <div style={{
+      position: 'absolute',
+      inset: 0,
+      pointerEvents: 'none',
+      zIndex: 0,
+      background: `
+        radial-gradient(1px 1px at 10% 10%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 20% 40%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1px 1px at 40% 20%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 60% 30%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 70% 70%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 50% 80%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.3), transparent)
+      `,
+    }} />
+  ) : null;
+
   return (
     <div
       onContextMenu={handleContextMenu}
@@ -240,7 +447,8 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
         height: '100vh',
         overflow: 'hidden',
         position: 'relative',
-        background: '#008080',
+        background: desktopBg,
+        transition: 'background 0.5s ease',
       }}
     >
       {/* Boot Sequence */}
@@ -251,6 +459,7 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
         <>
           {/* 3D Background */}
           <div style={{ position: 'absolute', inset: 0, bottom: '36px', overflow: 'hidden' }}>
+            {nightStars}
             <FloatingShapes />
 
             {/* Desktop Icons */}
@@ -266,7 +475,7 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
                 maxWidth: '600px',
               }}
             >
-              {APP_DEFS.map((app) => (
+              {DESKTOP_APPS.map((app) => (
                 <DesktopIcon
                   key={app.id}
                   label={app.label}
@@ -276,7 +485,7 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
               ))}
               <DesktopIcon
                 label="README.md"
-                icon="📝"
+                icon="📄"
                 onOpen={() => openApp('about')}
               />
             </div>
@@ -298,12 +507,12 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
                 }}
               >
                 <div style={{ fontSize: '10px', marginBottom: '8px', color: '#00ff41', textShadow: '0 0 10px rgba(0,255,65,0.5)' }}>
-                  Welcome to
+                  {greeting}! Welcome to
                 </div>
                 <div style={{ fontSize: '24px', marginBottom: '12px' }}>umesh.OS</div>
                 <div style={{ fontSize: '8px', color: '#c0c0c0', lineHeight: '1.6' }}>
                   Double-click icons to explore<br />
-                  Right-click for more options<br />
+                  Press Ctrl+K for command palette<br />
                   Try the Konami code!
                 </div>
               </div>
@@ -313,7 +522,7 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
           {/* Open Windows */}
           {openWindowIds.map((win) => {
             const def = APP_DEFS.find((d) => d.id === win.id);
-            if (!def) return null;
+            if (!def || def.width === 0) return null;
             return (
               <DraggableWindow
                 key={win.id}
@@ -353,6 +562,23 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
             onClose={() => setContextMenu((p) => ({ ...p, open: false }))}
             onRefresh={() => window.location.reload()}
           />
+
+          {/* Command Palette */}
+          <CommandPalette
+            isOpen={showCommandPalette}
+            onClose={() => setShowCommandPalette(false)}
+            items={paletteItems}
+          />
+
+          {/* Print Dialog */}
+          <PrintDialog
+            isOpen={showPrintDialog}
+            onClose={() => setShowPrintDialog(false)}
+            onAchievement={(id) => unlock(id)}
+          />
+
+          {/* Hire Me Badge */}
+          <HireMeBadge onOpenContact={() => openApp('contact')} />
 
           {/* Clippy */}
           <Clippy />

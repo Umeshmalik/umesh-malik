@@ -13,7 +13,14 @@ const menuItems = [
   { id: 'projects', label: 'Projects', icon: '📁' },
   { id: 'skills', label: 'Skills', icon: '🌌' },
   { id: 'contact', label: 'Contact', icon: '📧' },
+  { id: 'github', label: 'GitHub Activity', icon: '🐙' },
+  { id: 'notepad', label: 'Notepad (Blog)', icon: '📝' },
+  { id: 'code', label: 'Code Playground', icon: '🧪' },
   { id: 'terminal', label: 'Terminal', icon: '💻' },
+  { id: 'keyboard', label: 'Keyboard Shortcuts', icon: '⌨️' },
+  { id: 'system', label: 'System Properties', icon: '🖥️' },
+  { id: 'print', label: 'Print Resume', icon: '🖨️' },
+  { id: 'theme', label: 'Desktop Themes', icon: '🎨' },
 ];
 
 export default function StartMenu({ isOpen, onClose, onShutdown, onOpenApp }: StartMenuProps) {

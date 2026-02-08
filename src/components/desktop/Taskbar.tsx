@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Clock from './Clock';
 import StartMenu from './StartMenu';
+import VisitorCounter from '../ui/VisitorCounter';
 
 export interface OpenWindow {
   id: string;
@@ -167,6 +168,7 @@ export default function Taskbar({
           {soundEnabled ? '🔊' : '🔇'}
         </button>
 
+        <VisitorCounter />
         <Clock />
       </div>
     </div>
