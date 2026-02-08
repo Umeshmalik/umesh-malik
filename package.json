@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy": "astro build && wrangler pages deploy",
+    "cf:preview": "wrangler pages dev"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
@@ -25,13 +27,15 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
-      "sharp"
+      "sharp",
+      "workerd"
     ]
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
     "@types/howler": "^2.2.12",
     "@types/three": "^0.182.0",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "wrangler": "^4.63.0"
   }
 }
