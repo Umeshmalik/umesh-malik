@@ -1,0 +1,26 @@
+---
+import Desktop from "../layouts/Desktop.astro";
+import DesktopApp from "../components/DesktopApp";
+import DraggableWindow from "../components/windows/DraggableWindow";
+import ContactContent from "../components/pages/ContactContent";
+---
+
+<Desktop
+  title="Contact Umesh Malik — Senior Frontend Engineer | Hire Me"
+  description="Get in touch with Umesh Malik, Senior Frontend Engineer at Expedia Group. Reach out via email, LinkedIn, or GitHub for collaboration, freelance projects, or job opportunities. Open to connecting with fellow engineers and recruiters."
+  keywords="contact Umesh Malik, hire Umesh Malik, Umesh Malik email, Umesh Malik LinkedIn, frontend engineer for hire, React developer contact, Umesh Malik GitHub"
+  currentPage="contact"
+>
+  <DesktopApp currentPage="contact" client:load>
+    <DraggableWindow
+      title="mail.exe - umesh.OS Mail"
+      icon="📧"
+      defaultWidth={700}
+      defaultHeight={500}
+      closeHref="/"
+      client:load
+    >
+      <ContactContent client:load />
+    </DraggableWindow>
+  </DesktopApp>
+</Desktop>

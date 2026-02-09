@@ -1,0 +1,26 @@
+---
+import Desktop from "../layouts/Desktop.astro";
+import DesktopApp from "../components/DesktopApp";
+import DraggableWindow from "../components/windows/DraggableWindow";
+import ExperienceContent from "../components/pages/ExperienceContent";
+---
+
+<Desktop
+  title={`Umesh Malik — Work Experience | Expedia Group, Tekion Corp, BYJU'S`}
+  description={`Explore ${new Date().getFullYear() - 2021}+ years of professional experience of Umesh Malik — currently SDE-2 at Expedia Group, previously at Tekion Corp and BYJU'S. Expert in React, TypeScript, frontend architecture, workflow orchestration, and scalable web applications.`}
+  keywords="Umesh Malik experience, Umesh Malik resume, Umesh Malik Expedia Group, Umesh Malik Tekion, Umesh Malik BYJU'S, frontend engineer experience, SDE-2 Expedia, software engineer career"
+  currentPage="experience"
+>
+  <DesktopApp currentPage="experience" client:load>
+    <DraggableWindow
+      title="career.exe - Professional Experience"
+      icon="💼"
+      defaultWidth={750}
+      defaultHeight={550}
+      closeHref="/"
+      client:load
+    >
+      <ExperienceContent client:load />
+    </DraggableWindow>
+  </DesktopApp>
+</Desktop>

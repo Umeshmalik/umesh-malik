@@ -1,0 +1,28 @@
+---
+import Desktop from '../layouts/Desktop.astro';
+import DesktopApp from '../components/DesktopApp';
+import DraggableWindow from '../components/windows/DraggableWindow';
+import SkillGalaxy from '../components/three/SkillGalaxy';
+---
+
+<Desktop
+  title="Umesh Malik — Technical Skills | React, TypeScript, JavaScript, Node.js & More"
+  description="Discover the technical skills of Umesh Malik, Senior Frontend Engineer — proficient in React, TypeScript, JavaScript, Next.js, Node.js, Tailwind CSS, Three.js, MongoDB, PostgreSQL, and modern frontend tools. Visualized as an interactive 3D skill galaxy."
+  keywords="Umesh Malik skills, frontend engineer skills, React expert, TypeScript developer skills, JavaScript proficiency, Node.js developer, full-stack skills, web developer technologies, Umesh Malik tech stack"
+  currentPage="skills"
+>
+  <DesktopApp currentPage="skills" client:load>
+    <DraggableWindow
+      title="skills.exe - Skill Galaxy"
+      icon="🌌"
+      defaultWidth={800}
+      defaultHeight={560}
+      closeHref="/"
+      client:load
+    >
+      <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+        <SkillGalaxy client:visible />
+      </div>
+    </DraggableWindow>
+  </DesktopApp>
+</Desktop>

@@ -1,0 +1,31 @@
+# Umesh Malik — Senior Frontend Engineer Portfolio
+# https://umesh-malik.com
+
+User-agent: *
+Allow: /
+Disallow: /404
+
+# Sitemaps
+Sitemap: https://umesh-malik.com/sitemap-index.xml
+
+# Crawl-delay (optional, for polite bots)
+Crawl-delay: 1
+
+# Allow all major search engine bots explicitly
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /

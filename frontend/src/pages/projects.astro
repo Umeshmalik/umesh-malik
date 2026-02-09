@@ -1,0 +1,26 @@
+---
+import Desktop from '../layouts/Desktop.astro';
+import DesktopApp from '../components/DesktopApp';
+import DraggableWindow from '../components/windows/DraggableWindow';
+import ProjectsContent from '../components/pages/ProjectsContent';
+---
+
+<Desktop
+  title="Projects by Umesh Malik — Frontend Engineer Portfolio & Open Source Work"
+  description="Browse portfolio projects by Umesh Malik, Senior Frontend Engineer — including a real-time chat app, enterprise workflow orchestration platform, finance & insurance module, and payment systems processing $10M+ monthly. Built with React, TypeScript, Node.js, and more."
+  keywords="Umesh Malik projects, frontend engineer portfolio, React projects, TypeScript projects, chat application, workflow orchestration, Umesh Malik GitHub, open source developer, web development portfolio"
+  currentPage="projects"
+>
+  <DesktopApp currentPage="projects" client:load>
+    <DraggableWindow
+      title="projects.exe - File Explorer"
+      icon="📁"
+      defaultWidth={750}
+      defaultHeight={520}
+      closeHref="/"
+      client:load
+    >
+      <ProjectsContent client:load />
+    </DraggableWindow>
+  </DesktopApp>
+</Desktop>
