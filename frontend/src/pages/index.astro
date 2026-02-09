@@ -1,11 +1,12 @@
 ---
-import Desktop from '../layouts/Desktop.astro';
-import ResponsiveApp from '../components/ResponsiveApp';
+import Desktop from "../layouts/Desktop.astro";
+import ResponsiveApp from "../components/ResponsiveApp";
+import { getYearsOfExperience } from "../data/dynamic";
 ---
 
 <Desktop
   title="Umesh Malik — Senior Frontend Engineer | React & TypeScript Expert"
-  description="Umesh Malik is a Senior Frontend Engineer at Expedia Group with 4+ years of experience in React, TypeScript, JavaScript, Node.js, and full-stack web development. Explore his interactive portfolio showcasing projects, skills, and career journey."
+  description={`Umesh Malik is a Senior Frontend Engineer at Expedia Group with ${getYearsOfExperience()}+ years of experience in React, TypeScript, JavaScript, Node.js, and full-stack web development. Explore his interactive portfolio showcasing projects, skills, and career journey.`}
   keywords="Umesh Malik, umesh, malik, frontend engineer, senior frontend engineer, React developer, TypeScript expert, Expedia Group engineer, JavaScript developer, full-stack developer, web developer portfolio, Gurugram developer, software engineer India"
   currentPage="home"
 >

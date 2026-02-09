@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { getYearsOfExperience } from "../data/dynamic";
 
 interface Props {
   title: string;
@@ -10,64 +11,74 @@ interface Props {
 
 const {
   title,
-  description = "Umesh Malik — Senior Frontend Engineer at Expedia Group with 4+ years of experience in React, TypeScript, JavaScript, and full-stack web development. Explore his portfolio, projects, skills, and professional journey.",
+  description = `Umesh Malik — Senior Frontend Engineer at Expedia Group with ${getYearsOfExperience()}+ years of experience in React, TypeScript, JavaScript, and full-stack web development. Explore his portfolio, projects, skills, and professional journey.`,
   currentPage,
   keywords = "Umesh Malik, umesh, malik, frontend engineer, senior frontend engineer, React developer, TypeScript developer, JavaScript developer, full-stack developer, Expedia Group, web developer India, Gurugram developer, software engineer portfolio",
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteUrl = "https://umesh-malik.com";
 const ogImageUrl = `${siteUrl}/og-image.png`;
-const years = new Date().getFullYear() - 2021;
+const years = getYearsOfExperience();
 
 // JSON-LD Structured Data for Person (appears as rich result in Google)
 const personSchema = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
-  "name": "Umesh Malik",
-  "url": siteUrl,
-  "image": ogImageUrl,
-  "jobTitle": "Senior Frontend Engineer",
-  "worksFor": {
+  name: "Umesh Malik",
+  url: siteUrl,
+  image: ogImageUrl,
+  jobTitle: "Senior Frontend Engineer",
+  worksFor: {
     "@type": "Organization",
-    "name": "Expedia Group",
-    "url": "https://www.expediagroup.com"
+    name: "Expedia Group",
+    url: "https://www.expediagroup.com",
   },
-  "description": `Senior Frontend Engineer with ${years}+ years of experience building scalable web applications using React, TypeScript, and modern frontend technologies.`,
-  "email": "lucky.umeshmalik@gmail.com",
-  "address": {
+  description: `Senior Frontend Engineer with ${years}+ years of experience building scalable web applications using React, TypeScript, and modern frontend technologies.`,
+  email: "lucky.umeshmalik@gmail.com",
+  address: {
     "@type": "PostalAddress",
-    "addressLocality": "Gurugram",
-    "addressRegion": "Haryana",
-    "addressCountry": "IN"
+    addressLocality: "Gurugram",
+    addressRegion: "Haryana",
+    addressCountry: "IN",
   },
-  "alumniOf": {
+  alumniOf: {
     "@type": "CollegeOrUniversity",
-    "name": "Deenbandhu Chhotu Ram University of Science and Technology"
+    name: "Deenbandhu Chhotu Ram University of Science and Technology",
   },
-  "sameAs": [
+  sameAs: [
     "https://linkedin.com/in/umesh-malik",
     "https://github.com/Umeshmalik",
-    siteUrl
+    siteUrl,
   ],
-  "knowsAbout": [
-    "React", "TypeScript", "JavaScript", "Next.js", "Node.js",
-    "Frontend Engineering", "Full-Stack Development", "Web Performance",
-    "Tailwind CSS", "Three.js", "REST APIs", "MongoDB", "PostgreSQL"
-  ]
+  knowsAbout: [
+    "React",
+    "TypeScript",
+    "JavaScript",
+    "Next.js",
+    "Node.js",
+    "Frontend Engineering",
+    "Full-Stack Development",
+    "Web Performance",
+    "Tailwind CSS",
+    "Three.js",
+    "REST APIs",
+    "MongoDB",
+    "PostgreSQL",
+  ],
 });
 
 // WebSite schema for sitelinks search box
 const websiteSchema = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": "Umesh Malik — Senior Frontend Engineer",
-  "alternateName": ["Umesh Malik Portfolio", "Umesh Malik"],
-  "url": siteUrl,
-  "description": `Portfolio website of Umesh Malik, a Senior Frontend Engineer at Expedia Group specializing in React, TypeScript, and modern web development.`,
-  "author": {
+  name: "Umesh Malik — Senior Frontend Engineer",
+  alternateName: ["Umesh Malik Portfolio", "Umesh Malik"],
+  url: siteUrl,
+  description: `Portfolio website of Umesh Malik, a Senior Frontend Engineer at Expedia Group specializing in React, TypeScript, and modern web development.`,
+  author: {
     "@type": "Person",
-    "name": "Umesh Malik"
-  }
+    name: "Umesh Malik",
+  },
 });
 ---
 
@@ -83,7 +94,10 @@ const websiteSchema = JSON.stringify({
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content="Umesh Malik" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph / Facebook -->
@@ -91,11 +105,17 @@ const websiteSchema = JSON.stringify({
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:site_name" content="Umesh Malik — Senior Frontend Engineer" />
+    <meta
+      property="og:site_name"
+      content="Umesh Malik — Senior Frontend Engineer"
+    />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Umesh Malik — Senior Frontend Engineer at Expedia Group" />
+    <meta
+      property="og:image:alt"
+      content="Umesh Malik — Senior Frontend Engineer at Expedia Group"
+    />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
@@ -103,10 +123,16 @@ const websiteSchema = JSON.stringify({
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
-    <meta name="twitter:image:alt" content="Umesh Malik — Senior Frontend Engineer at Expedia Group" />
+    <meta
+      name="twitter:image:alt"
+      content="Umesh Malik — Senior Frontend Engineer at Expedia Group"
+    />
 
     <!-- Additional SEO -->
-    <meta name="subject" content="Portfolio of Umesh Malik, Senior Frontend Engineer" />
+    <meta
+      name="subject"
+      content="Portfolio of Umesh Malik, Senior Frontend Engineer"
+    />
     <meta name="rating" content="general" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
