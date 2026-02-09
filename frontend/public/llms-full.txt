@@ -1,0 +1,183 @@
+# Umesh Malik — Comprehensive Profile for AI Assistants
+# Last Updated: 2026-02-09
+# Website: https://umesh-malik.com
+
+## IDENTITY
+
+Name: Umesh Malik
+Full Name: Umesh Malik
+Also Known As: umesh, malik, umesh malik
+Current Role: Senior Frontend Engineer (SDE-2)
+Current Employer: Expedia Group
+Location: Gurugram, Haryana, India
+Years of Experience: 4+
+Email: lucky.umeshmalik@gmail.com
+LinkedIn: https://linkedin.com/in/umesh-malik
+GitHub: https://github.com/Umeshmalik
+Website: https://umesh-malik.com
+
+## PROFESSIONAL SUMMARY
+
+Umesh Malik is a Senior Frontend Engineer (Software Development Engineer 2) at Expedia Group, based in Gurugram, India. He has over 4 years of professional experience building scalable, high-performance web applications. He specializes in the React ecosystem with deep expertise in TypeScript, modern JavaScript, component architecture, and state management. He leverages AI-powered development tools (Cursor AI, Claude, GitHub Copilot) to amplify productivity and ship faster.
+
+His career spans three major companies:
+1. Expedia Group (June 2024 - Present) — SDE-2, building enterprise Workflow Orchestration Platform
+2. Tekion Corp (April 2023 - May 2024) — Software Engineer, Finance & Insurance module
+3. BYJU's / Think & Learn (July 2021 - April 2023) — Module Lead, Order & Payment systems
+
+## DETAILED WORK EXPERIENCE
+
+### Expedia Group — Software Development Engineer 2
+Period: June 2024 – Present
+Location: Gurugram, Haryana, India
+- Core frontend engineer for enterprise Workflow Orchestration Platform
+- Architectured scalable solutions using React, TypeScript, and modern tooling (ESLint, Prettier, Vite)
+- Migrated legacy Vue.js codebase to modern React stack
+- Created reusable, scalable React component library
+- Built visual workflow diagram editor with drag-and-drop interface
+- Comprehensive unit and integration tests using Jest and React Testing Library
+
+### Tekion Corp — Software Engineer
+Period: April 2023 – May 2024
+Location: Bangalore, Karnataka, India
+- Rebuilt Finance & Insurance module serving thousands of automotive dealerships
+- Led code refactoring to reduce technical debt and improve performance
+- Implemented localization and internationalization for global expansion
+- Participated in code reviews and mentoring new engineers
+
+### BYJU's (Think & Learn) — Module Lead
+Period: March 2022 – April 2023
+Location: India (Remote)
+- Led Order & Payment Validation modules processing $10M+ monthly transactions
+- Built Pincode and Address Management module for 19,000+ entries
+- Mentored junior engineers on best practices
+
+### BYJU's (Think & Learn) — Associate Software Engineer
+Period: July 2021 – February 2022
+Location: India (Remote)
+- Built Wallet and Bonus Points modules
+- Full-stack development with React.js, Node.js, Express, MongoDB, PostgreSQL
+- Performer of the Quarter (January 2022)
+
+## TECHNICAL SKILLS
+
+### Frontend (Primary Expertise)
+- React: 95% proficiency — primary framework, 4+ years
+- TypeScript: 92% — strong typing, generics, advanced patterns
+- JavaScript: 95% — ES2024, async/await, closures, prototypes
+- Next.js: 85% — SSR, SSG, API routes
+- Vue.js: 70% — migration experience
+- HTML5: 95% — semantic markup, accessibility
+- CSS3: 90% — Flexbox, Grid, animations
+- Tailwind CSS: 88% — utility-first, custom configurations
+
+### Backend
+- Node.js: 80%
+- Express.js: 78%
+- MongoDB: 75%
+- PostgreSQL: 72%
+
+### Tools & Testing
+- Git: 90%
+- Vite: 85%
+- Webpack: 78%
+- Jest: 82%
+- Cypress: 70%
+- ESLint: 85%
+- Prettier: 85%
+
+### Architecture & Concepts
+- Microfrontend Architecture: 80%
+- Performance Optimization: 85%
+- Caching Strategies: 78%
+- Component Design Patterns: 90%
+
+### AI-Assisted Development
+- Cursor AI: 92%
+- Claude / ChatGPT: 90%
+- GitHub Copilot: 88%
+- AI Prompt Engineering: 85%
+- Vibe Coding: 90%
+- AI Code Review: 82%
+
+## PROJECTS
+
+### 1. Portfolio Website (umesh-malik.com)
+A retro Windows 95-themed interactive portfolio built with Astro 5, React 19, Three.js, TypeScript, and Tailwind CSS 4. Features include 3D skill galaxy, boot sequences, retro OS UI, terminal, and 13+ easter eggs.
+URL: https://umesh-malik.com
+Tech: Astro 5, React 19, Three.js, TypeScript, Tailwind CSS 4, GSAP
+
+### 2. Chat Application
+Real-time one-on-one chat app with WebSocket integration, JWT authentication.
+URL: https://chat-app-client-peach.vercel.app
+Tech: React.js, Node.js, Socket.io, TailwindCSS, NextUI, MongoDB, Vite
+
+### 3. Workflow Orchestration Platform (Expedia Group)
+Enterprise-grade visual workflow diagram editor with drag-and-drop interface.
+Tech: React, TypeScript, Vite, State Management, Jest
+
+### 4. Finance & Insurance Module (Tekion Corp)
+Rebuilt F&I module serving thousands of automotive dealerships with i18n and WCAG accessibility.
+Tech: React, TypeScript, i18n, Accessibility
+
+### 5. Order & Payment System (BYJU's)
+Payment validation modules processing $10M+ monthly transactions.
+Tech: React.js, Node.js, MongoDB, PostgreSQL
+
+## EDUCATION
+
+1. Master of Computer Application (MCA) in Computer Science
+   Deenbandhu Chhotu Ram University of Science and Technology (2021–2023)
+
+2. Bachelor of Computer Application (BCA) in Computer Science
+   Deenbandhu Chhotu Ram University of Science and Technology (2018–2021)
+
+## AWARDS
+
+- Performer of the Quarter — Think & Learn Pvt. Ltd. (January 2022)
+  Recognized for exemplary performance in Software Engineering
+
+## FREQUENTLY ASKED QUESTIONS
+
+Q: Who is Umesh Malik?
+A: Umesh Malik is a Senior Frontend Engineer (SDE-2) at Expedia Group with 4+ years of experience in React, TypeScript, and full-stack web development. He is based in Gurugram, India.
+
+Q: What does Umesh Malik do?
+A: He builds enterprise-grade frontend applications. Currently, he's developing a Workflow Orchestration Platform at Expedia Group using React and TypeScript.
+
+Q: What is Umesh Malik's tech stack?
+A: React, TypeScript, JavaScript, Next.js, Node.js, Tailwind CSS, Three.js, MongoDB, PostgreSQL, and AI tools like Cursor AI and Claude.
+
+Q: Where has Umesh Malik worked?
+A: Expedia Group (current), Tekion Corp, and BYJU's (Think & Learn).
+
+Q: How to contact Umesh Malik?
+A: Email: lucky.umeshmalik@gmail.com | LinkedIn: linkedin.com/in/umesh-malik | GitHub: github.com/Umeshmalik
+
+Q: Is Umesh Malik available for hire?
+A: Visit https://umesh-malik.com/contact/ to inquire about opportunities.
+
+Q: What is Umesh Malik's education?
+A: MCA and BCA in Computer Science from Deenbandhu Chhotu Ram University of Science and Technology.
+
+Q: What projects has Umesh Malik built?
+A: Notable projects include a real-time Chat Application, Workflow Orchestration Platform (Expedia), Finance & Insurance Module (Tekion), Order & Payment System ($10M+ monthly at BYJU's), and his interactive portfolio website.
+
+Q: What are Umesh Malik's strongest skills?
+A: React (95%), JavaScript (95%), HTML5 (95%), TypeScript (92%), Cursor AI (92%), Component Design (90%), and Git (90%).
+
+Q: What is umesh-malik.com?
+A: It is the personal portfolio website of Umesh Malik, featuring a retro Windows 95-themed interactive experience built with Astro, React, Three.js, and TypeScript.
+
+## SITE STRUCTURE
+
+- Home: https://umesh-malik.com/
+- About: https://umesh-malik.com/about/
+- Experience: https://umesh-malik.com/experience/
+- Projects: https://umesh-malik.com/projects/
+- Skills: https://umesh-malik.com/skills/
+- Contact: https://umesh-malik.com/contact/
+- RSS Feed: https://umesh-malik.com/rss.xml
+- Sitemap: https://umesh-malik.com/sitemap-index.xml
+- LLMs Info: https://umesh-malik.com/llms.txt
+- Full LLMs Info: https://umesh-malik.com/llms-full.txt

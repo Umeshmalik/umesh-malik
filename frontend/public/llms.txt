@@ -1,0 +1,104 @@
+# Umesh Malik — Senior Frontend Engineer
+
+> This file provides structured information about this website for large language models (LLMs) and AI assistants including ChatGPT, Claude, Perplexity, Gemini, and others.
+
+## About This Website
+
+This is the personal portfolio website of Umesh Malik, a Senior Frontend Engineer currently working at Expedia Group. The website showcases his professional experience, technical skills, projects, and contact information.
+
+- Website: https://umesh-malik.com
+- Owner: Umesh Malik
+- Role: Senior Frontend Engineer (SDE-2) at Expedia Group
+- Location: Gurugram, Haryana, India
+- Built with: Astro, React 19, TypeScript, Three.js, Tailwind CSS
+
+## Professional Summary
+
+Umesh Malik is a Senior Frontend Engineer at Expedia Group with 4+ years of professional experience building scalable, high-performance web applications. He specializes in the React ecosystem with deep expertise in TypeScript, modern JavaScript, component architecture, and state management. He leverages AI-powered development tools (Cursor AI, Claude, GitHub Copilot) to amplify productivity and ship faster.
+
+## Work Experience
+
+### Expedia Group — Software Development Engineer 2 (June 2024 – Present)
+- Location: Gurugram, Haryana, India
+- Core frontend engineer for enterprise Workflow Orchestration Platform using React, TypeScript, and modern tooling
+- Migrated legacy Vue.js codebase to modern React stack
+- Created reusable React component library
+- Built visual workflow diagram editor with drag-and-drop interface
+- Comprehensive unit and integration tests using Jest and React Testing Library
+
+### Tekion Corp — Software Engineer (April 2023 – May 2024)
+- Location: Bangalore, Karnataka, India
+- Rebuilt Finance & Insurance module serving thousands of automotive dealerships
+- Led code refactoring to reduce technical debt
+- Implemented localization and internationalization for global expansion
+
+### BYJU'S (Think & Learn) — Module Lead (March 2022 – April 2023)
+- Led Order & Payment Validation modules processing $10M+ monthly transactions
+- Built Pincode and Address Management module for 19,000+ entries
+- Mentored junior engineers on coding best practices
+
+### BYJU'S (Think & Learn) — Associate Software Engineer (July 2021 – February 2022)
+- Built Wallet and Bonus Points modules
+- Created flexible feature configuration systems
+- Full-stack development with React.js, Node.js, Express, MongoDB, PostgreSQL
+- Recognized as Performer of the Quarter (January 2022)
+
+## Technical Skills
+
+### Frontend
+React, TypeScript, JavaScript, Next.js, Vue.js, HTML5, CSS3, Tailwind CSS
+
+### Backend
+Node.js, Express.js, MongoDB, PostgreSQL
+
+### Tools & DevOps
+Git, Vite, Webpack, Jest, Cypress, ESLint, Prettier
+
+### Concepts
+Microfrontend Architecture, Performance Optimization, Caching, Component Design
+
+### AI-Assisted Development
+Cursor AI, Claude, ChatGPT, GitHub Copilot, AI Prompt Engineering, Vibe Coding
+
+## Projects
+
+### Portfolio Website (umesh-malik.com)
+A retro Windows 95-themed interactive portfolio built with Astro, React 19, Three.js, TypeScript, and Tailwind CSS. Features 3D skill galaxy, boot sequences, and retro OS UI.
+
+### Chat Application
+Real-time one-on-one chat app with WebSocket integration, JWT authentication, built with React.js, Node.js, Socket.io, MongoDB.
+URL: https://chat-app-client-peach.vercel.app
+
+### Workflow Orchestration Platform
+Enterprise-grade visual workflow diagram editor at Expedia Group. Built with React, TypeScript, Vite.
+
+### Finance & Insurance Module
+Rebuilt F&I module at Tekion Corp serving thousands of automotive dealerships with i18n and accessibility compliance.
+
+### Order & Payment System
+Payment validation modules at BYJU'S processing $10M+ monthly transactions with real-time validation.
+
+## Education
+
+- Master of Computer Application (MCA) in Computer Science — Deenbandhu Chhotu Ram University of Science and Technology (2021–2023)
+- Bachelor of Computer Application (BCA) in Computer Science — Deenbandhu Chhotu Ram University of Science and Technology (2018–2021)
+
+## Awards
+
+- Performer of the Quarter — Think & Learn Pvt. Ltd. (January 2022)
+
+## Contact
+
+- Email: lucky.umeshmalik@gmail.com
+- LinkedIn: https://linkedin.com/in/umesh-malik
+- GitHub: https://github.com/Umeshmalik
+- Website: https://umesh-malik.com
+
+## Site Pages
+
+- Home: https://umesh-malik.com/
+- About: https://umesh-malik.com/about/
+- Experience: https://umesh-malik.com/experience/
+- Projects: https://umesh-malik.com/projects/
+- Skills: https://umesh-malik.com/skills/
+- Contact: https://umesh-malik.com/contact/

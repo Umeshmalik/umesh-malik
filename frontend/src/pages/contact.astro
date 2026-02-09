@@ -3,17 +3,18 @@ import Desktop from "../layouts/Desktop.astro";
 import DesktopApp from "../components/DesktopApp";
 import DraggableWindow from "../components/windows/DraggableWindow";
 import ContactContent from "../components/pages/ContactContent";
+import { personalInfo } from "../data/resume";
 ---
 
 <Desktop
-  title="Contact Umesh Malik — Senior Frontend Engineer | Hire Me"
-  description="Get in touch with Umesh Malik, Senior Frontend Engineer at Expedia Group. Reach out via email, LinkedIn, or GitHub for collaboration, freelance projects, or job opportunities. Open to connecting with fellow engineers and recruiters."
-  keywords="contact Umesh Malik, hire Umesh Malik, Umesh Malik email, Umesh Malik LinkedIn, frontend engineer for hire, React developer contact, Umesh Malik GitHub"
+  title="Contact Umesh Malik — Senior Frontend Engineer | Hire Me for React & TypeScript Projects"
+  description="Get in touch with Umesh Malik, Senior Frontend Engineer at Expedia Group. Reach out via email (lucky.umeshmalik@gmail.com), LinkedIn (umesh-malik), or GitHub (Umeshmalik) for collaboration, freelance projects, consulting, or job opportunities. Open to connecting with engineers and recruiters."
+  keywords="contact Umesh Malik, hire Umesh Malik, Umesh Malik email, Umesh Malik LinkedIn, frontend engineer for hire, React developer contact, Umesh Malik GitHub, hire React developer India, freelance frontend engineer, Umesh Malik phone"
   currentPage="contact"
 >
   <DesktopApp currentPage="contact" client:load>
     <DraggableWindow
-      title="mail.exe - umesh.OS Mail"
+      title="mail.exe - Contact Umesh Malik"
       icon="📧"
       defaultWidth={700}
       defaultHeight={500}
@@ -23,4 +24,36 @@ import ContactContent from "../components/pages/ContactContent";
       <ContactContent client:load />
     </DraggableWindow>
   </DesktopApp>
+
+  <article slot="seo-content">
+    <h1>Contact Umesh Malik — Senior Frontend Engineer</h1>
+    <p>Umesh Malik is a Senior Frontend Engineer at Expedia Group, available for professional connections, collaboration, consulting, and career opportunities. Here's how to reach him:</p>
+
+    <section>
+      <h2>Contact Methods</h2>
+      <ul>
+        <li><strong>Email:</strong> <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a> — Best for direct inquiries, job opportunities, and project proposals.</li>
+        <li><strong>LinkedIn:</strong> <a href={personalInfo.linkedin} rel="noopener">linkedin.com/in/umesh-malik</a> — Connect professionally and view endorsements.</li>
+        <li><strong>GitHub:</strong> <a href={personalInfo.github} rel="noopener">github.com/Umeshmalik</a> — View open source contributions and code samples.</li>
+        <li><strong>Portfolio:</strong> <a href={personalInfo.website}>umesh-malik.com</a> — This website.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>What I Can Help With</h2>
+      <ul>
+        <li>Frontend architecture and React application development</li>
+        <li>TypeScript migration and code modernization</li>
+        <li>Performance optimization for web applications</li>
+        <li>Component library design and development</li>
+        <li>AI-assisted development consulting and training</li>
+        <li>Technical mentoring and code reviews</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Location</h2>
+      <p>Umesh Malik is based in {personalInfo.location} and is open to remote and hybrid work arrangements.</p>
+    </section>
+  </article>
 </Desktop>

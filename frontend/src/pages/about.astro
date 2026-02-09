@@ -3,12 +3,16 @@ import Desktop from "../layouts/Desktop.astro";
 import DesktopApp from "../components/DesktopApp";
 import DraggableWindow from "../components/windows/DraggableWindow";
 import AboutContent from "../components/pages/AboutContent";
+import { personalInfo, education, awards } from "../data/resume";
+import { getYearsOfExperience, getSummary } from "../data/dynamic";
+
+const years = getYearsOfExperience();
 ---
 
 <Desktop
-  title={`About Umesh Malik — Senior Frontend Engineer with ${new Date().getFullYear() - 2021}+ Years Experience`}
-  description={`Learn about Umesh Malik, a Senior Frontend Engineer at Expedia Group with ${new Date().getFullYear() - 2021}+ years of hands-on experience in React, TypeScript, JavaScript, and modern web development. Previously at Tekion Corp and BYJU'S. Based in Gurugram, India.`}
-  keywords="about Umesh Malik, who is Umesh Malik, Umesh Malik biography, frontend engineer profile, Umesh Malik Expedia, React developer India, senior software engineer Gurugram"
+  title={`About Umesh Malik — Senior Frontend Engineer with ${years}+ Years of Experience`}
+  description={`Learn about Umesh Malik, a Senior Frontend Engineer (SDE-2) at Expedia Group with ${years}+ years of hands-on experience in React, TypeScript, JavaScript, and full-stack web development. MCA graduate, previously at Tekion Corp and BYJU'S. Based in Gurugram, India.`}
+  keywords="about Umesh Malik, who is Umesh Malik, Umesh Malik biography, Umesh Malik profile, frontend engineer profile, Umesh Malik Expedia, React developer India, senior software engineer Gurugram, Umesh Malik education, MCA computer science"
   currentPage="about"
 >
   <DesktopApp currentPage="about" client:load>
@@ -23,4 +27,41 @@ import AboutContent from "../components/pages/AboutContent";
       <AboutContent client:load />
     </DraggableWindow>
   </DesktopApp>
+
+  <article slot="seo-content">
+    <h1>About Umesh Malik — Senior Frontend Engineer</h1>
+    <p>{getSummary()}</p>
+
+    <section>
+      <h2>Professional Summary</h2>
+      <p>Umesh Malik is a {personalInfo.title} based in {personalInfo.location}. With {years}+ years of professional experience, he currently works as a Software Development Engineer 2 (SDE-2) at Expedia Group, where he builds enterprise-grade frontend applications using React, TypeScript, and modern web technologies.</p>
+      <p>Before Expedia, Umesh worked at Tekion Corp as a Software Engineer and at BYJU's (Think & Learn) as a Module Lead, where he led development of critical payment and order management modules.</p>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      {education.map((edu) => (
+        <article>
+          <h3>{edu.degree} in {edu.field}</h3>
+          <p>{edu.institution} ({edu.period})</p>
+        </article>
+      ))}
+    </section>
+
+    <section>
+      <h2>Awards & Recognition</h2>
+      {awards.map((award) => (
+        <p><strong>{award.title}</strong> — {award.company}, {award.date}. {award.description}</p>
+      ))}
+    </section>
+
+    <section>
+      <h2>Contact Umesh Malik</h2>
+      <ul>
+        <li>Email: <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a></li>
+        <li>LinkedIn: <a href={personalInfo.linkedin}>linkedin.com/in/umesh-malik</a></li>
+        <li>GitHub: <a href={personalInfo.github}>github.com/Umeshmalik</a></li>
+      </ul>
+    </section>
+  </article>
 </Desktop>

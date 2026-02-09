@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
-import { getYearsOfExperience } from "../data/dynamic";
+import { personalInfo, experiences, skills, education, projects, awards } from "../data/resume";
+import { getYearsOfExperience, getSummary } from "../data/dynamic";
 
 interface Props {
   title: string;
@@ -15,192 +16,563 @@ const {
   currentPage,
   keywords = "Umesh Malik, umesh, malik, frontend engineer, senior frontend engineer, React developer, TypeScript developer, JavaScript developer, full-stack developer, Expedia Group, web developer India, Gurugram developer, software engineer portfolio",
 } = Astro.props;
+
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteUrl = "https://umesh-malik.com";
 const ogImageUrl = `${siteUrl}/og-image.png`;
 const years = getYearsOfExperience();
+const today = new Date().toISOString().split("T")[0];
 
-// JSON-LD Structured Data for Person (appears as rich result in Google)
+// ═══════════════════════════════════════════════════════════════
+// JSON-LD STRUCTURED DATA — Maximum schema coverage
+// ═══════════════════════════════════════════════════════════════
+
+// 1. Person schema — Google Knowledge Panel
 const personSchema = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": `${siteUrl}/#person`,
   name: "Umesh Malik",
+  givenName: "Umesh",
+  familyName: "Malik",
   url: siteUrl,
-  image: ogImageUrl,
+  image: {
+    "@type": "ImageObject",
+    url: ogImageUrl,
+    width: 1200,
+    height: 630,
+  },
   jobTitle: "Senior Frontend Engineer",
   worksFor: {
     "@type": "Organization",
     name: "Expedia Group",
     url: "https://www.expediagroup.com",
+    logo: "https://www.expediagroup.com/favicon.ico",
   },
   description: `Senior Frontend Engineer with ${years}+ years of experience building scalable web applications using React, TypeScript, and modern frontend technologies.`,
-  email: "lucky.umeshmalik@gmail.com",
+  email: personalInfo.email,
+  telephone: undefined,
   address: {
     "@type": "PostalAddress",
     addressLocality: "Gurugram",
     addressRegion: "Haryana",
     addressCountry: "IN",
   },
-  alumniOf: {
+  nationality: { "@type": "Country", name: "India" },
+  alumniOf: education.map((edu) => ({
     "@type": "CollegeOrUniversity",
-    name: "Deenbandhu Chhotu Ram University of Science and Technology",
-  },
+    name: edu.institution,
+  })),
   sameAs: [
-    "https://linkedin.com/in/umesh-malik",
-    "https://github.com/Umeshmalik",
+    personalInfo.linkedin,
+    personalInfo.github,
     siteUrl,
   ],
-  knowsAbout: [
-    "React",
-    "TypeScript",
-    "JavaScript",
-    "Next.js",
-    "Node.js",
-    "Frontend Engineering",
-    "Full-Stack Development",
-    "Web Performance",
-    "Tailwind CSS",
-    "Three.js",
-    "REST APIs",
-    "MongoDB",
-    "PostgreSQL",
-  ],
+  knowsAbout: skills.map((s) => s.name),
+  knowsLanguage: ["English", "Hindi"],
+  hasOccupation: experiences.map((exp) => ({
+    "@type": "Occupation",
+    name: exp.role,
+    occupationLocation: { "@type": "Country", name: "India" },
+    estimatedSalary: undefined,
+  })),
+  award: awards.map((a) => `${a.title} — ${a.company} (${a.date})`),
 });
 
-// WebSite schema for sitelinks search box
+// 2. WebSite schema — sitelinks + search box
 const websiteSchema = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": `${siteUrl}/#website`,
   name: "Umesh Malik — Senior Frontend Engineer",
-  alternateName: ["Umesh Malik Portfolio", "Umesh Malik"],
+  alternateName: ["Umesh Malik Portfolio", "Umesh Malik", "umesh malik", "umesh-malik.com"],
   url: siteUrl,
   description: `Portfolio website of Umesh Malik, a Senior Frontend Engineer at Expedia Group specializing in React, TypeScript, and modern web development.`,
-  author: {
-    "@type": "Person",
-    name: "Umesh Malik",
-  },
+  publisher: { "@id": `${siteUrl}/#person` },
+  inLanguage: "en-US",
 });
+
+// 3. ProfilePage schema — Google profile rich results
+const profilePageSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": `${siteUrl}/#profilepage`,
+  mainEntity: { "@id": `${siteUrl}/#person` },
+  dateCreated: "2024-01-01",
+  dateModified: today,
+  url: siteUrl,
+  name: "Umesh Malik — Senior Frontend Engineer Portfolio",
+  description: `Professional portfolio of Umesh Malik, Senior Frontend Engineer at Expedia Group.`,
+});
+
+// 4. BreadcrumbList schema — breadcrumb rich results
+const breadcrumbItems = [{ name: "Home", url: siteUrl }];
+const pageMap: Record<string, { name: string; url: string }> = {
+  about: { name: "About Umesh Malik", url: `${siteUrl}/about/` },
+  experience: { name: "Work Experience", url: `${siteUrl}/experience/` },
+  projects: { name: "Projects", url: `${siteUrl}/projects/` },
+  skills: { name: "Technical Skills", url: `${siteUrl}/skills/` },
+  contact: { name: "Contact", url: `${siteUrl}/contact/` },
+};
+if (currentPage !== "home" && pageMap[currentPage]) {
+  breadcrumbItems.push(pageMap[currentPage]);
+}
+const breadcrumbSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: breadcrumbItems.map((item, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: item.name,
+    item: item.url,
+  })),
+});
+
+// 5. ItemList schema — projects as structured list
+const itemListSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Projects by Umesh Malik",
+  description: "Portfolio projects built by Umesh Malik, Senior Frontend Engineer",
+  numberOfItems: projects.length,
+  itemListElement: projects.map((project, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: project.name,
+    description: project.description,
+    url: project.url || siteUrl + "/projects/",
+  })),
+});
+
+// 6. FAQ Schema — Answer Engine Optimization (appears as rich result in Google)
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Who is Umesh Malik?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: `Umesh Malik is a Senior Frontend Engineer (SDE-2) currently working at Expedia Group in Gurugram, India. He has ${years}+ years of professional experience specializing in React, TypeScript, JavaScript, and full-stack web development. He previously worked at Tekion Corp and BYJU's.`,
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What technologies does Umesh Malik specialize in?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Umesh Malik specializes in React, TypeScript, JavaScript, Next.js, Node.js, Tailwind CSS, and modern frontend development tools. He is also proficient in MongoDB, PostgreSQL, Three.js, and AI-assisted development using Cursor AI, Claude, and GitHub Copilot.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Where does Umesh Malik currently work?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Umesh Malik currently works at Expedia Group as a Software Development Engineer 2 (SDE-2) in Gurugram, Haryana, India. He is a core frontend engineer working on the enterprise Workflow Orchestration Platform.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is Umesh Malik's educational background?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Umesh Malik holds a Master of Computer Application (MCA) and Bachelor of Computer Application (BCA) in Computer Science from Deenbandhu Chhotu Ram University of Science and Technology, Haryana.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How can I contact Umesh Malik?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: `You can reach Umesh Malik via email at ${personalInfo.email}, connect on LinkedIn at linkedin.com/in/umesh-malik, or view his open source work on GitHub at github.com/Umeshmalik.`,
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What projects has Umesh Malik built?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Umesh Malik has built several notable projects including: a real-time Chat Application with WebSocket integration, an enterprise Workflow Orchestration Platform at Expedia Group, a Finance & Insurance Module at Tekion Corp serving thousands of dealerships, and an Order & Payment System at BYJU's processing $10M+ monthly transactions.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is Umesh Malik's work experience?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: `Umesh Malik has ${years}+ years of experience: Currently SDE-2 at Expedia Group (June 2024-Present), previously Software Engineer at Tekion Corp (Apr 2023-May 2024), Module Lead at BYJU's (Mar 2022-Apr 2023), and Associate Software Engineer at BYJU's (Jul 2021-Feb 2022).`,
+      },
+    },
+  ],
+});
+
+// Navigation links
+const navLinks = [
+  { href: "/", label: "Home", page: "home" },
+  { href: "/about/", label: "About", page: "about" },
+  { href: "/experience/", label: "Experience", page: "experience" },
+  { href: "/projects/", label: "Projects", page: "projects" },
+  { href: "/skills/", label: "Skills", page: "skills" },
+  { href: "/contact/", label: "Contact", page: "contact" },
+];
+
+// Skill categories for SEO content
+const frontendSkills = skills.filter(s => s.category === 'frontend').map(s => s.name);
+const backendSkills = skills.filter(s => s.category === 'backend').map(s => s.name);
+const toolSkills = skills.filter(s => s.category === 'tools').map(s => s.name);
+const conceptSkills = skills.filter(s => s.category === 'concepts').map(s => s.name);
+const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Primary SEO Meta Tags -->
+    <!-- ═══════ PRIMARY SEO ═══════ -->
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content="Umesh Malik" />
-    <meta
-      name="robots"
-      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
-    />
+    <meta name="creator" content="Umesh Malik" />
+    <meta name="publisher" content="Umesh Malik" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <link rel="canonical" href={canonicalURL} />
 
-    <!-- Open Graph / Facebook -->
+    <!-- ═══════ OPEN GRAPH / FACEBOOK / LINKEDIN / WHATSAPP ═══════ -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta
-      property="og:site_name"
-      content="Umesh Malik — Senior Frontend Engineer"
-    />
+    <meta property="og:site_name" content="Umesh Malik — Senior Frontend Engineer" />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:secure_url" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta
-      property="og:image:alt"
-      content="Umesh Malik — Senior Frontend Engineer at Expedia Group"
-    />
+    <meta property="og:image:alt" content="Umesh Malik — Senior Frontend Engineer at Expedia Group" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="en_IN" />
+    <meta property="article:author" content="Umesh Malik" />
+    <meta property="profile:first_name" content="Umesh" />
+    <meta property="profile:last_name" content="Malik" />
 
-    <!-- Twitter -->
+    <!-- ═══════ TWITTER / X ═══════ -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
-    <meta
-      name="twitter:image:alt"
-      content="Umesh Malik — Senior Frontend Engineer at Expedia Group"
-    />
+    <meta name="twitter:image:alt" content="Umesh Malik — Senior Frontend Engineer at Expedia Group" />
+    <meta name="twitter:site" content="@UmeshMalik" />
+    <meta name="twitter:creator" content="@UmeshMalik" />
 
-    <!-- Additional SEO -->
-    <meta
-      name="subject"
-      content="Portfolio of Umesh Malik, Senior Frontend Engineer"
-    />
+    <!-- ═══════ BING / MICROSOFT ═══════ -->
+    <meta name="geo.region" content="IN-HR" />
+    <meta name="geo.placename" content="Gurugram, Haryana, India" />
+    <meta name="geo.position" content="28.4595;77.0266" />
+    <meta name="ICBM" content="28.4595, 77.0266" />
+    <meta name="msapplication-TileColor" content="#000080" />
+    <meta name="msapplication-TileImage" content="/favicon-192.png" />
+    <meta name="msapplication-config" content="none" />
+
+    <!-- ═══════ APPLE / iOS ═══════ -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Umesh Malik" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- ═══════ AI CRAWLERS / LLMs ═══════ -->
+    <meta name="ai-content-declaration" content="This is a personal portfolio website of Umesh Malik, a Senior Frontend Engineer at Expedia Group with expertise in React, TypeScript, and JavaScript." />
+    <link rel="alternate" type="text/plain" href={`${siteUrl}/llms.txt`} title="LLM-friendly site summary" />
+    <link rel="alternate" type="text/plain" href={`${siteUrl}/llms-full.txt`} title="Comprehensive LLM site information" />
+
+    <!-- ═══════ ADDITIONAL SEO ═══════ -->
+    <meta name="subject" content="Portfolio of Umesh Malik, Senior Frontend Engineer at Expedia Group" />
+    <meta name="classification" content="Portfolio, Technology, Software Engineering" />
+    <meta name="category" content="Technology" />
+    <meta name="coverage" content="Worldwide" />
+    <meta name="distribution" content="global" />
     <meta name="rating" content="general" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#008080" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#004040" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="mobile-web-app-capable" content="yes" />
 
-    <!-- Favicon -->
+    <!-- ═══════ FAVICONS & ICONS ═══════ -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="manifest" href="/manifest.json" />
 
-    <!-- JSON-LD Structured Data -->
+    <!-- ═══════ DISCOVERY & SYNDICATION ═══════ -->
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <link rel="author" href="/humans.txt" />
+    <link rel="alternate" type="application/rss+xml" title="Umesh Malik — Updates" href="/rss.xml" />
+
+    <!-- ═══════ JSON-LD STRUCTURED DATA (6 schemas) ═══════ -->
     <script type="application/ld+json" set:html={personSchema} />
     <script type="application/ld+json" set:html={websiteSchema} />
+    <script type="application/ld+json" set:html={profilePageSchema} />
+    <script type="application/ld+json" set:html={breadcrumbSchema} />
+    <script type="application/ld+json" set:html={itemListSchema} />
+    <script type="application/ld+json" set:html={faqSchema} />
 
-    <!-- Easter Egg for developers who view source -->
-    <meta
-      name="crafted-with"
-      content="Cursor AI + Claude | Vibe-coded by Umesh Malik"
-    />
-    <!--
-    ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║     _   _ _ __ ___   ___  ___| |__                           ║
-    ║    | | | | '_ ` _ \ / _ \/ __| '_ \                          ║
-    ║    | |_| | | | | | |  __/\__ \ | | |                         ║
-    ║     \__,_|_| |_| |_|\___||___/_| |_|                         ║
-    ║                                                              ║
-    ║   Hey, fellow developer! 👋                                  ║
-    ║   You found the source code easter egg!                      ║
-    ║                                                              ║
-    ║   This portfolio was vibe-coded using                        ║
-    ║   Cursor AI + Claude in a single session.                    ║
-    ║                                                              ║
-    ║   Tech: Astro + React 19 + TypeScript + Three.js + GSAP     ║
-    ║   Source: github.com/Umeshmalik                              ║
-    ║   Website: umesh-malik.com                                    ║
-    ║                                                              ║
-    ║   Want to hire me? Head to the Contact page! 📧              ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
-    -->
+    <!-- Easter Egg -->
+    <meta name="crafted-with" content="Cursor AI + Claude | Vibe-coded by Umesh Malik" />
 
-    <!-- Preconnect for fonts -->
+    <!-- ═══════ RESOURCE HINTS ═══════ -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
 
-    <!-- Preload critical fonts to reduce CLS and speed up FCP -->
-    <link
-      rel="preload"
-      href="https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isRFJXGdg.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="https://fonts.gstatic.com/s/pressstart2p/v15/e3t4euO8T-267oIAQAu6jDQyK3nVivM.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isRFJXGdg.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="https://fonts.gstatic.com/s/pressstart2p/v15/e3t4euO8T-267oIAQAu6jDQyK3nVivM.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- Prefetch key pages -->
+    <link rel="prefetch" href="/about/" />
+    <link rel="prefetch" href="/experience/" />
+    <link rel="prefetch" href="/projects/" />
+    <link rel="prefetch" href="/skills/" />
+    <link rel="prefetch" href="/contact/" />
   </head>
-  <body>
-    <div id="desktop-root">
+
+  <body itemscope itemtype="https://schema.org/WebPage">
+    <!-- Semantic navigation -->
+    <nav class="sr-only" aria-label="Main navigation" itemscope itemtype="https://schema.org/SiteNavigationElement">
+      <ul>
+        {navLinks.map((link) => (
+          <li>
+            <a href={link.href} aria-current={currentPage === link.page ? "page" : undefined} itemprop="url">
+              <span itemprop="name">{link.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Main interactive application (client-rendered) -->
+    <div id="desktop-root" role="application" aria-label="Umesh Malik Interactive Portfolio">
       <slot />
     </div>
+
+    <!-- ═══════ SERVER-RENDERED SEO CONTENT ═══════ -->
+    <!-- Crawlable by: Google, Bing, ChatGPT, Claude, Perplexity, DuckDuckGo, Yandex, Baidu -->
+    <!-- Visually hidden but fully accessible to screen readers and all crawlers -->
+    <main class="sr-only" aria-label="Portfolio content" itemprop="mainContentOfPage">
+      <slot name="seo-content">
+        <!-- Default comprehensive SEO content -->
+        <article itemscope itemtype="https://schema.org/Person">
+          <h1 itemprop="name">Umesh Malik — Senior Frontend Engineer</h1>
+          <p itemprop="description">{getSummary()}</p>
+          <p><span itemprop="jobTitle">Senior Frontend Engineer</span> at <span itemprop="worksFor" itemscope itemtype="https://schema.org/Organization"><span itemprop="name">Expedia Group</span></span>, based in <span itemprop="address" itemscope itemtype="https://schema.org/PostalAddress"><span itemprop="addressLocality">Gurugram</span>, <span itemprop="addressRegion">Haryana</span>, <span itemprop="addressCountry">India</span></span>.</p>
+
+          <section aria-label="Contact Information">
+            <h2>Contact Umesh Malik</h2>
+            <ul>
+              <li>Email: <a href={`mailto:${personalInfo.email}`} itemprop="email">{personalInfo.email}</a></li>
+              <li>LinkedIn: <a href={personalInfo.linkedin} itemprop="sameAs" rel="noopener">linkedin.com/in/umesh-malik</a></li>
+              <li>GitHub: <a href={personalInfo.github} itemprop="sameAs" rel="noopener">github.com/Umeshmalik</a></li>
+              <li>Website: <a href={personalInfo.website} itemprop="url">umesh-malik.com</a></li>
+            </ul>
+          </section>
+
+          <section aria-label="Professional Experience">
+            <h2>Work Experience of Umesh Malik</h2>
+            {experiences.map((exp) => (
+              <article>
+                <h3>{exp.role} at {exp.company}</h3>
+                <p><strong>Duration:</strong> {exp.period} | <strong>Location:</strong> {exp.location}</p>
+                <ul>
+                  {exp.highlights.map((h) => <li>{h}</li>)}
+                </ul>
+              </article>
+            ))}
+          </section>
+
+          <section aria-label="Technical Skills">
+            <h2>Technical Skills of Umesh Malik</h2>
+            <h3>Frontend Development</h3>
+            <p>{frontendSkills.join(', ')}</p>
+            <h3>Backend Development</h3>
+            <p>{backendSkills.join(', ')}</p>
+            <h3>Developer Tools & Testing</h3>
+            <p>{toolSkills.join(', ')}</p>
+            <h3>Architecture & Concepts</h3>
+            <p>{conceptSkills.join(', ')}</p>
+            <h3>AI-Assisted Development</h3>
+            <p>{aiSkills.join(', ')}</p>
+          </section>
+
+          <section aria-label="Portfolio Projects">
+            <h2>Projects by Umesh Malik</h2>
+            {projects.map((project) => (
+              <article>
+                <h3>{project.name}</h3>
+                <p>{project.description}</p>
+                <p><strong>Technologies:</strong> {project.tech.join(', ')}</p>
+                {project.url && <p><a href={project.url} rel="noopener">View Project</a></p>}
+                <ul>
+                  {project.highlights.map((h) => <li>{h}</li>)}
+                </ul>
+              </article>
+            ))}
+          </section>
+
+          <section aria-label="Education">
+            <h2>Education</h2>
+            {education.map((edu) => (
+              <article itemprop="alumniOf" itemscope itemtype="https://schema.org/CollegeOrUniversity">
+                <h3><span itemprop="name">{edu.degree} in {edu.field}</span></h3>
+                <p>{edu.institution} ({edu.period})</p>
+              </article>
+            ))}
+          </section>
+
+          <section aria-label="Awards and Recognition">
+            <h2>Awards & Recognition</h2>
+            {awards.map((award) => (
+              <article>
+                <h3>{award.title}</h3>
+                <p>{award.company} — {award.date}</p>
+                <p>{award.description}</p>
+              </article>
+            ))}
+          </section>
+
+          <section aria-label="Frequently Asked Questions">
+            <h2>Frequently Asked Questions about Umesh Malik</h2>
+            <dl>
+              <dt>Who is Umesh Malik?</dt>
+              <dd>Umesh Malik is a Senior Frontend Engineer (SDE-2) at Expedia Group with {years}+ years of experience in React, TypeScript, and full-stack web development. He is based in Gurugram, Haryana, India.</dd>
+
+              <dt>What is Umesh Malik's tech stack?</dt>
+              <dd>Umesh specializes in React, TypeScript, JavaScript, Next.js, Node.js, Tailwind CSS, MongoDB, PostgreSQL, and AI-assisted development tools including Cursor AI and Claude.</dd>
+
+              <dt>Where has Umesh Malik worked?</dt>
+              <dd>Umesh has worked at Expedia Group (current — SDE-2), Tekion Corp (Software Engineer), and BYJU's (Module Lead & Associate Software Engineer).</dd>
+
+              <dt>How can I hire or contact Umesh Malik?</dt>
+              <dd>You can contact Umesh via email at {personalInfo.email}, connect on LinkedIn at linkedin.com/in/umesh-malik, or visit his GitHub at github.com/Umeshmalik.</dd>
+
+              <dt>What projects has Umesh Malik built?</dt>
+              <dd>Notable projects include a real-time Chat Application, enterprise Workflow Orchestration Platform at Expedia, Finance & Insurance Module at Tekion, and an Order & Payment System processing $10M+ monthly at BYJU's.</dd>
+
+              <dt>What is Umesh Malik's education?</dt>
+              <dd>Umesh holds an MCA and BCA in Computer Science from Deenbandhu Chhotu Ram University of Science and Technology.</dd>
+
+              <dt>Is Umesh Malik open to new opportunities?</dt>
+              <dd>Visit the contact page at umesh-malik.com/contact/ to get in touch with Umesh for collaboration, freelance, or career opportunities.</dd>
+            </dl>
+          </section>
+        </article>
+      </slot>
+    </main>
+
+    <!-- Noscript fallback -->
+    <noscript>
+      <style>
+        .sr-only { position: static !important; width: auto !important; height: auto !important; padding: inherit !important; margin: inherit !important; overflow: visible !important; clip: auto !important; white-space: normal !important; }
+        #desktop-root { display: none !important; }
+      </style>
+      <div style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: system-ui, sans-serif; color: #333; line-height: 1.8;">
+        <header>
+          <h1 style="font-size: 2em; margin-bottom: 0.5em;">Umesh Malik</h1>
+          <p style="font-size: 1.2em; color: #555;"><strong>{personalInfo.title}</strong></p>
+          <p>{personalInfo.location} | <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a></p>
+          <nav style="margin: 20px 0; padding: 10px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+            {navLinks.map((link) => (
+              <a href={link.href} style="margin-right: 20px; color: #0066cc;">{link.label}</a>
+            ))}
+          </nav>
+        </header>
+
+        <section>
+          <h2>About</h2>
+          <p>{getSummary()}</p>
+        </section>
+
+        <section>
+          <h2>Experience</h2>
+          {experiences.map((exp) => (
+            <div style="margin-bottom: 20px;">
+              <h3 style="margin-bottom: 5px;">{exp.role} — {exp.company}</h3>
+              <p style="color: #666; font-size: 0.9em;">{exp.period} | {exp.location}</p>
+              <ul>
+                {exp.highlights.map((h) => <li>{h}</li>)}
+              </ul>
+            </div>
+          ))}
+        </section>
+
+        <section>
+          <h2>Technical Skills</h2>
+          <p><strong>Frontend:</strong> {frontendSkills.join(', ')}</p>
+          <p><strong>Backend:</strong> {backendSkills.join(', ')}</p>
+          <p><strong>Tools:</strong> {toolSkills.join(', ')}</p>
+          <p><strong>Concepts:</strong> {conceptSkills.join(', ')}</p>
+          <p><strong>AI Development:</strong> {aiSkills.join(', ')}</p>
+        </section>
+
+        <section>
+          <h2>Projects</h2>
+          {projects.map((project) => (
+            <div style="margin-bottom: 15px;">
+              <h3>{project.name}</h3>
+              <p>{project.description}</p>
+              <p><em>Tech: {project.tech.join(', ')}</em></p>
+              {project.url && <p><a href={project.url} style="color: #0066cc;">View Project</a></p>}
+            </div>
+          ))}
+        </section>
+
+        <section>
+          <h2>Education</h2>
+          {education.map((edu) => (
+            <p><strong>{edu.degree}</strong> in {edu.field} — {edu.institution} ({edu.period})</p>
+          ))}
+        </section>
+
+        <section>
+          <h2>Contact</h2>
+          <ul>
+            <li>Email: <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a></li>
+            <li>LinkedIn: <a href={personalInfo.linkedin}>linkedin.com/in/umesh-malik</a></li>
+            <li>GitHub: <a href={personalInfo.github}>github.com/Umeshmalik</a></li>
+          </ul>
+        </section>
+
+        <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+          <p>&copy; {new Date().getFullYear()} Umesh Malik. All rights reserved.</p>
+          <p><em>This website features an interactive retro-themed experience. Please enable JavaScript for the full experience.</em></p>
+        </footer>
+      </div>
+    </noscript>
+
+    <!-- Semantic footer -->
+    <footer class="sr-only" itemscope itemtype="https://schema.org/WPFooter">
+      <p>&copy; {new Date().getFullYear()} Umesh Malik. All rights reserved.</p>
+      <p>Senior Frontend Engineer at Expedia Group | React, TypeScript, JavaScript Expert | Gurugram, India</p>
+      <p>Previously: Tekion Corp, BYJU's (Think & Learn)</p>
+      <nav aria-label="Footer links">
+        <a href={personalInfo.linkedin} rel="noopener noreferrer me">LinkedIn</a> |
+        <a href={personalInfo.github} rel="noopener noreferrer me">GitHub</a> |
+        <a href={`mailto:${personalInfo.email}`} rel="me">Email</a> |
+        <a href="/llms.txt">LLMs Info</a> |
+        <a href="/sitemap-index.xml">Sitemap</a>
+      </nav>
+    </footer>
   </body>
 </html>

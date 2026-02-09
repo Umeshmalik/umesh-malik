@@ -1,0 +1,19 @@
+# Cloudflare Pages Redirects
+# https://developers.cloudflare.com/pages/configuration/redirects/
+
+# Trailing slash consistency (SEO: avoid duplicate content)
+/about      /about/     301
+/experience /experience/ 301
+/projects   /projects/  301
+/skills     /skills/    301
+/contact    /contact/   301
+
+# Common misspellings / alternate URLs
+/resume     /experience/ 301
+/cv         /experience/ 301
+/work       /experience/ 301
+/portfolio  /projects/   301
+/hire       /contact/    301
+/email      /contact/    301
+/skills-galaxy /skills/  301
+/tech       /skills/     301

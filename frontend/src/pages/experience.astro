@@ -3,12 +3,16 @@ import Desktop from "../layouts/Desktop.astro";
 import DesktopApp from "../components/DesktopApp";
 import DraggableWindow from "../components/windows/DraggableWindow";
 import ExperienceContent from "../components/pages/ExperienceContent";
+import { experiences, personalInfo } from "../data/resume";
+import { getYearsOfExperience } from "../data/dynamic";
+
+const years = getYearsOfExperience();
 ---
 
 <Desktop
-  title={`Umesh Malik — Work Experience | Expedia Group, Tekion Corp, BYJU'S`}
-  description={`Explore ${new Date().getFullYear() - 2021}+ years of professional experience of Umesh Malik — currently SDE-2 at Expedia Group, previously at Tekion Corp and BYJU'S. Expert in React, TypeScript, frontend architecture, workflow orchestration, and scalable web applications.`}
-  keywords="Umesh Malik experience, Umesh Malik resume, Umesh Malik Expedia Group, Umesh Malik Tekion, Umesh Malik BYJU'S, frontend engineer experience, SDE-2 Expedia, software engineer career"
+  title={`Umesh Malik — ${years}+ Years of Work Experience | Expedia Group, Tekion Corp, BYJU'S`}
+  description={`Explore ${years}+ years of professional experience of Umesh Malik — currently SDE-2 at Expedia Group building enterprise workflow orchestration, previously Software Engineer at Tekion Corp and Module Lead at BYJU'S. Expert in React, TypeScript, frontend architecture, and scalable web applications.`}
+  keywords="Umesh Malik experience, Umesh Malik resume, Umesh Malik work history, Umesh Malik Expedia Group, Umesh Malik Tekion, Umesh Malik BYJU'S, frontend engineer experience, SDE-2 Expedia, software engineer career, React developer experience"
   currentPage="experience"
 >
   <DesktopApp currentPage="experience" client:load>
@@ -23,4 +27,26 @@ import ExperienceContent from "../components/pages/ExperienceContent";
       <ExperienceContent client:load />
     </DraggableWindow>
   </DesktopApp>
+
+  <article slot="seo-content">
+    <h1>Work Experience of Umesh Malik — {years}+ Years in Frontend Engineering</h1>
+    <p>Umesh Malik has {years}+ years of professional experience across leading technology companies including Expedia Group, Tekion Corp, and BYJU's. His career demonstrates a strong trajectory from Associate Software Engineer to SDE-2, with expertise in React, TypeScript, and enterprise-scale frontend development.</p>
+
+    {experiences.map((exp) => (
+      <section>
+        <h2>{exp.role} at {exp.company}</h2>
+        <p><strong>Period:</strong> {exp.period} | <strong>Location:</strong> {exp.location}</p>
+        <h3>Key Achievements & Responsibilities</h3>
+        <ul>
+          {exp.highlights.map((h) => <li>{h}</li>)}
+        </ul>
+      </section>
+    ))}
+
+    <section>
+      <h2>Career Timeline</h2>
+      <p>July 2021 — Present: {years}+ years of progressive growth from Associate Engineer to Senior Frontend Engineer across fintech, automotive, and travel technology domains.</p>
+      <p>Looking to connect? <a href="/contact/">Contact Umesh Malik</a> or visit his <a href={personalInfo.linkedin}>LinkedIn profile</a>.</p>
+    </section>
+  </article>
 </Desktop>

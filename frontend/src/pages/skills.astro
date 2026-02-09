@@ -3,12 +3,19 @@ import Desktop from '../layouts/Desktop.astro';
 import DesktopApp from '../components/DesktopApp';
 import DraggableWindow from '../components/windows/DraggableWindow';
 import SkillGalaxy from '../components/three/SkillGalaxy';
+import { skills } from '../data/resume';
+
+const frontendSkills = skills.filter(s => s.category === 'frontend');
+const backendSkills = skills.filter(s => s.category === 'backend');
+const toolSkills = skills.filter(s => s.category === 'tools');
+const conceptSkills = skills.filter(s => s.category === 'concepts');
+const aiSkills = skills.filter(s => s.category === 'ai');
 ---
 
 <Desktop
   title="Umesh Malik — Technical Skills | React, TypeScript, JavaScript, Node.js & More"
-  description="Discover the technical skills of Umesh Malik, Senior Frontend Engineer — proficient in React, TypeScript, JavaScript, Next.js, Node.js, Tailwind CSS, Three.js, MongoDB, PostgreSQL, and modern frontend tools. Visualized as an interactive 3D skill galaxy."
-  keywords="Umesh Malik skills, frontend engineer skills, React expert, TypeScript developer skills, JavaScript proficiency, Node.js developer, full-stack skills, web developer technologies, Umesh Malik tech stack"
+  description="Comprehensive technical skills of Umesh Malik, Senior Frontend Engineer — expert in React (95%), TypeScript (92%), JavaScript (95%), Next.js, Node.js, Vue.js, Tailwind CSS, Three.js, MongoDB, PostgreSQL, Git, Jest, Webpack, and AI-assisted development with Cursor AI, Claude, and GitHub Copilot."
+  keywords="Umesh Malik skills, frontend engineer skills, React expert, TypeScript developer, JavaScript proficiency, Node.js developer, full-stack skills, web developer technologies, Umesh Malik tech stack, Cursor AI, AI developer, vibe coding"
   currentPage="skills"
 >
   <DesktopApp currentPage="skills" client:load>
@@ -25,4 +32,55 @@ import SkillGalaxy from '../components/three/SkillGalaxy';
       </div>
     </DraggableWindow>
   </DesktopApp>
+
+  <article slot="seo-content">
+    <h1>Technical Skills of Umesh Malik — Senior Frontend Engineer</h1>
+    <p>Umesh Malik possesses a comprehensive skill set spanning frontend development, backend technologies, developer tooling, software architecture, and AI-assisted development. Here is a detailed breakdown of his technical proficiencies.</p>
+
+    <section>
+      <h2>Frontend Development Skills</h2>
+      <table>
+        <thead><tr><th>Technology</th><th>Proficiency</th></tr></thead>
+        <tbody>
+          {frontendSkills.map((s) => (
+            <tr><td>{s.name}</td><td>{s.proficiency}%</td></tr>
+          ))}
+        </tbody>
+      </table>
+      <p>Core frontend technologies: {frontendSkills.map(s => s.name).join(', ')}.</p>
+    </section>
+
+    <section>
+      <h2>Backend Development Skills</h2>
+      <table>
+        <thead><tr><th>Technology</th><th>Proficiency</th></tr></thead>
+        <tbody>
+          {backendSkills.map((s) => (
+            <tr><td>{s.name}</td><td>{s.proficiency}%</td></tr>
+          ))}
+        </tbody>
+      </table>
+      <p>Backend stack: {backendSkills.map(s => s.name).join(', ')}.</p>
+    </section>
+
+    <section>
+      <h2>Developer Tools & Testing</h2>
+      <p>{toolSkills.map(s => `${s.name} (${s.proficiency}%)`).join(', ')}.</p>
+    </section>
+
+    <section>
+      <h2>Architecture & Concepts</h2>
+      <p>{conceptSkills.map(s => `${s.name} (${s.proficiency}%)`).join(', ')}.</p>
+    </section>
+
+    <section>
+      <h2>AI-Assisted Development</h2>
+      <p>Umesh is a strong advocate of AI-powered development, leveraging tools like {aiSkills.map(s => s.name).join(', ')} to amplify productivity and ship code faster.</p>
+    </section>
+
+    <section>
+      <h2>Total Skills Overview</h2>
+      <p>Umesh Malik is proficient in {skills.length}+ technologies across {['frontend', 'backend', 'tools', 'concepts', 'AI'].length} categories, with the highest proficiency in React (95%), JavaScript (95%), HTML5 (95%), TypeScript (92%), and Cursor AI (92%).</p>
+    </section>
+  </article>
 </Desktop>

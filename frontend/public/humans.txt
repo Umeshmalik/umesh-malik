@@ -1,0 +1,19 @@
+/* TEAM */
+Name: Umesh Malik
+Role: Senior Frontend Engineer
+Location: Gurugram, Haryana, India
+Contact: lucky.umeshmalik [at] gmail.com
+LinkedIn: linkedin.com/in/umesh-malik
+GitHub: github.com/Umeshmalik
+
+/* SITE */
+Standards: HTML5, CSS3, JavaScript ES2024
+Components: Astro 5, React 19, TypeScript, Three.js, GSAP, Tailwind CSS 4
+Software: Cursor AI, Claude, GitHub Copilot
+Hosting: Cloudflare Pages
+Last Updated: 2026-02-09
+
+/* THANKS */
+AI Pair Programming: Cursor AI + Claude by Anthropic
+Framework: Astro (astro.build)
+Design Inspiration: Windows 95, Retro Computing

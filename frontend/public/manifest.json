@@ -1,0 +1,81 @@
+{
+  "name": "Umesh Malik — Senior Frontend Engineer",
+  "short_name": "Umesh Malik",
+  "description": "Portfolio of Umesh Malik, Senior Frontend Engineer at Expedia Group. React, TypeScript, and JavaScript expert with 4+ years of experience building scalable web applications.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "background_color": "#008080",
+  "theme_color": "#008080",
+  "orientation": "any",
+  "id": "umesh-malik-portfolio",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["portfolio", "technology", "business", "developer-tools"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "label": "Umesh Malik Portfolio — Desktop View"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "About Umesh Malik",
+      "short_name": "About",
+      "url": "/about/",
+      "description": "Learn about Umesh Malik's background and experience"
+    },
+    {
+      "name": "Work Experience",
+      "short_name": "Experience",
+      "url": "/experience/",
+      "description": "View professional experience at Expedia, Tekion, BYJU's"
+    },
+    {
+      "name": "Projects",
+      "short_name": "Projects",
+      "url": "/projects/",
+      "description": "Browse portfolio projects"
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "url": "/contact/",
+      "description": "Get in touch with Umesh Malik"
+    }
+  ]
+}

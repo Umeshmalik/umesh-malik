@@ -3,12 +3,13 @@ import Desktop from '../layouts/Desktop.astro';
 import DesktopApp from '../components/DesktopApp';
 import DraggableWindow from '../components/windows/DraggableWindow';
 import ProjectsContent from '../components/pages/ProjectsContent';
+import { projects, personalInfo } from '../data/resume';
 ---
 
 <Desktop
   title="Projects by Umesh Malik — Frontend Engineer Portfolio & Open Source Work"
-  description="Browse portfolio projects by Umesh Malik, Senior Frontend Engineer — including a real-time chat app, enterprise workflow orchestration platform, finance & insurance module, and payment systems processing $10M+ monthly. Built with React, TypeScript, Node.js, and more."
-  keywords="Umesh Malik projects, frontend engineer portfolio, React projects, TypeScript projects, chat application, workflow orchestration, Umesh Malik GitHub, open source developer, web development portfolio"
+  description="Browse portfolio projects by Umesh Malik, Senior Frontend Engineer — including a real-time chat app with WebSockets, enterprise workflow orchestration platform at Expedia, finance & insurance module at Tekion, and payment systems processing $10M+ monthly. Built with React, TypeScript, Node.js, Three.js, and more."
+  keywords="Umesh Malik projects, frontend engineer portfolio, React projects, TypeScript projects, chat application WebSocket, workflow orchestration platform, Umesh Malik GitHub, open source developer, web development portfolio, Node.js projects, Astro portfolio"
   currentPage="projects"
 >
   <DesktopApp currentPage="projects" client:load>
@@ -23,4 +24,29 @@ import ProjectsContent from '../components/pages/ProjectsContent';
       <ProjectsContent client:load />
     </DraggableWindow>
   </DesktopApp>
+
+  <article slot="seo-content">
+    <h1>Projects by Umesh Malik — Frontend Engineer Portfolio</h1>
+    <p>A collection of professional and personal projects built by Umesh Malik, demonstrating expertise in React, TypeScript, Node.js, and modern web development.</p>
+
+    {projects.map((project) => (
+      <section>
+        <h2>{project.name}</h2>
+        <p>{project.description}</p>
+        <h3>Technologies Used</h3>
+        <p>{project.tech.join(', ')}</p>
+        {project.url && <p><a href={project.url} rel="noopener">View Live Project: {project.name}</a></p>}
+        <h3>Key Features</h3>
+        <ul>
+          {project.highlights.map((h) => <li>{h}</li>)}
+        </ul>
+      </section>
+    ))}
+
+    <section>
+      <h2>Open Source & GitHub</h2>
+      <p>View more of Umesh Malik's work on <a href={personalInfo.github} rel="noopener">GitHub (github.com/Umeshmalik)</a>.</p>
+      <p>Interested in collaborating? <a href="/contact/">Get in touch</a>.</p>
+    </section>
+  </article>
 </Desktop>
