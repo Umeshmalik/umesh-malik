@@ -3,96 +3,9 @@
 # https://umesh-malik.com
 # ═══════════════════════════════════════════════════════════════
 
-# Default: Allow everything
 User-agent: *
-Allow: /
-Disallow: /404
-
-# Sitemaps & Feeds
-Sitemap: https://umesh-malik.com/sitemap-index.xml
-
-# ═══════ SEARCH ENGINE BOTS ═══════
-
-User-agent: Googlebot
-Allow: /
-
-User-agent: Googlebot-Image
-Allow: /
-
-User-agent: Googlebot-Video
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Slurp
-Allow: /
-
-User-agent: DuckDuckBot
-Allow: /
-
-User-agent: Baiduspider
-Allow: /
-
-User-agent: YandexBot
-Allow: /
-
-User-agent: Applebot
-Allow: /
-
-User-agent: Applebot-Extended
-Allow: /
-
-# ═══════ AI / LLM CRAWLERS ═══════
-# We WELCOME AI crawlers — this is a portfolio site meant to be found
-
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: Anthropic-AI
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-User-agent: cohere-ai
-Allow: /
-
-User-agent: Diffbot
-Allow: /
-
-User-agent: FacebookExternalHit
-Allow: /
-
-User-agent: LinkedInBot
-Allow: /
-
-User-agent: WhatsApp
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: Slackbot
-Allow: /
+   Allow: /
+   Sitemap: https://umesh-malik.com/sitemap-index.xml
 
 # ═══════ AI-READABLE CONTENT ═══════
 # For AI crawlers: structured profile info available at:
