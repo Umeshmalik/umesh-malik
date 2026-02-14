@@ -1,5 +1,11 @@
-import { getAllPosts, getPostsByCategory } from '$lib/utils/blog';
-import type { PageServerLoad } from './$types';
+import { getAllPosts, getPostsByCategory, getAllCategories } from '$lib/utils/blog';
+import type { PageServerLoad, EntryGenerator } from './$types';
+
+export const entries: EntryGenerator = async () => {
+	const posts = await getAllPosts();
+	const categories = getAllCategories(posts);
+	return categories.map((cat) => ({ category: cat.slug }));
+};
 
 export const load: PageServerLoad = async ({ params }) => {
 	const allPosts = await getAllPosts();

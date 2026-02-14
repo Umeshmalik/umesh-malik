@@ -1,10 +1,12 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
 @theme {
-	--font-display: 'Inter', system-ui, sans-serif;
-	--font-sans: 'Inter', system-ui, sans-serif;
-	--font-mono: 'JetBrains Mono', monospace;
+	--font-display: 'Inter Variable', 'Inter', system-ui, sans-serif;
+	--font-sans: 'Inter Variable', 'Inter', system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', monospace;
 
 	--color-brand-black: #000000;
 	--color-brand-white: #ffffff;
@@ -160,7 +162,7 @@ body {
 	min-height: 40px;
 	padding: 9px 16px;
 	cursor: pointer;
-	transition: all 0.3s ease;
+	transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .btn-brackets::before,
@@ -169,7 +171,7 @@ body {
 	position: absolute;
 	width: 12px;
 	height: 12px;
-	transition: all 0.3s ease;
+	transition: width 0.3s ease, height 0.3s ease;
 	pointer-events: none;
 }
 
@@ -201,7 +203,7 @@ body {
 	--tw-prose-links: #C09E5A;
 	--tw-prose-bold: #ffffff;
 	--tw-prose-counters: rgba(255, 255, 255, 0.5);
-	--tw-prose-bullets: rgba(255, 255, 255, 0.4);
+	--tw-prose-bullets: rgba(255, 255, 255, 0.5);
 	--tw-prose-hr: #2B2B2B;
 	--tw-prose-quotes: rgba(255, 255, 255, 0.8);
 	--tw-prose-quote-borders: #C09E5A;

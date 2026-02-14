@@ -1,8 +1,12 @@
-name = "umesh-malik"
-main = ".svelte-kit/cloudflare/_worker.js"
-compatibility_date = "2024-01-01"
-compatibility_flags = ["nodejs_compat"]
-
-[assets]
-directory = ".svelte-kit/cloudflare"
-binding = "ASSETS"
+# No longer needed — site is now fully static (SSG via adapter-static).
+# Cloudflare Pages serves the `build/` directory directly.
+# Keep this file only as reference; it has no effect on static deployments.
+#
+# name = "umesh-malik"
+# main = ".svelte-kit/cloudflare/_worker.js"
+# compatibility_date = "2024-01-01"
+# compatibility_flags = ["nodejs_compat"]
+#
+# [assets]
+# directory = ".svelte-kit/cloudflare"
+# binding = "ASSETS"

@@ -3,6 +3,8 @@ import { getAllPosts } from '$lib/utils/blog';
 import { siteConfig } from '$lib/config/site';
 import { jsonHeaders } from '$lib/utils/xml';
 
+export const prerender = true;
+
 export const GET: RequestHandler = async () => {
 	const posts = await getAllPosts();
 

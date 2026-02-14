@@ -13,8 +13,7 @@
 		"build:full": "bash scripts/build-microfrontends.sh"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^7.0.0",
-		"@sveltejs/adapter-cloudflare": "^7.2.7",
+		"@sveltejs/adapter-static": "^3.0.0",
 		"@sveltejs/kit": "^2.50.2",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@tailwindcss/typography": "^0.5.19",
@@ -29,10 +28,11 @@
 		"svelte-check": "^4.3.6",
 		"tailwindcss": "^4.1.18",
 		"typescript": "^5.9.3",
-		"vite": "^7.3.1",
-		"wrangler": "^4.65.0"
+		"vite": "^7.3.1"
 	},
 	"dependencies": {
+		"@fontsource-variable/inter": "^5.1.1",
+		"@fontsource-variable/jetbrains-mono": "^5.1.2",
 		"schema-dts": "^1.1.5",
 		"svelte-inview": "^4.0.4"
 	}

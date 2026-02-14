@@ -69,6 +69,9 @@ for entry in "${MICROFRONTENDS[@]}"; do
 done
 
 # ── Phase 2: Build SvelteKit ───────────────────────────────
+echo "→ Installing dependencies in SvelteKit app..."
+(cd "$PROJECT_ROOT" && pnpm install --frozen-lockfile)
+
 echo "→ Building SvelteKit app..."
 (cd "$PROJECT_ROOT" && pnpm build)
 

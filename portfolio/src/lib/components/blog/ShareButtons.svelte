@@ -21,7 +21,7 @@
       href={twitterUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class="btn-brackets bg-white px-4 py-2 text-black transition-colors hover:bg-[var(--color-brand-accent)]"
+      class="btn-brackets bg-white px-4 py-2 text-black transition-colors hover:bg-brand-accent"
     >
       Twitter
     </a>

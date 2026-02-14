@@ -17,11 +17,10 @@
     children,
   }: Props = $props();
 
-  const baseStyles = "btn-brackets transition-all duration-300";
+  const baseStyles = "btn-brackets transition-colors duration-300";
 
   const variants = {
-    primary:
-      "bg-white text-black hover:bg-[var(--color-brand-accent)] hover:text-black",
+    primary: "bg-white text-black hover:bg-brand-accent hover:text-black",
     secondary: "bg-transparent text-white hover:text-brand-accent",
   };
 
@@ -39,7 +38,7 @@
     {@render children()}
   </a>
 {:else}
-  <button class={classes}>
+  <button type="button" class={classes}>
     {@render children()}
   </button>
 {/if}

@@ -3,6 +3,8 @@ import { getAllPosts, getAllCategories, getAllTags } from '$lib/utils/blog';
 import { siteConfig } from '$lib/config/site';
 import { xmlHeaders } from '$lib/utils/xml';
 
+export const prerender = true;
+
 export const GET: RequestHandler = async () => {
 	const posts = await getAllPosts();
 	const categories = getAllCategories(posts);

@@ -5,6 +5,8 @@ import { textHeaders } from '$lib/utils/xml';
 
 const S = siteConfig;
 
+export const prerender = true;
+
 export const GET: RequestHandler = async () => {
 	const posts = await getAllPosts();
 

@@ -2,6 +2,8 @@ import type { RequestHandler } from './$types';
 import { siteConfig } from '$lib/config/site';
 import { xmlHeaders } from '$lib/utils/xml';
 
+export const prerender = true;
+
 export const GET: RequestHandler = async () => {
 	const now = new Date().toISOString();
 

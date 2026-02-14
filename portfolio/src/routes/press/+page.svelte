@@ -232,7 +232,7 @@
   <div
     class="corner-brackets border border-brand-card-border bg-brand-card p-8"
   >
-    <h3 class="mb-4 text-xl font-medium text-white">Media Inquiries</h3>
+    <h2 class="mb-4 text-xl font-medium text-white">Media Inquiries</h2>
     <p class="body-medium mb-4 text-brand-text-secondary">
       For interviews, speaking engagements, or media requests, please get in
       touch:

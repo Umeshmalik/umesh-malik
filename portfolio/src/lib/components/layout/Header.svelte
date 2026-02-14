@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { onMount } from "svelte";
 
   let menuOpen = $state(false);
@@ -24,7 +24,7 @@
 </script>
 
 <header
-  class="fixed top-0 right-0 left-0 z-50 transition-all duration-300 {scrolled
+  class="fixed top-0 right-0 left-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300 {scrolled
     ? 'border-b border-brand-border bg-black/80 backdrop-blur-md'
     : 'bg-transparent'}"
 >
@@ -32,17 +32,63 @@
     class="mx-auto flex h-[81px] max-w-[1440px] items-center justify-between px-6 lg:px-12"
   >
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-3 text-white" aria-label="Umesh Malik - Home">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect width="32" height="32" rx="4" fill="currentColor" fill-opacity="0"/>
-        <path d="M3 9 L3 3 L9 3" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
-        <path d="M23 3 L29 3 L29 9" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
-        <path d="M29 23 L29 29 L23 29" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
-        <path d="M9 29 L3 29 L3 23" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
-        <text x="9" y="23" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="17" fill="white">U</text>
-        <circle cx="24" cy="22" r="2" fill="#C09E5A"/>
+    <a
+      href="/"
+      class="flex items-center gap-3 text-white"
+      aria-label="Umesh Malik - Home"
+    >
+      <svg
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <rect
+          width="32"
+          height="32"
+          rx="4"
+          fill="currentColor"
+          fill-opacity="0"
+        />
+        <path
+          d="M3 9 L3 3 L9 3"
+          stroke="#C09E5A"
+          stroke-width="1.5"
+          stroke-linecap="square"
+        />
+        <path
+          d="M23 3 L29 3 L29 9"
+          stroke="#C09E5A"
+          stroke-width="1.5"
+          stroke-linecap="square"
+        />
+        <path
+          d="M29 23 L29 29 L23 29"
+          stroke="#C09E5A"
+          stroke-width="1.5"
+          stroke-linecap="square"
+        />
+        <path
+          d="M9 29 L3 29 L3 23"
+          stroke="#C09E5A"
+          stroke-width="1.5"
+          stroke-linecap="square"
+        />
+        <text
+          x="9"
+          y="23"
+          font-family="Inter, system-ui, sans-serif"
+          font-weight="600"
+          font-size="17"
+          fill="white">U</text
+        >
+        <circle cx="24" cy="22" r="2" fill="#C09E5A" />
       </svg>
-      <span class="text-xl font-medium tracking-tight">Umesh<span class="text-brand-accent">.</span></span>
+      <span class="text-xl font-medium tracking-tight"
+        >Umesh<span class="text-brand-accent">.</span></span
+      >
     </a>
 
     <!-- Desktop Nav - Center -->
@@ -50,7 +96,7 @@
       {#each navLinks as link}
         <a
           href={link.href}
-          class="label-mono transition-colors duration-200 {$page.url
+          class="label-mono transition-colors duration-200 {page.url
             .pathname === link.href
             ? 'text-white'
             : 'text-brand-text-muted hover:text-white'}"
@@ -64,7 +110,7 @@
     <div class="hidden md:block">
       <a
         href="/contact"
-        class="btn-brackets bg-white text-black hover:bg-[var(--color-brand-accent)] hover:text-black"
+        class="btn-brackets bg-white text-black hover:bg-brand-accent hover:text-black"
       >
         Contact
       </a>
@@ -107,7 +153,7 @@
       {#each navLinks as link}
         <a
           href={link.href}
-          class="label-mono block py-3 transition-colors {$page.url.pathname ===
+          class="label-mono block py-3 transition-colors {page.url.pathname ===
           link.href
             ? 'text-white'
             : 'text-brand-text-muted'}"

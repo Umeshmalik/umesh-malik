@@ -49,14 +49,14 @@
       class="transition-colors hover:text-brand-accent"
       >lucky.umeshmalik@gmail.com</a
     >
-    <span class="text-[var(--color-brand-border)]">|</span>
+    <span class="text-brand-border">|</span>
     <a
       href="https://linkedin.com/in/umesh-malik"
       target="_blank"
       rel="noopener noreferrer"
       class="transition-colors hover:text-brand-accent">LinkedIn</a
     >
-    <span class="text-[var(--color-brand-border)]">|</span>
+    <span class="text-brand-border">|</span>
     <a
       href="https://github.com/Umeshmalik"
       target="_blank"

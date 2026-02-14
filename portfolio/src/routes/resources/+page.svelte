@@ -48,6 +48,8 @@
 	<div class="mb-12 flex flex-wrap gap-3">
 		{#each resourceCategories as category}
 			<button
+				type="button"
+				aria-pressed={activeCategory === category}
 				class="label-mono rounded border px-4 py-2 transition-colors {activeCategory ===
 				category
 					? 'border-brand-accent bg-brand-accent/10 text-brand-accent'

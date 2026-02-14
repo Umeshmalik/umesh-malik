@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { siteConfig } from "$lib/config/site";
   import {
     personSchema,
@@ -31,8 +31,8 @@
     noindex = false,
   }: Props = $props();
 
-  const canonicalUrl = $derived($page.url.origin + $page.url.pathname);
-  const currentUrl = $derived($page.url.href);
+  const canonicalUrl = $derived(page.url.origin + page.url.pathname);
+  const currentUrl = $derived(page.url.href);
   const robotsContent = $derived(
     noindex
       ? "noindex, nofollow"

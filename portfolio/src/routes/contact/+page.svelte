@@ -53,7 +53,7 @@
           : ''}"
       >
         <div class="mb-1 flex items-center gap-3">
-          <h2 class="text-xl font-medium text-white">{channel.label}</h2>
+          <h3 class="text-xl font-medium text-white">{channel.label}</h3>
           {#if channel.primary}
             <span
               class="label-mono rounded bg-brand-accent/10 px-2 py-0.5 text-brand-accent"

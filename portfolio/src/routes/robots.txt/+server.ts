@@ -2,6 +2,8 @@ import type { RequestHandler } from './$types';
 import { siteConfig } from '$lib/config/site';
 import { textHeaders } from '$lib/utils/xml';
 
+export const prerender = true;
+
 export const GET: RequestHandler = async () => {
 	const robots = `# Robots.txt for ${siteConfig.url}
 # Last updated: ${new Date().toISOString().split('T')[0]}
