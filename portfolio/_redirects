@@ -1,4 +1,13 @@
-# Cloudflare Pages Redirects for static sub-apps
+# Cloudflare Pages Redirects
+
+# ═══════ Old retro app URLs → new locations ═══════
+# These were indexed by search engines when the retro app was at the root.
+# Pages that also exist in SvelteKit (/about, /projects, /contact) resolve
+# naturally; these redirects cover retro-only pages and trailing-slash variants.
+/experience   /projects/retro-portfolio/experience/  301
+/experience/  /projects/retro-portfolio/experience/  301
+/skills       /projects/retro-portfolio/skills/      301
+/skills/      /projects/retro-portfolio/skills/      301
 
 # ═══════ Retro Portfolio — Trailing slash consistency ═══════
 /projects/retro-portfolio/about      /projects/retro-portfolio/about/     301
