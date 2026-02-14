@@ -28,8 +28,17 @@
     class="mx-auto flex h-[81px] max-w-[1440px] items-center justify-between px-6 lg:px-12"
   >
     <!-- Logo -->
-    <a href="/" class="text-xl font-medium tracking-tight text-white">
-      Umesh<span class="text-brand-accent">.</span>
+    <a href="/" class="flex items-center gap-3 text-white" aria-label="Umesh Malik - Home">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="32" height="32" rx="4" fill="currentColor" fill-opacity="0"/>
+        <path d="M3 9 L3 3 L9 3" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
+        <path d="M23 3 L29 3 L29 9" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
+        <path d="M29 23 L29 29 L23 29" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
+        <path d="M9 29 L3 29 L3 23" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
+        <text x="9" y="23" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="17" fill="white">U</text>
+        <circle cx="24" cy="22" r="2" fill="#C09E5A"/>
+      </svg>
+      <span class="text-xl font-medium tracking-tight">Umesh<span class="text-brand-accent">.</span></span>
     </a>
 
     <!-- Desktop Nav - Center -->

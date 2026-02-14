@@ -19,7 +19,7 @@ export const siteConfig = {
 		github: 'https://github.com/Umeshmalik'
 	},
 	ogImage: '/og-image.jpg',
-	logo: '/logo.png',
+	logo: '/logo.svg',
 	copyright: (year: number) => `Copyright ${year} Umesh Malik`,
 	/** Static pages and their sitemap metadata */
 	staticPages: [

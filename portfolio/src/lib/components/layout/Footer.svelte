@@ -24,7 +24,15 @@
   <div class="mx-auto max-w-[1440px] px-6 py-20 lg:px-12">
     <div class="grid gap-12 md:grid-cols-3">
       <div>
-        <h3 class="mb-4 text-lg font-medium text-white">
+        <h3 class="mb-4 flex items-center gap-2 text-lg font-medium text-white">
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 9 L3 3 L9 3" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
+            <path d="M23 3 L29 3 L29 9" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
+            <path d="M29 23 L29 29 L23 29" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
+            <path d="M9 29 L3 29 L3 23" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
+            <text x="9" y="23" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="17" fill="white">U</text>
+            <circle cx="24" cy="22" r="2" fill="#C09E5A"/>
+          </svg>
           Umesh Malik<span class="text-brand-accent">.</span>
         </h3>
         <p class="body-medium text-brand-text-secondary">
