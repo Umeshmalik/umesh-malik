@@ -1,0 +1,16 @@
+name = "umesh-malik-portfolio"
+main = ".svelte-kit/cloudflare/_worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production]
+name = "umesh-malik-portfolio"
+main = ".svelte-kit/cloudflare/_worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[env.development]
+name = "umesh-malik-portfolio-dev"
+main = ".svelte-kit/cloudflare/_worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
