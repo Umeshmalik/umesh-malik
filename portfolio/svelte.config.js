@@ -35,6 +35,7 @@ const config = {
 			precompress: false,
 			strict: false
 		}),
+		inlineStyleThreshold: 20000,
 		prerender: {
 			handleHttpError({ path, message }) {
 				// Static microfrontend files exist in static/ but aren't SvelteKit routes
