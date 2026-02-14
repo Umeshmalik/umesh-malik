@@ -48,8 +48,8 @@
     },
     {
       title: "@lumeshmalik",
-      outlet: "Twitter",
-      url: "https://twitter.com/umeshmalik",
+      outlet: "X",
+      url: "https://x.com/lumeshmalik",
       description:
         "Frontend tips, tech opinions, and occasional threads on web architecture",
     },

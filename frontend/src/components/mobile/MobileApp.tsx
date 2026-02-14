@@ -97,7 +97,8 @@ export default function MobileApp() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
               {[
                 { icon: '🐙', label: 'GitHub', action: () => window.open('https://github.com/Umeshmalik', '_blank') },
-                { icon: '💼', label: 'LinkedIn', action: () => window.open('https://linkedin.com/in/umeshmalik', '_blank') },
+                { icon: '💼', label: 'LinkedIn', action: () => window.open('https://linkedin.com/in/umesh-malik', '_blank') },
+                { icon: '🐦', label: 'X', action: () => window.open('https://x.com/lumeshmalik', '_blank') },
                 { icon: '📧', label: 'Email', action: () => setActiveTab('contact') },
                 { icon: '📄', label: 'Resume', action: () => { const a = document.createElement('a'); a.href = '/Umesh-Malik-Resume.pdf'; a.download = 'Umesh-Malik-Resume.pdf'; a.click(); } },
               ].map((item) => (

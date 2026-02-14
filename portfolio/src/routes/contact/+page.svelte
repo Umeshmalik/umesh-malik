@@ -16,7 +16,7 @@
 
 <SEO
   title="Get in Touch - Umesh Malik"
-  description="Contact Umesh Malik for professional inquiries, technical collaborations, speaking engagements, or open-source projects. Available via email, LinkedIn, GitHub, and Twitter."
+  description="Contact Umesh Malik for professional inquiries, technical collaborations, speaking engagements, or open-source projects. Available via email, LinkedIn, GitHub, and X."
 />
 
 <svelte:head>

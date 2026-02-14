@@ -6,8 +6,8 @@
 
   let { title, url }: Props = $props();
 
-  const twitterUrl = $derived(
-    `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+  const xUrl = $derived(
+    `https://x.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
   );
   const linkedinUrl = $derived(
     `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
@@ -18,12 +18,12 @@
   <span class="font-medium text-white">Share this article:</span>
   <div class="flex gap-3">
     <a
-      href={twitterUrl}
+      href={xUrl}
       target="_blank"
       rel="noopener noreferrer"
       class="btn-brackets bg-white px-4 py-2 text-black transition-colors hover:bg-brand-accent"
     >
-      Twitter
+      X
     </a>
     <a
       href={linkedinUrl}

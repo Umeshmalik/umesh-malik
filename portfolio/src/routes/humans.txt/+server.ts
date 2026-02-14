@@ -11,7 +11,7 @@ Role: ${siteConfig.author.jobTitle}
 Site: ${siteConfig.url}
 Location: Gurugram, India
 Contact: ${siteConfig.author.email}
-Twitter: ${siteConfig.author.twitter}
+X: ${siteConfig.author.x}
 GitHub: ${siteConfig.author.github}
 
 /* SITE */

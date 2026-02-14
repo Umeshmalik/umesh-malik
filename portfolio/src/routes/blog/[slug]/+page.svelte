@@ -153,10 +153,10 @@
       </p>
       <div class="flex gap-3">
         <a
-          href="https://twitter.com/umeshmalik"
+          href="https://x.com/lumeshmalik"
           class="label-mono text-brand-accent hover:underline"
           target="_blank"
-          rel="noopener noreferrer">Twitter</a
+          rel="noopener noreferrer">X</a
         >
         <a
           href="https://linkedin.com/in/umesh-malik"

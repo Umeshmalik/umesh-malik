@@ -29,9 +29,9 @@ export const contactChannels: ContactChannel[] = [
 		primary: false
 	},
 	{
-		label: 'Twitter',
+		label: 'X',
 		value: '@lumeshmalik',
-		href: 'https://twitter.com/umeshmalik',
+		href: 'https://x.com/lumeshmalik',
 		description: 'Follow for frontend tips, tech opinions, and the occasional thread on web architecture.',
 		primary: false
 	}

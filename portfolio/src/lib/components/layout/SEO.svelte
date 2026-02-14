@@ -80,7 +80,11 @@
   />
 
   <!-- Sitemap Discovery -->
-  <link rel="sitemap" type="application/xml" href="{siteConfig.url}/sitemap-index.xml" />
+  <link
+    rel="sitemap"
+    type="application/xml"
+    href="{siteConfig.url}/sitemap-index.xml"
+  />
 
   <!-- Humans & Security -->
   <link rel="author" href="{siteConfig.url}/humans.txt" />
@@ -107,7 +111,7 @@
     <meta property="article:section" content="Technology" />
   {/if}
 
-  <!-- Twitter Card -->
+  <!-- X Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content={currentUrl} />
   <meta name="twitter:title" content={title} />

@@ -15,7 +15,7 @@ export const personSchema = {
 		'Senior Frontend Engineer specializing in React, TypeScript, and modern web architecture with 4+ years of experience building scalable applications.',
 	image: `${baseUrl}/images/umesh-malik.jpg`,
 	url: baseUrl,
-	sameAs: [S.author.linkedin, S.author.github, 'https://twitter.com/umeshmalik'],
+	sameAs: [S.author.linkedin, S.author.github, 'https://x.com/lumeshmalik'],
 	email: `mailto:${S.author.email}`,
 	address: {
 		'@type': 'PostalAddress',
@@ -101,7 +101,7 @@ export const organizationSchema = {
 	founder: {
 		'@id': `${baseUrl}/#person`
 	},
-	sameAs: [S.author.linkedin, S.author.github, 'https://twitter.com/umeshmalik']
+	sameAs: [S.author.linkedin, S.author.github, 'https://x.com/lumeshmalik']
 };
 
 export const siteNavigationSchema = {

@@ -14,7 +14,7 @@ export const siteConfig = {
 		email: 'lucky.umeshmalik@gmail.com',
 		jobTitle: 'Senior Frontend Engineer',
 		company: 'Expedia Group',
-		twitter: '@lumeshmalik',
+		x: '@lumeshmalik',
 		linkedin: 'https://linkedin.com/in/umesh-malik',
 		github: 'https://github.com/Umeshmalik'
 	},

@@ -281,7 +281,7 @@ The site is configured for static output (`output: "static"` in `astro.config.mj
 ## SEO
 
 - Unique `<title>` and `<meta description>` on every page
-- Open Graph and Twitter Card meta tags
+- Open Graph and X Card meta tags
 - Canonical URLs pointing to `umesh-malik.com`
 - Auto-generated `sitemap-index.xml` via `@astrojs/sitemap`
 - `robots.txt` allowing all crawlers
