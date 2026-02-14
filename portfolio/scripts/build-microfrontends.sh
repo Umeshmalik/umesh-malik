@@ -38,6 +38,9 @@ for entry in "${MICROFRONTENDS[@]}"; do
   src_path="$REPO_ROOT/$src_dir"
   dest_path="$PROJECT_ROOT/static/$static_path"
 
+  echo "→ Installing dependencies: $src_dir"
+  (cd "$src_path" && pnpm install --frozen-lockfile)
+
   echo "→ Building: $src_dir → static/$static_path"
 
   # Build the sub-app
