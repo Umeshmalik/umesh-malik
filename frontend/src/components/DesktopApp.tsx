@@ -12,7 +12,7 @@ import HireMeBadge from './ui/HireMeBadge';
 import PrintDialog from './ui/PrintDialog';
 import MatrixRain from './effects/MatrixRain';
 import ScreenSaver from './effects/ScreenSaver';
-import BSOD from './effects/BSOD';
+import ShutdownScreen from './effects/ShutdownScreen';
 import Terminal from './terminal/Terminal';
 import Snake from './games/Snake';
 import AboutContent from './pages/AboutContent';
@@ -78,7 +78,7 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
   const [openWindowIds, setOpenWindowIds] = useState<WindowState[]>([]);
   const [nextZ, setNextZ] = useState(1000);
   const [showMatrix, setShowMatrix] = useState(false);
-  const [showBSOD, setShowBSOD] = useState(false);
+  const [showShutdown, setShowShutdown] = useState(false);
   const [showPrintDialog, setShowPrintDialog] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [contextMenu, setContextMenu] = useState({ x: 0, y: 0, open: false });
@@ -284,7 +284,7 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
   );
 
   const handleShutdown = useCallback(() => {
-    setShowBSOD(true);
+    setShowShutdown(true);
   }, []);
 
 
@@ -400,12 +400,14 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
         return (
           <Terminal
             onNavigate={(path) => {
+              const rawBase = import.meta.env.BASE_URL;
+              const BASE = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
               const appMap: Record<string, string> = {
-                '/about': 'about',
-                '/experience': 'experience',
-                '/projects': 'projects',
-                '/skills': 'skills',
-                '/contact': 'contact',
+                [`${BASE}about`]: 'about',
+                [`${BASE}experience`]: 'experience',
+                [`${BASE}projects`]: 'projects',
+                [`${BASE}skills`]: 'skills',
+                [`${BASE}contact`]: 'contact',
               };
               const id = appMap[path];
               if (id) openApp(id);
@@ -606,24 +608,11 @@ export default function DesktopApp({ currentPage }: { currentPage?: string }) {
       {/* Matrix Rain */}
       {showMatrix && <MatrixRain onDismiss={() => setShowMatrix(false)} />}
 
-      {/* BSOD */}
-      {showBSOD && (
-        <BSOD
-          onDismiss={() => {
-            setShowBSOD(false);
-            setBooted(false);
-            setOpenWindowIds([]);
-            sessionStorage.removeItem('umesh-os-booted');
-            setTimeout(() => {
-              setBooted(true);
-              sessionStorage.setItem('umesh-os-booted', 'true');
-            }, 100);
-          }}
-        />
-      )}
+      {/* Shutdown Animation */}
+      {showShutdown && <ShutdownScreen />}
 
       {/* Screen Saver */}
-      {isIdle && booted && !showMatrix && !showBSOD && (
+      {isIdle && booted && !showMatrix && !showShutdown && (
         <ScreenSaver onDismiss={dismissIdle} />
       )}
 

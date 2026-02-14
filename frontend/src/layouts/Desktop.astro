@@ -19,7 +19,9 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteUrl = "https://umesh-malik.com";
-const ogImageUrl = `${siteUrl}/og-image.png`;
+const rawBase = import.meta.env.BASE_URL;
+const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const ogImageUrl = `${siteUrl}${basePath}og-image.png`;
 const years = getYearsOfExperience();
 const today = new Date().toISOString().split("T")[0];
 
@@ -106,13 +108,13 @@ const profilePageSchema = JSON.stringify({
 });
 
 // 4. BreadcrumbList schema — breadcrumb rich results
-const breadcrumbItems = [{ name: "Home", url: siteUrl }];
+const breadcrumbItems = [{ name: "Home", url: `${siteUrl}${basePath}` }];
 const pageMap: Record<string, { name: string; url: string }> = {
-  about: { name: "About Umesh Malik", url: `${siteUrl}/about/` },
-  experience: { name: "Work Experience", url: `${siteUrl}/experience/` },
-  projects: { name: "Projects", url: `${siteUrl}/projects/` },
-  skills: { name: "Technical Skills", url: `${siteUrl}/skills/` },
-  contact: { name: "Contact", url: `${siteUrl}/contact/` },
+  about: { name: "About Umesh Malik", url: `${siteUrl}${basePath}about/` },
+  experience: { name: "Work Experience", url: `${siteUrl}${basePath}experience/` },
+  projects: { name: "Projects", url: `${siteUrl}${basePath}projects/` },
+  skills: { name: "Technical Skills", url: `${siteUrl}${basePath}skills/` },
+  contact: { name: "Contact", url: `${siteUrl}${basePath}contact/` },
 };
 if (currentPage !== "home" && pageMap[currentPage]) {
   breadcrumbItems.push(pageMap[currentPage]);
@@ -210,12 +212,12 @@ const faqSchema = JSON.stringify({
 
 // Navigation links
 const navLinks = [
-  { href: "/", label: "Home", page: "home" },
-  { href: "/about/", label: "About", page: "about" },
-  { href: "/experience/", label: "Experience", page: "experience" },
-  { href: "/projects/", label: "Projects", page: "projects" },
-  { href: "/skills/", label: "Skills", page: "skills" },
-  { href: "/contact/", label: "Contact", page: "contact" },
+  { href: basePath, label: "Home", page: "home" },
+  { href: `${basePath}about/`, label: "About", page: "about" },
+  { href: `${basePath}experience/`, label: "Experience", page: "experience" },
+  { href: `${basePath}projects/`, label: "Projects", page: "projects" },
+  { href: `${basePath}skills/`, label: "Skills", page: "skills" },
+  { href: `${basePath}contact/`, label: "Contact", page: "contact" },
 ];
 
 // Skill categories for SEO content
@@ -279,19 +281,19 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <meta name="geo.position" content="28.4595;77.0266" />
     <meta name="ICBM" content="28.4595, 77.0266" />
     <meta name="msapplication-TileColor" content="#000080" />
-    <meta name="msapplication-TileImage" content="/favicon-192.png" />
+    <meta name="msapplication-TileImage" content={`${basePath}favicon-192.png`} />
     <meta name="msapplication-config" content="none" />
 
     <!-- ═══════ APPLE / iOS ═══════ -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Umesh Malik" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href={`${basePath}apple-touch-icon.png`} />
 
     <!-- ═══════ AI CRAWLERS / LLMs ═══════ -->
     <meta name="ai-content-declaration" content="This is a personal portfolio website of Umesh Malik, a Senior Frontend Engineer at Expedia Group with expertise in React, TypeScript, and JavaScript." />
-    <link rel="alternate" type="text/plain" href={`${siteUrl}/llms.txt`} title="LLM-friendly site summary" />
-    <link rel="alternate" type="text/plain" href={`${siteUrl}/llms-full.txt`} title="Comprehensive LLM site information" />
+    <link rel="alternate" type="text/plain" href={`${siteUrl}${basePath}llms.txt`} title="LLM-friendly site summary" />
+    <link rel="alternate" type="text/plain" href={`${siteUrl}${basePath}llms-full.txt`} title="Comprehensive LLM site information" />
 
     <!-- ═══════ ADDITIONAL SEO ═══════ -->
     <meta name="subject" content="Portfolio of Umesh Malik, Senior Frontend Engineer at Expedia Group" />
@@ -308,16 +310,16 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- ═══════ FAVICONS & ICONS ═══════ -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href={`${basePath}favicon.svg`} />
+    <link rel="icon" type="image/x-icon" href={`${basePath}favicon.ico`} />
+    <link rel="icon" type="image/png" sizes="192x192" href={`${basePath}favicon-192.png`} />
+    <link rel="icon" type="image/png" sizes="512x512" href={`${basePath}favicon-512.png`} />
+    <link rel="manifest" href={`${basePath}manifest.json`} />
 
     <!-- ═══════ DISCOVERY & SYNDICATION ═══════ -->
-    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
-    <link rel="author" href="/humans.txt" />
-    <link rel="alternate" type="application/rss+xml" title="Umesh Malik — Updates" href="/rss.xml" />
+    <link rel="sitemap" type="application/xml" href={`${basePath}sitemap-index.xml`} />
+    <link rel="author" href={`${basePath}humans.txt`} />
+    <link rel="alternate" type="application/rss+xml" title="Umesh Malik — Updates" href={`${basePath}rss.xml`} />
 
     <!-- ═══════ JSON-LD STRUCTURED DATA (6 schemas) ═══════ -->
     <script type="application/ld+json" set:html={personSchema} />
@@ -342,11 +344,11 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <link rel="preload" href="https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Prefetch key pages -->
-    <link rel="prefetch" href="/about/" />
-    <link rel="prefetch" href="/experience/" />
-    <link rel="prefetch" href="/projects/" />
-    <link rel="prefetch" href="/skills/" />
-    <link rel="prefetch" href="/contact/" />
+    <link rel="prefetch" href={`${basePath}about/`} />
+    <link rel="prefetch" href={`${basePath}experience/`} />
+    <link rel="prefetch" href={`${basePath}projects/`} />
+    <link rel="prefetch" href={`${basePath}skills/`} />
+    <link rel="prefetch" href={`${basePath}contact/`} />
   </head>
 
   <body itemscope itemtype="https://schema.org/WebPage">
@@ -570,8 +572,8 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
         <a href={personalInfo.linkedin} rel="noopener noreferrer me">LinkedIn</a> |
         <a href={personalInfo.github} rel="noopener noreferrer me">GitHub</a> |
         <a href={`mailto:${personalInfo.email}`} rel="me">Email</a> |
-        <a href="/llms.txt">LLMs Info</a> |
-        <a href="/sitemap-index.xml">Sitemap</a>
+        <a href={`${basePath}llms.txt`}>LLMs Info</a> |
+        <a href={`${basePath}sitemap-index.xml`}>Sitemap</a>
       </nav>
     </footer>
   </body>

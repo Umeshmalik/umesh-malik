@@ -2,18 +2,18 @@
 # https://developers.cloudflare.com/pages/configuration/redirects/
 
 # Trailing slash consistency (SEO: avoid duplicate content)
-/about      /about/     301
-/experience /experience/ 301
-/projects   /projects/  301
-/skills     /skills/    301
-/contact    /contact/   301
+/projects/retro-portfolio/about      /projects/retro-portfolio/about/     301
+/projects/retro-portfolio/experience /projects/retro-portfolio/experience/ 301
+/projects/retro-portfolio/projects   /projects/retro-portfolio/projects/  301
+/projects/retro-portfolio/skills     /projects/retro-portfolio/skills/    301
+/projects/retro-portfolio/contact    /projects/retro-portfolio/contact/   301
 
 # Common misspellings / alternate URLs
-/resume     /experience/ 301
-/cv         /experience/ 301
-/work       /experience/ 301
-/portfolio  /projects/   301
-/hire       /contact/    301
-/email      /contact/    301
-/skills-galaxy /skills/  301
-/tech       /skills/     301
+/projects/retro-portfolio/resume     /projects/retro-portfolio/experience/ 301
+/projects/retro-portfolio/cv         /projects/retro-portfolio/experience/ 301
+/projects/retro-portfolio/work       /projects/retro-portfolio/experience/ 301
+/projects/retro-portfolio/portfolio  /projects/retro-portfolio/projects/   301
+/projects/retro-portfolio/hire       /projects/retro-portfolio/contact/    301
+/projects/retro-portfolio/email      /projects/retro-portfolio/contact/    301
+/projects/retro-portfolio/skills-galaxy /projects/retro-portfolio/skills/  301
+/projects/retro-portfolio/tech       /projects/retro-portfolio/skills/     301

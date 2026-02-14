@@ -4,6 +4,9 @@ import DesktopApp from '../components/DesktopApp';
 import DraggableWindow from '../components/windows/DraggableWindow';
 import ProjectsContent from '../components/pages/ProjectsContent';
 import { projects, personalInfo } from '../data/resume';
+
+const rawBase = import.meta.env.BASE_URL;
+const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 ---
 
 <Desktop
@@ -18,7 +21,7 @@ import { projects, personalInfo } from '../data/resume';
       icon="📁"
       defaultWidth={750}
       defaultHeight={520}
-      closeHref="/"
+      closeHref={basePath}
       client:load
     >
       <ProjectsContent client:load />
@@ -46,7 +49,7 @@ import { projects, personalInfo } from '../data/resume';
     <section>
       <h2>Open Source & GitHub</h2>
       <p>View more of Umesh Malik's work on <a href={personalInfo.github} rel="noopener">GitHub (github.com/Umeshmalik)</a>.</p>
-      <p>Interested in collaborating? <a href="/contact/">Get in touch</a>.</p>
+      <p>Interested in collaborating? <a href={`${basePath}contact/`}>Get in touch</a>.</p>
     </section>
   </article>
 </Desktop>

@@ -1,0 +1,8 @@
+# Cloudflare Pages Redirects for static sub-apps
+
+# ═══════ Retro Portfolio — Trailing slash consistency ═══════
+/projects/retro-portfolio/about      /projects/retro-portfolio/about/     301
+/projects/retro-portfolio/experience /projects/retro-portfolio/experience/ 301
+/projects/retro-portfolio/projects   /projects/retro-portfolio/projects/  301
+/projects/retro-portfolio/skills     /projects/retro-portfolio/skills/    301
+/projects/retro-portfolio/contact    /projects/retro-portfolio/contact/   301

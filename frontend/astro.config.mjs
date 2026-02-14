@@ -7,6 +7,7 @@ import sitemap from "@astrojs/sitemap";
 // https://astro.build/config
 export default defineConfig({
   site: "https://umesh-malik.com",
+  base: "/projects/retro-portfolio",
   output: "static",
   compressHTML: true,
   integrations: [
@@ -16,12 +17,12 @@ export default defineConfig({
       priority: 0.7,
       lastmod: new Date(),
       customPages: [
-        "https://umesh-malik.com/",
-        "https://umesh-malik.com/about/",
-        "https://umesh-malik.com/experience/",
-        "https://umesh-malik.com/projects/",
-        "https://umesh-malik.com/skills/",
-        "https://umesh-malik.com/contact/",
+        "https://umesh-malik.com/projects/retro-portfolio/",
+        "https://umesh-malik.com/projects/retro-portfolio/about/",
+        "https://umesh-malik.com/projects/retro-portfolio/experience/",
+        "https://umesh-malik.com/projects/retro-portfolio/projects/",
+        "https://umesh-malik.com/projects/retro-portfolio/skills/",
+        "https://umesh-malik.com/projects/retro-portfolio/contact/",
       ],
     }),
   ],

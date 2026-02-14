@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+
+const rawBase = import.meta.env.BASE_URL;
+const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 ---
 
 <!DOCTYPE html>
@@ -9,7 +12,7 @@ import '../styles/global.css';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Page Not Found — Umesh Malik</title>
     <meta name="robots" content="noindex, nofollow" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${basePath}favicon.svg`} />
   </head>
   <body>
     <div class="bsod" id="bsod-screen">
@@ -30,7 +33,7 @@ import '../styles/global.css';
       *  Or stare at this screen. Your choice.<br />
       <br />
       <a
-        href="/"
+        href={basePath}
         style="color: white; text-decoration: underline; cursor: pointer; font-family: 'VT323', monospace; font-size: 20px;"
       >
         [ Click here or press any key to reboot ]
@@ -44,7 +47,7 @@ import '../styles/global.css';
     <script>
       document.getElementById('url-display')!.textContent = window.location.pathname;
       document.getElementById('timestamp')!.textContent = new Date().toISOString();
-      document.addEventListener('keydown', () => { window.location.href = '/'; });
+      document.addEventListener('keydown', () => { window.location.href = '/projects/retro-portfolio/'; });
     </script>
   </body>
 </html>

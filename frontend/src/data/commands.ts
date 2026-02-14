@@ -26,6 +26,9 @@ function getNeofetch() {
 `;
 }
 
+const rawBase = import.meta.env.BASE_URL;
+const BASE = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+
 export function executeCommand(input: string, history: string[]): CommandResult {
   const trimmed = input.trim().toLowerCase();
   const parts = trimmed.split(/\s+/);
@@ -56,21 +59,21 @@ export function executeCommand(input: string, history: string[]): CommandResult 
       };
 
     case 'about':
-      return { output: 'Navigating to about.exe...', action: 'navigate', target: '/about' };
+      return { output: 'Navigating to about.exe...', action: 'navigate', target: `${BASE}about` };
 
     case 'experience':
     case 'career':
-      return { output: 'Navigating to career.exe...', action: 'navigate', target: '/experience' };
+      return { output: 'Navigating to career.exe...', action: 'navigate', target: `${BASE}experience` };
 
     case 'projects':
-      return { output: 'Navigating to projects.exe...', action: 'navigate', target: '/projects' };
+      return { output: 'Navigating to projects.exe...', action: 'navigate', target: `${BASE}projects` };
 
     case 'skills':
-      return { output: 'Navigating to skills.exe...', action: 'navigate', target: '/skills' };
+      return { output: 'Navigating to skills.exe...', action: 'navigate', target: `${BASE}skills` };
 
     case 'contact':
     case 'mail':
-      return { output: 'Navigating to mail.exe...', action: 'navigate', target: '/contact' };
+      return { output: 'Navigating to mail.exe...', action: 'navigate', target: `${BASE}contact` };
 
     case 'whoami':
       return {

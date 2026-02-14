@@ -7,6 +7,8 @@ import { personalInfo, education, awards } from "../data/resume";
 import { getYearsOfExperience, getSummary } from "../data/dynamic";
 
 const years = getYearsOfExperience();
+const rawBase = import.meta.env.BASE_URL;
+const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 ---
 
 <Desktop
@@ -21,7 +23,7 @@ const years = getYearsOfExperience();
       icon="👤"
       defaultWidth={700}
       defaultHeight={520}
-      closeHref="/"
+      closeHref={basePath}
       client:load
     >
       <AboutContent client:load />

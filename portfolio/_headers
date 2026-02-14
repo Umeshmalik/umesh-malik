@@ -1,0 +1,35 @@
+# Cloudflare Pages HTTP Headers for static sub-apps
+# These headers apply to microfrontend assets served as static files
+# (SvelteKit's hooks.server.ts headers only apply to SvelteKit-routed requests)
+
+# ═══════ Retro Portfolio Sub-App ═══════
+/projects/retro-portfolio/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# Hashed Astro assets — immutable cache
+/projects/retro-portfolio/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML pages — short cache for freshness
+/projects/retro-portfolio/
+  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400
+
+/projects/retro-portfolio/about/
+  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400
+
+/projects/retro-portfolio/experience/
+  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400
+
+/projects/retro-portfolio/projects/
+  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400
+
+/projects/retro-portfolio/skills/
+  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400
+
+/projects/retro-portfolio/contact/
+  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400

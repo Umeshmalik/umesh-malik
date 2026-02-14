@@ -7,6 +7,8 @@ import { experiences, personalInfo } from "../data/resume";
 import { getYearsOfExperience } from "../data/dynamic";
 
 const years = getYearsOfExperience();
+const rawBase = import.meta.env.BASE_URL;
+const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 ---
 
 <Desktop
@@ -21,7 +23,7 @@ const years = getYearsOfExperience();
       icon="💼"
       defaultWidth={750}
       defaultHeight={550}
-      closeHref="/"
+      closeHref={basePath}
       client:load
     >
       <ExperienceContent client:load />
@@ -46,7 +48,7 @@ const years = getYearsOfExperience();
     <section>
       <h2>Career Timeline</h2>
       <p>July 2021 — Present: {years}+ years of progressive growth from Associate Engineer to Senior Frontend Engineer across fintech, automotive, and travel technology domains.</p>
-      <p>Looking to connect? <a href="/contact/">Contact Umesh Malik</a> or visit his <a href={personalInfo.linkedin}>LinkedIn profile</a>.</p>
+      <p>Looking to connect? <a href={`${basePath}contact/`}>Contact Umesh Malik</a> or visit his <a href={personalInfo.linkedin}>LinkedIn profile</a>.</p>
     </section>
   </article>
 </Desktop>

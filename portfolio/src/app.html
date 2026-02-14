@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<!-- Favicon & App Icons -->
+		<link rel="icon" href="%sveltekit.assets%/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="%sveltekit.assets%/icons/icon-192.png" type="image/png" />
+		<link rel="apple-touch-icon" href="%sveltekit.assets%/icons/apple-touch-icon.png" />
+		<link rel="manifest" href="%sveltekit.assets%/manifest.json" />
+
+		<!-- Theme Color -->
+		<meta name="theme-color" content="#000000" />
+		<meta name="msapplication-TileColor" content="#000000" />
+		<meta name="color-scheme" content="dark" />
+
+		<!-- Fonts: preconnect + dns-prefetch for fast loading -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+		<link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- RSS Feed Discovery -->
+		<link rel="alternate" type="application/rss+xml" title="Umesh Malik's Blog" href="/blog-feed.xml" />
+		<link rel="alternate" type="application/rss+xml" title="Umesh Malik" href="/rss.xml" />
+
+		<!-- Sitemap Discovery -->
+		<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>

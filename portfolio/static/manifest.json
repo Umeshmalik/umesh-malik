@@ -1,0 +1,30 @@
+{
+  "name": "Umesh Malik - Senior Frontend Engineer",
+  "short_name": "Umesh Malik",
+  "description": "Portfolio and blog of Umesh Malik, Senior Frontend Engineer at Expedia Group specializing in React, TypeScript, and modern web architecture.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#C09E5A",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["portfolio", "blog", "technology"],
+  "lang": "en",
+  "dir": "ltr"
+}
