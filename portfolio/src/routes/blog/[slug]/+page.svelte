@@ -144,9 +144,9 @@
     class="corner-brackets mt-12 border border-brand-card-border bg-brand-card p-8"
   >
     <div>
-      <h3 class="mb-1 text-lg font-medium text-white">
+      <h2 class="mb-1 text-lg font-medium text-white">
         Written by Umesh Malik
-      </h3>
+      </h2>
       <p class="body-medium mb-3 text-brand-text-secondary">
         Senior Frontend Engineer at Expedia Group. Passionate about React,
         TypeScript, and building scalable web applications.

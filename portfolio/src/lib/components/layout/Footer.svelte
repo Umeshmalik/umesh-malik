@@ -24,7 +24,7 @@
   <div class="mx-auto max-w-[1440px] px-6 py-20 lg:px-12">
     <div class="grid gap-12 md:grid-cols-3">
       <div>
-        <h3 class="mb-4 flex items-center gap-2 text-lg font-medium text-white">
+        <h2 class="mb-4 flex items-center gap-2 text-lg font-medium text-white">
           <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M3 9 L3 3 L9 3" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
             <path d="M23 3 L29 3 L29 9" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
@@ -34,7 +34,7 @@
             <circle cx="24" cy="22" r="2" fill="#C09E5A"/>
           </svg>
           Umesh Malik<span class="text-brand-accent">.</span>
-        </h3>
+        </h2>
         <p class="body-medium text-brand-text-secondary">
           Senior Frontend Engineer at Expedia Group. Building scalable web
           applications with React, TypeScript, and modern architecture.
@@ -42,7 +42,7 @@
       </div>
 
       <div>
-        <h4 class="label-mono mb-6 text-brand-text-muted">Pages</h4>
+        <h3 class="label-mono mb-6 text-brand-text-muted">Pages</h3>
         <ul class="space-y-3">
           {#each siteLinks as link}
             <li>
@@ -58,7 +58,7 @@
       </div>
 
       <div>
-        <h4 class="label-mono mb-6 text-brand-text-muted">Connect</h4>
+        <h3 class="label-mono mb-6 text-brand-text-muted">Connect</h3>
         <ul class="space-y-3">
           {#each socialLinks as link}
             <li>
