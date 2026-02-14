@@ -2,13 +2,13 @@
  * Post-build script: inlines render-blocking CSS and adds font preload hints.
  * - Inlines CSS into HTML to eliminate render-blocking stylesheet requests
  * - Resolves relative url() paths to absolute (critical when moving CSS into HTML)
- * - Extracts font URLs from inlined CSS and adds <link rel="preload"> hints
- *   so fonts download in parallel with HTML parsing (no chain)
+ * - Adds <link rel="preload"> for latin font files only (most critical subset)
+ * - Injects preload hints AFTER <meta charset> to keep charset in first 1024 bytes
  *
  * Runs after `vite build` and before deployment.
  */
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
-import { join, dirname, posix } from 'path';
+import { join, posix } from 'path';
 
 const buildDir = 'build';
 
@@ -33,17 +33,25 @@ function getAllHtmlFiles(dir) {
  */
 function resolveRelativeUrls(css, cssHref) {
 	const cssDir = posix.dirname(cssHref);
-	return css.replace(/url\(["']?(?!data:|https?:|\/\/)([^"')]+)["']?\)/g, (match, relPath) => {
+	return css.replace(/url\(["']?(?!data:|https?:|\/\/)([^"')]+)["']?\)/g, (_match, relPath) => {
 		const absPath = posix.normalize(`${cssDir}/${relPath}`);
 		return `url(${absPath})`;
 	});
 }
 
-function extractFontUrls(css) {
+/**
+ * Extract only the primary latin font URLs (not latin-ext, cyrillic, etc.)
+ * to keep preload hints minimal and avoid pushing charset past 1024 bytes.
+ */
+function extractLatinFontUrls(css) {
 	const fontUrls = new Set();
 	const urlRegex = /url\(["']?([^"')]+\.woff2)["']?\)/g;
 	for (const match of css.matchAll(urlRegex)) {
-		fontUrls.add(match[1]);
+		const url = match[1];
+		// Only preload primary latin subset — skip latin-ext, cyrillic, etc.
+		if (url.includes('-latin-') && !url.includes('-latin-ext-')) {
+			fontUrls.add(url);
+		}
 	}
 	return [...fontUrls];
 }
@@ -81,7 +89,6 @@ for (const htmlFile of htmlFiles) {
 		if (!cssCache.has(cssPath)) {
 			try {
 				const rawCss = readFileSync(cssPath, 'utf-8');
-				// Resolve relative URLs to absolute before caching
 				cssCache.set(cssPath, { css: resolveRelativeUrls(rawCss, href), href });
 			} catch {
 				continue;
@@ -89,15 +96,18 @@ for (const htmlFile of htmlFiles) {
 		}
 
 		const { css } = cssCache.get(cssPath);
-		allFontUrls.push(...extractFontUrls(css));
+		allFontUrls.push(...extractLatinFontUrls(css));
 		html = html.replace(linkTag, `<style>${css}</style>`);
 		modified = true;
 	}
 
-	// Inject font preload hints right after <head> opening tag
+	// Inject font preload hints AFTER <meta charset="utf-8"> to keep charset in first 1024 bytes
 	if (modified && allFontUrls.length > 0) {
 		const preloadTags = buildPreloadTags(allFontUrls);
-		html = html.replace('<head>', `<head>\n\t\t${preloadTags}`);
+		html = html.replace(
+			/<meta charset="utf-8"\s*\/?>/,
+			(charsetTag) => `${charsetTag}\n\t\t${preloadTags}`
+		);
 		totalFonts = allFontUrls.length;
 	}
 
