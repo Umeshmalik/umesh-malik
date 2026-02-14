@@ -3,17 +3,17 @@
   import { fly } from "svelte/transition";
   import { experience } from "$lib/data/resume";
 
-  let isInView = $state(false);
+  let hasBeenInView = $state(false);
 </script>
 
 <section
   id="experience"
   class="border-y border-brand-border px-6 py-20 md:py-32 lg:px-12"
   use:inview={{ threshold: 0.1 }}
-  oninview_change={(e) => (isInView = e.detail.inView)}
+  oninview_change={(e) => { if (e.detail.inView) hasBeenInView = true; }}
 >
   <div class="mx-auto max-w-[1160px]">
-    {#if isInView}
+    {#if hasBeenInView}
       <h2
         class="section-title mb-20 text-white"
         in:fly={{ y: 30, duration: 600 }}

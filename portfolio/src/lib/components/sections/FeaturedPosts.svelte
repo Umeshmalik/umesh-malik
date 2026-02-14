@@ -8,17 +8,17 @@
   }
 
   let { posts }: Props = $props();
-  let isInView = $state(false);
+  let hasBeenInView = $state(false);
 </script>
 
 {#if posts.length > 0}
   <section
     class="border-t border-brand-border px-6 py-20 md:py-32 lg:px-12"
     use:inview={{ threshold: 0.2 }}
-    oninview_change={(e) => (isInView = e.detail.inView)}
+    oninview_change={(e) => { if (e.detail.inView) hasBeenInView = true; }}
   >
     <div class="mx-auto max-w-[1160px]">
-      {#if isInView}
+      {#if hasBeenInView}
         <div class="mb-20 flex items-end justify-between">
           <h2
             class="section-title text-white"

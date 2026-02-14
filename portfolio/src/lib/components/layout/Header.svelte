@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { onMount } from "svelte";
 
   let menuOpen = $state(false);
   let scrolled = $state(false);
@@ -12,11 +13,14 @@
     { href: "/resume", label: "Resume" },
   ];
 
-  if (typeof window !== "undefined") {
-    window.addEventListener("scroll", () => {
+  onMount(() => {
+    const onScroll = () => {
       scrolled = window.scrollY > 10;
-    });
-  }
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  });
 </script>
 
 <header

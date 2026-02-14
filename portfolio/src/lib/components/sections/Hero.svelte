@@ -3,21 +3,21 @@
   import { fly } from "svelte/transition";
   import Button from "$lib/components/ui/Button.svelte";
 
-  let isInView = $state(false);
+  let hasBeenInView = $state(false);
 </script>
 
 <section
   class="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-24 lg:px-12"
   use:inview
   oninview_change={(event) => {
-    isInView = event.detail.inView;
+    if (event.detail.inView) hasBeenInView = true;
   }}
 >
   <!-- Subtle gold radial glow -->
   <div class="pointer-events-none absolute inset-0 gold-glow"></div>
 
   <div class="relative z-10 mx-auto w-full max-w-[1160px]">
-    {#if isInView}
+    {#if hasBeenInView}
       <p
         class="label-mono mb-8 text-brand-accent"
         in:fly={{ y: 20, duration: 600, delay: 0 }}
