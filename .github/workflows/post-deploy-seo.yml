@@ -6,13 +6,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  ping-search-engines:
-    name: Ping Search Engines
+  wait-for-deploy:
+    name: Wait for Cloudflare Pages
     runs-on: ubuntu-latest
-    # Wait for Cloudflare Pages to finish building and deploying
     steps:
-      - uses: actions/checkout@v4
-
       - name: Wait for Cloudflare Pages deploy
         run: |
           echo "Waiting 90s for Cloudflare Pages to complete deployment..."
@@ -20,75 +17,76 @@ jobs:
 
       - name: Verify sites are live
         run: |
-          COM_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://umesh-malik.com" || echo "000")
-          IN_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://umesh-malik.in" || echo "000")
-          echo ".com status: $COM_STATUS"
-          echo ".in  status: $IN_STATUS"
-          if [ "$COM_STATUS" != "200" ] && [ "$IN_STATUS" != "200" ]; then
+          COM=$(curl -s -o /dev/null -w "%{http_code}" "https://umesh-malik.com")
+          IN=$(curl -s -o /dev/null -w "%{http_code}" "https://umesh-malik.in")
+          echo ".com → $COM"
+          echo ".in  → $IN"
+          if [ "$COM" != "200" ] && [ "$IN" != "200" ]; then
             echo "::warning::Both sites returned non-200 — deploy may still be in progress"
           fi
 
-      - name: Ping Google sitemaps
+  websub-google:
+    name: WebSub → Google
+    needs: wait-for-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Google via PubSubHubbub
         run: |
-          curl -sf "https://www.google.com/ping?sitemap=https://umesh-malik.com/sitemap-index.xml" > /dev/null && echo ".com sitemap-index pinged"
-          curl -sf "https://www.google.com/ping?sitemap=https://umesh-malik.com/blog-sitemap.xml" > /dev/null && echo ".com blog-sitemap pinged"
-          curl -sf "https://www.google.com/ping?sitemap=https://umesh-malik.in/sitemap-index.xml" > /dev/null && echo ".in  sitemap-index pinged"
-          curl -sf "https://www.google.com/ping?sitemap=https://umesh-malik.in/blog-sitemap.xml" > /dev/null && echo ".in  blog-sitemap pinged"
+          HUB="https://pubsubhubbub.appspot.com"
+          for DOMAIN in "umesh-malik.com" "umesh-malik.in"; do
+            for FEED in "/rss.xml" "/blog-feed.xml" "/feed.json"; do
+              RESP=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$HUB" \
+                -d "hub.mode=publish" \
+                -d "hub.url=https://${DOMAIN}${FEED}")
+              echo "${DOMAIN}${FEED} → HTTP $RESP"
+            done
+          done
 
-      - name: Submit to IndexNow (Bing, Yandex, DuckDuckGo)
+  indexnow-bing:
+    name: IndexNow → Bing/Yandex/DuckDuckGo
+    needs: wait-for-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit URLs to IndexNow
         run: |
-          INDEXNOW_KEY="b52fd35b0ee3234d8074e58fa2591da9"
+          KEY="b52fd35b0ee3234d8074e58fa2591da9"
 
-          # Get latest blog post URLs from blog-sitemap
-          BLOG_URLS=$(curl -sf "https://umesh-malik.com/blog-sitemap.xml" | grep -oP '(?<=<loc>)[^<]+' | head -5 || echo "")
+          for DOMAIN in "umesh-malik.com" "umesh-malik.in"; do
+            BLOG_URLS=$(curl -sf "https://${DOMAIN}/blog-sitemap.xml" \
+              | grep -o '<loc>[^<]*</loc>' \
+              | sed 's/<[^>]*>//g' \
+              | head -5 || echo "")
 
-          # Build URL list for .com
-          URL_LIST_COM="\"https://umesh-malik.com/\", \"https://umesh-malik.com/blog\""
-          if [ -n "$BLOG_URLS" ]; then
+            URL_JSON="\"https://${DOMAIN}/\", \"https://${DOMAIN}/blog\""
             while IFS= read -r url; do
-              URL_LIST_COM="${URL_LIST_COM}, \"${url}\""
+              [ -n "$url" ] && URL_JSON="${URL_JSON}, \"${url}\""
             done <<< "$BLOG_URLS"
-          fi
 
-          echo "Submitting .com to IndexNow..."
-          curl -sf -X POST "https://api.indexnow.org/indexnow" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"host\": \"umesh-malik.com\",
-              \"key\": \"${INDEXNOW_KEY}\",
-              \"keyLocation\": \"https://umesh-malik.com/${INDEXNOW_KEY}.txt\",
-              \"urlList\": [${URL_LIST_COM}]
-            }" && echo ".com IndexNow OK" || echo ".com IndexNow submitted"
+            RESP=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.indexnow.org/indexnow" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"host\": \"${DOMAIN}\",
+                \"key\": \"${KEY}\",
+                \"keyLocation\": \"https://${DOMAIN}/${KEY}.txt\",
+                \"urlList\": [${URL_JSON}]
+              }")
+            echo "${DOMAIN} → HTTP $RESP"
+          done
 
-          # Build URL list for .in (replace domain)
-          URL_LIST_IN=$(echo "$URL_LIST_COM" | sed 's/umesh-malik\.com/umesh-malik.in/g')
-
-          echo "Submitting .in to IndexNow..."
-          curl -sf -X POST "https://api.indexnow.org/indexnow" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"host\": \"umesh-malik.in\",
-              \"key\": \"${INDEXNOW_KEY}\",
-              \"keyLocation\": \"https://umesh-malik.in/${INDEXNOW_KEY}.txt\",
-              \"urlList\": [${URL_LIST_IN}]
-            }" && echo ".in  IndexNow OK" || echo ".in  IndexNow submitted"
-
-      - name: Ping Bing sitemaps
+  summary:
+    name: Summary
+    needs: [websub-google, indexnow-bing]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write summary
         run: |
-          curl -sf "https://www.bing.com/ping?sitemap=https://umesh-malik.com/sitemap-index.xml" > /dev/null && echo ".com Bing pinged"
-          curl -sf "https://www.bing.com/ping?sitemap=https://umesh-malik.in/sitemap-index.xml" > /dev/null && echo ".in  Bing pinged"
-
-      - name: Summary
-        run: |
-          echo "## SEO Ping Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## SEO Notification Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Engine | Domain | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|--------|--------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Google | .com | Pinged |" >> $GITHUB_STEP_SUMMARY
-          echo "| Google | .in | Pinged |" >> $GITHUB_STEP_SUMMARY
-          echo "| IndexNow (Bing/Yandex) | .com | Submitted |" >> $GITHUB_STEP_SUMMARY
-          echo "| IndexNow (Bing/Yandex) | .in | Submitted |" >> $GITHUB_STEP_SUMMARY
+          echo "| Method | Engines | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| WebSub (PubSubHubbub) | Google | ${{ needs.websub-google.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| IndexNow | Bing, Yandex, DuckDuckGo, Seznam, Naver | ${{ needs.indexnow-bing.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Manual steps for fastest indexing:**" >> $GITHUB_STEP_SUMMARY
-          echo "1. Google Search Console → URL Inspection → Request Indexing" >> $GITHUB_STEP_SUMMARY
-          echo "2. Share on social media for backlink signals" >> $GITHUB_STEP_SUMMARY
+          echo "**For fastest Google indexing:**" >> $GITHUB_STEP_SUMMARY
+          echo "Google Search Console → URL Inspection → Request Indexing" >> $GITHUB_STEP_SUMMARY

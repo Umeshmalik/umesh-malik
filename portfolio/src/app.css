@@ -226,6 +226,36 @@ body {
 	object-fit: cover;
 }
 
+/* Prevent horizontal overflow on mobile */
+.prose {
+	overflow-wrap: break-word;
+	word-break: break-word;
+}
+
+.prose pre {
+	overflow-x: auto;
+	max-width: 100%;
+}
+
+.prose table {
+	display: block;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	max-width: 100%;
+	white-space: nowrap;
+	font-size: 0.875em;
+}
+
+.prose table th,
+.prose table td {
+	white-space: normal;
+	min-width: 80px;
+}
+
+.prose :where(code):not(:where(pre *)) {
+	word-break: break-all;
+}
+
 .prose a {
 	color: var(--color-brand-accent);
 	text-decoration: none;
