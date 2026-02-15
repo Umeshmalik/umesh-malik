@@ -4,6 +4,7 @@
  */
 export const siteConfig = {
 	url: 'https://umesh-malik.com',
+	alternateUrl: 'https://umesh-malik.in',
 	title: 'Umesh Malik - Senior Frontend Engineer',
 	description:
 		'Portfolio and professional website of Umesh Malik, Senior Frontend Engineer at Expedia Group',

@@ -31,7 +31,8 @@
     noindex = false,
   }: Props = $props();
 
-  const canonicalUrl = $derived(page.url.origin + page.url.pathname);
+  const canonicalUrl = $derived(siteConfig.url + page.url.pathname);
+  const alternateUrl = $derived(siteConfig.alternateUrl + page.url.pathname);
   const currentUrl = $derived(page.url.href);
   const robotsContent = $derived(
     noindex
@@ -55,8 +56,9 @@
   <meta name="googlebot" content={robotsContent} />
   <link rel="canonical" href={canonicalUrl} />
 
-  <!-- Hreflang (self-referential for single-language site) -->
+  <!-- Hreflang — both domains serve the same content, .com is primary -->
   <link rel="alternate" hreflang="en" href={canonicalUrl} />
+  <link rel="alternate" hreflang="en-IN" href={alternateUrl} />
   <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
 
   <!-- Feed Discovery -->

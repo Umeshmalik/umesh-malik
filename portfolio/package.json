@@ -10,7 +10,8 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"build:full": "bash scripts/build-microfrontends.sh"
+		"build:full": "bash scripts/build-microfrontends.sh",
+		"ping:seo": "bash scripts/ping-search-engines.sh"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",

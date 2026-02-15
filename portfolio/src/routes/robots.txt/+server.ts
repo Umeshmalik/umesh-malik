@@ -58,10 +58,15 @@ Allow: /
 User-agent: Meta-ExternalAgent
 Allow: /
 
-# Sitemaps
+# Sitemaps — primary domain
 Sitemap: ${siteConfig.url}/sitemap-index.xml
 Sitemap: ${siteConfig.url}/sitemap.xml
 Sitemap: ${siteConfig.url}/blog-sitemap.xml
+
+# Sitemaps — alternate domain
+Sitemap: ${siteConfig.alternateUrl}/sitemap-index.xml
+Sitemap: ${siteConfig.alternateUrl}/sitemap.xml
+Sitemap: ${siteConfig.alternateUrl}/blog-sitemap.xml
 
 # AI/LLM content files
 # Human-readable AI summary: ${siteConfig.url}/ai-summary
