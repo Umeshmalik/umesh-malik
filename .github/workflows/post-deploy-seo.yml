@@ -1,15 +1,35 @@
 name: Post-Deploy SEO Ping
 
-# Triggered by Cloudflare Pages after build completes (via scripts/notify-github.sh)
-# Also supports manual trigger from GitHub Actions UI
 on:
-  repository_dispatch:
-    types: [cf-pages-deployed]
+  push:
+    branches: [main]
+    paths:
+      - 'portfolio/**'
   workflow_dispatch:
 
 jobs:
+  wait-for-deploy:
+    name: Wait for Cloudflare Pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Cloudflare Pages deploy
+        run: |
+          echo "Waiting 90s for Cloudflare Pages to complete deployment..."
+          sleep 90
+
+      - name: Verify sites are live
+        run: |
+          COM=$(curl -s -o /dev/null -w "%{http_code}" "https://umesh-malik.com")
+          IN=$(curl -s -o /dev/null -w "%{http_code}" "https://umesh-malik.in")
+          echo ".com → $COM"
+          echo ".in  → $IN"
+          if [ "$COM" != "200" ] && [ "$IN" != "200" ]; then
+            echo "::warning::Both sites returned non-200 — deploy may still be in progress"
+          fi
+
   websub-google:
     name: WebSub → Google
+    needs: wait-for-deploy
     runs-on: ubuntu-latest
     steps:
       - name: Notify Google via PubSubHubbub
@@ -26,6 +46,7 @@ jobs:
 
   indexnow-bing:
     name: IndexNow → Bing/Yandex/DuckDuckGo
+    needs: wait-for-deploy
     runs-on: ubuntu-latest
     steps:
       - name: Submit URLs to IndexNow
@@ -54,9 +75,92 @@ jobs:
             echo "${DOMAIN} → HTTP $RESP"
           done
 
+  bing-url-submission:
+    name: Bing URL Submission API
+    needs: wait-for-deploy
+    runs-on: ubuntu-latest
+    # Requires BING_API_KEY secret — skip if not set
+    if: ${{ vars.BING_API_KEY != '' || secrets.BING_API_KEY != '' }}
+    steps:
+      - name: Submit URLs to Bing
+        env:
+          BING_API_KEY: ${{ secrets.BING_API_KEY }}
+        run: |
+          for DOMAIN in "umesh-malik.com" "umesh-malik.in"; do
+            RESP=$(curl -s -w "\nHTTP: %{http_code}" \
+              -X POST "https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=${BING_API_KEY}" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"siteUrl\": \"https://${DOMAIN}\",
+                \"urlList\": [
+                  \"https://${DOMAIN}/blog/ai-agent-attacks-developer-matplotlib-open-source\",
+                  \"https://${DOMAIN}/blog\",
+                  \"https://${DOMAIN}/\"
+                ]
+              }")
+            echo "${DOMAIN}:"
+            echo "$RESP"
+            echo ""
+          done
+
+  google-indexing-api:
+    name: Google Indexing API
+    needs: wait-for-deploy
+    runs-on: ubuntu-latest
+    # Requires GOOGLE_SERVICE_ACCOUNT_KEY secret — skip if not set
+    if: ${{ vars.GOOGLE_SERVICE_ACCOUNT_KEY != '' || secrets.GOOGLE_SERVICE_ACCOUNT_KEY != '' }}
+    steps:
+      - name: Request Google indexing
+        env:
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+        run: |
+          # Write service account key to temp file
+          echo "$GOOGLE_SA_KEY" > /tmp/sa-key.json
+
+          # Generate JWT for Google API auth
+          NOW=$(date +%s)
+          EXP=$((NOW + 3600))
+          SA_EMAIL=$(cat /tmp/sa-key.json | python3 -c "import sys,json; print(json.load(sys.stdin)['client_email'])")
+
+          HEADER=$(echo -n '{"alg":"RS256","typ":"JWT"}' | base64 -w0 | tr '+/' '-_' | tr -d '=')
+          PAYLOAD=$(echo -n "{\"iss\":\"${SA_EMAIL}\",\"scope\":\"https://www.googleapis.com/auth/indexing\",\"aud\":\"https://oauth2.googleapis.com/token\",\"iat\":${NOW},\"exp\":${EXP}}" | base64 -w0 | tr '+/' '-_' | tr -d '=')
+
+          PRIVATE_KEY=$(cat /tmp/sa-key.json | python3 -c "import sys,json; print(json.load(sys.stdin)['private_key'])")
+          SIGNATURE=$(echo -n "${HEADER}.${PAYLOAD}" | openssl dgst -sha256 -sign <(echo "$PRIVATE_KEY") | base64 -w0 | tr '+/' '-_' | tr -d '=')
+
+          JWT="${HEADER}.${PAYLOAD}.${SIGNATURE}"
+
+          # Get access token
+          ACCESS_TOKEN=$(curl -s -X POST "https://oauth2.googleapis.com/token" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${JWT}" \
+            | python3 -c "import sys,json; print(json.load(sys.stdin).get('access_token',''))")
+
+          if [ -z "$ACCESS_TOKEN" ]; then
+            echo "::error::Failed to get Google access token"
+            exit 1
+          fi
+
+          # Submit URLs for indexing
+          for URL in \
+            "https://umesh-malik.com/blog/ai-agent-attacks-developer-matplotlib-open-source" \
+            "https://umesh-malik.com/blog" \
+            "https://umesh-malik.com/"; do
+            RESP=$(curl -s -w "\nHTTP: %{http_code}" \
+              -X POST "https://indexing.googleapis.com/v3/urlNotifications:publish" \
+              -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -d "{\"url\": \"${URL}\", \"type\": \"URL_UPDATED\"}")
+            echo "${URL}:"
+            echo "$RESP"
+            echo ""
+          done
+
+          rm -f /tmp/sa-key.json
+
   summary:
     name: Summary
-    needs: [websub-google, indexnow-bing]
+    needs: [websub-google, indexnow-bing, bing-url-submission, google-indexing-api]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -64,12 +168,22 @@ jobs:
         run: |
           echo "## SEO Notification Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Triggered by: \`${{ github.event_name }}\` / \`${{ github.event.action }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "| Method | Engines | Status | Setup |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|---------|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| WebSub | Google | ${{ needs.websub-google.result }} | No secrets needed |" >> $GITHUB_STEP_SUMMARY
+          echo "| IndexNow | Bing, Yandex, DuckDuckGo | ${{ needs.indexnow-bing.result }} | No secrets needed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Bing URL Submission | Bing | ${{ needs.bing-url-submission.result }} | Needs \`BING_API_KEY\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Google Indexing API | Google | ${{ needs.google-indexing-api.result }} | Needs \`GOOGLE_SERVICE_ACCOUNT_KEY\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Method | Engines | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|--------|---------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| WebSub (PubSubHubbub) | Google | ${{ needs.websub-google.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| IndexNow | Bing, Yandex, DuckDuckGo, Seznam, Naver | ${{ needs.indexnow-bing.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "### How to enable skipped jobs" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**For fastest Google indexing:**" >> $GITHUB_STEP_SUMMARY
-          echo "Google Search Console → URL Inspection → Request Indexing" >> $GITHUB_STEP_SUMMARY
+          echo "**Bing URL Submission** (guaranteed Bing indexing):" >> $GITHUB_STEP_SUMMARY
+          echo "1. Go to [Bing Webmaster Tools](https://www.bing.com/webmasters)" >> $GITHUB_STEP_SUMMARY
+          echo "2. Add your site → Settings → API access → API key" >> $GITHUB_STEP_SUMMARY
+          echo "3. Add \`BING_API_KEY\` secret to this repo" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Google Indexing API** (guaranteed Google indexing):" >> $GITHUB_STEP_SUMMARY
+          echo "1. [Google Cloud Console](https://console.cloud.google.com) → Create project → Enable Indexing API" >> $GITHUB_STEP_SUMMARY
+          echo "2. Create Service Account → Download JSON key" >> $GITHUB_STEP_SUMMARY
+          echo "3. [Google Search Console](https://search.google.com/search-console) → Settings → Users → Add the service account email as Owner" >> $GITHUB_STEP_SUMMARY
+          echo "4. Add \`GOOGLE_SERVICE_ACCOUNT_KEY\` secret (paste full JSON) to this repo" >> $GITHUB_STEP_SUMMARY
