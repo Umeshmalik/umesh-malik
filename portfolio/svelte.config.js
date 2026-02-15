@@ -4,6 +4,20 @@ import { mdsvex } from 'mdsvex';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 
+/** Rehype plugin: adds loading="lazy" and decoding="async" to all images */
+function rehypeLazyImages() {
+	function walk(node) {
+		if (node.tagName === 'img' && node.properties) {
+			node.properties.loading = 'lazy';
+			node.properties.decoding = 'async';
+		}
+		if (node.children) {
+			node.children.forEach(walk);
+		}
+	}
+	return (tree) => walk(tree);
+}
+
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
 	extensions: ['.md', '.svx'],
@@ -17,7 +31,8 @@ const mdsvexOptions = {
 			{
 				behavior: 'wrap'
 			}
-		]
+		],
+		rehypeLazyImages
 	]
 };
 

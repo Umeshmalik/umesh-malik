@@ -215,6 +215,17 @@ body {
 	--tw-prose-td-borders: rgba(43, 43, 43, 0.5);
 }
 
+.prose img {
+	max-height: 480px;
+	width: auto;
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 8px;
+	border: 1px solid var(--color-brand-border);
+	object-fit: cover;
+}
+
 .prose a {
 	color: var(--color-brand-accent);
 	text-decoration: none;
