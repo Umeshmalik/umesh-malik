@@ -1,33 +1,20 @@
 name: Post-Deploy SEO Ping
 
+# Triggered by Cloudflare Pages deployment status event
+# When CF Pages finishes deploying, it creates a GitHub deployment_status event.
+# This workflow fires only on successful deployments — no polling, no waiting.
 on:
-  push:
-    branches: [main]
+  deployment_status:
   workflow_dispatch:
 
 jobs:
-  wait-for-deploy:
-    name: Wait for Cloudflare Pages
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for Cloudflare Pages deploy
-        run: |
-          echo "Waiting 90s for Cloudflare Pages to complete deployment..."
-          sleep 90
-
-      - name: Verify sites are live
-        run: |
-          COM=$(curl -s -o /dev/null -w "%{http_code}" "https://umesh-malik.com")
-          IN=$(curl -s -o /dev/null -w "%{http_code}" "https://umesh-malik.in")
-          echo ".com → $COM"
-          echo ".in  → $IN"
-          if [ "$COM" != "200" ] && [ "$IN" != "200" ]; then
-            echo "::warning::Both sites returned non-200 — deploy may still be in progress"
-          fi
-
   websub-google:
     name: WebSub → Google
-    needs: wait-for-deploy
+    # Only run when Cloudflare Pages reports success, or on manual trigger
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       contains(github.event.deployment_status.target_url || '', 'pages.dev'))
     runs-on: ubuntu-latest
     steps:
       - name: Notify Google via PubSubHubbub
@@ -44,7 +31,10 @@ jobs:
 
   indexnow-bing:
     name: IndexNow → Bing/Yandex/DuckDuckGo
-    needs: wait-for-deploy
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       contains(github.event.deployment_status.target_url || '', 'pages.dev'))
     runs-on: ubuntu-latest
     steps:
       - name: Submit URLs to IndexNow
@@ -82,6 +72,8 @@ jobs:
       - name: Write summary
         run: |
           echo "## SEO Notification Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Triggered by: \`${{ github.event_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Method | Engines | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|---------|--------|" >> $GITHUB_STEP_SUMMARY
