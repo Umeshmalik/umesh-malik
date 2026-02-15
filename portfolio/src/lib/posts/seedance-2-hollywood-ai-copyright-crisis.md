@@ -2,7 +2,7 @@
 title: "The Two-Line Prompt That Broke Hollywood: Inside the Seedance 2.0 Catastrophe"
 slug: "seedance-2-hollywood-ai-copyright-crisis"
 description: "ByteDance's Seedance 2.0 AI video generator created a photorealistic Tom Cruise vs Brad Pitt fight from a two-line prompt — and triggered cease-and-desist letters from Disney and Paramount, emergency statements from SAG-AFTRA, and the biggest copyright crisis Hollywood has ever faced."
-publishDate: "2026-02-15"
+publishDate: "2026-02-16"
 author: "Umesh Malik"
 category: "AI & Entertainment"
 tags: ["AI", "Hollywood", "Copyright", "ByteDance", "Deepfakes", "AI Ethics"]
@@ -256,7 +256,7 @@ The question isn't which creative field is next. The question is which one has t
 
 ## What Happens Now
 
-As of February 15, 2026: additional studios are reportedly preparing legal action. The U.S. Copyright Office has announced an emergency review of AI video generation. Japan's government investigation is active. TikTok has distanced itself from ByteDance's Seedance project in U.S. communications. New celebrity deepfakes continue to appear daily. ByteDance has made minimal safeguard adjustments but shown no indication of shutting down.
+As of February 16, 2026: additional studios are reportedly preparing legal action. The U.S. Copyright Office has announced an emergency review of AI video generation. Japan's government investigation is active. TikTok has distanced itself from ByteDance's Seedance project in U.S. communications. New celebrity deepfakes continue to appear daily. ByteDance has made minimal safeguard adjustments but shown no indication of shutting down.
 
 And SAG-AFTRA is preparing for June 2026 contract negotiations with 160,000 members who just watched their faces and voices get stolen in real-time.
 
