@@ -1,20 +1,15 @@
 name: Post-Deploy SEO Ping
 
-# Triggered by Cloudflare Pages deployment status event
-# When CF Pages finishes deploying, it creates a GitHub deployment_status event.
-# This workflow fires only on successful deployments — no polling, no waiting.
+# Triggered by Cloudflare Pages after build completes (via scripts/notify-github.sh)
+# Also supports manual trigger from GitHub Actions UI
 on:
-  deployment_status:
+  repository_dispatch:
+    types: [cf-pages-deployed]
   workflow_dispatch:
 
 jobs:
   websub-google:
     name: WebSub → Google
-    # Only run when Cloudflare Pages reports success, or on manual trigger
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.deployment_status.state == 'success' &&
-       contains(github.event.deployment_status.target_url || '', 'pages.dev'))
     runs-on: ubuntu-latest
     steps:
       - name: Notify Google via PubSubHubbub
@@ -31,10 +26,6 @@ jobs:
 
   indexnow-bing:
     name: IndexNow → Bing/Yandex/DuckDuckGo
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.deployment_status.state == 'success' &&
-       contains(github.event.deployment_status.target_url || '', 'pages.dev'))
     runs-on: ubuntu-latest
     steps:
       - name: Submit URLs to IndexNow
@@ -73,7 +64,7 @@ jobs:
         run: |
           echo "## SEO Notification Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Triggered by: \`${{ github.event_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "Triggered by: \`${{ github.event_name }}\` / \`${{ github.event.action }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Method | Engines | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|---------|--------|" >> $GITHUB_STEP_SUMMARY
