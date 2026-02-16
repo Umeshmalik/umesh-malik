@@ -1,22 +1,21 @@
 #!/usr/bin/env node
 
 /**
- * Smart IndexNow submission script.
+ * Smart SEO submission script.
  *
  * Detects which pages changed via git diff, maps source files to public URLs,
- * and submits them to the IndexNow API for fast indexing by Bing, Yandex,
- * DuckDuckGo, Seznam, and Naver.
+ * and submits them to search engines for fast indexing.
+ *
+ * Engines:
+ *   - IndexNow  → Bing, Yandex, DuckDuckGo, Seznam, Naver
+ *   - WebSub    → Google PubSubHubbub
  *
  * Usage:
  *   node scripts/indexnow-submit.mjs                          # auto-detect from git
  *   node scripts/indexnow-submit.mjs --before <sha>           # diff against a specific commit
  *   node scripts/indexnow-submit.mjs --sitemap                # fallback: fetch all URLs from sitemap
  *   node scripts/indexnow-submit.mjs --urls "/blog/my-post"   # submit specific paths
- *
- * Environment variables:
- *   INDEXNOW_KEY          - IndexNow API key (falls back to hardcoded default)
- *   SITE_URL              - Primary domain (default: https://umesh-malik.com)
- *   SITE_URL_ALT          - Alternate domain (default: https://umesh-malik.in)
+ *   node scripts/indexnow-submit.mjs --dry-run                # preview without submitting
  */
 
 import { execSync } from 'node:child_process';
@@ -27,11 +26,11 @@ import { resolve } from 'node:path';
 // Configuration
 // ---------------------------------------------------------------------------
 
-const INDEXNOW_KEY = process.env.INDEXNOW_KEY || 'b52fd35b0ee3234d8074e58fa2591da9';
-const SITE_URL = process.env.SITE_URL || 'https://umesh-malik.com';
-const SITE_URL_ALT = process.env.SITE_URL_ALT || 'https://umesh-malik.in';
-const DOMAINS = [new URL(SITE_URL).hostname, new URL(SITE_URL_ALT).hostname];
+const INDEXNOW_KEY = 'b52fd35b0ee3234d8074e58fa2591da9';
+const DOMAINS = ['umesh-malik.com', 'umesh-malik.in'];
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/indexnow';
+const WEBSUB_HUB = 'https://pubsubhubbub.appspot.com';
+const FEEDS = ['/rss.xml', '/blog-feed.xml', '/feed.json'];
 const MAX_URLS_PER_REQUEST = 10000;
 
 // ---------------------------------------------------------------------------
@@ -39,12 +38,10 @@ const MAX_URLS_PER_REQUEST = 10000;
 // ---------------------------------------------------------------------------
 
 const args = process.argv.slice(2);
-
-function getArg(flag) {
+const getArg = (flag) => {
 	const idx = args.indexOf(flag);
 	return idx !== -1 && idx + 1 < args.length ? args[idx + 1] : null;
-}
-
+};
 const hasFlag = (flag) => args.includes(flag);
 
 const beforeSha = getArg('--before');
@@ -56,7 +53,6 @@ const dryRun = hasFlag('--dry-run');
 // Source file → public URL mapping
 // ---------------------------------------------------------------------------
 
-/** Known static pages from site config (paths relative to site root) */
 const STATIC_PAGES = [
 	'',
 	'/blog',
@@ -77,51 +73,32 @@ const STATIC_PAGES = [
 	'/projects/retro-portfolio/contact'
 ];
 
-/**
- * Map a changed source file path to zero or more public URL paths.
- * Returns an array of path strings (without domain).
- */
 function sourceFileToUrls(filePath) {
-	// Blog post changed or added
 	if (filePath.match(/^portfolio\/src\/lib\/posts\/(.+)\.md$/)) {
 		const slug = filePath.match(/^portfolio\/src\/lib\/posts\/(.+)\.md$/)[1];
 		return [`/blog/${slug}`, '/blog'];
 	}
 
-	// Route page changed
-	const routeMatch = filePath.match(/^portfolio\/src\/routes\/(.+?)\/\+page\.(svelte|ts|server\.ts)$/);
+	const routeMatch = filePath.match(
+		/^portfolio\/src\/routes\/(.+?)\/\+page\.(svelte|ts|server\.ts)$/
+	);
 	if (routeMatch) {
 		let routePath = routeMatch[1];
-		// Remove dynamic segments notation for mapping
-		// e.g., blog/[slug] pages trigger blog index
-		if (routePath.includes('[')) {
-			routePath = routePath.replace(/\/\[.*$/, '');
-		}
-		// Special route files (sitemap, rss, etc.) are not user-facing pages
-		if (routePath.includes('.xml') || routePath.includes('.json') || routePath.includes('.txt')) {
-			return [];
-		}
+		if (routePath.includes('[')) routePath = routePath.replace(/\/\[.*$/, '');
+		if (routePath.match(/\.(xml|json|txt)/)) return [];
 		return [`/${routePath}`];
 	}
 
-	// Layout or global component changed → submit all static pages
 	if (
 		filePath.match(/^portfolio\/src\/routes\/\+layout/) ||
 		filePath.match(/^portfolio\/src\/app\.(html|css)$/) ||
-		filePath.match(/^portfolio\/src\/lib\/components\/layout\//)
-	) {
-		return STATIC_PAGES;
-	}
-
-	// SEO component or config changed → submit all pages
-	if (
+		filePath.match(/^portfolio\/src\/lib\/components\/layout\//) ||
 		filePath.match(/^portfolio\/src\/lib\/config\/site\.ts$/) ||
 		filePath.match(/^portfolio\/src\/lib\/components\/.*(SEO|seo)/)
 	) {
 		return STATIC_PAGES;
 	}
 
-	// Blog utility or component changed → submit blog index + all blog posts
 	if (
 		filePath.match(/^portfolio\/src\/lib\/utils\/blog\.ts$/) ||
 		filePath.match(/^portfolio\/src\/lib\/components\/blog\//)
@@ -129,48 +106,29 @@ function sourceFileToUrls(filePath) {
 		return ['/blog', ...getBlogPostPaths()];
 	}
 
-	// Static assets changed (images, etc.)
 	if (filePath.match(/^portfolio\/static\//)) {
-		// Don't submit for key files, sitemaps, etc.
 		if (filePath.match(/\.(txt|xml|json)$/)) return [];
 		return ['/'];
 	}
 
-	// Frontend (retro-portfolio) changed
 	if (filePath.match(/^frontend\//)) {
-		return [
-			'/projects/retro-portfolio',
-			'/projects/retro-portfolio/about',
-			'/projects/retro-portfolio/experience',
-			'/projects/retro-portfolio/projects',
-			'/projects/retro-portfolio/skills',
-			'/projects/retro-portfolio/contact'
-		];
+		return STATIC_PAGES.filter((p) => p.startsWith('/projects/retro-portfolio'));
 	}
 
 	return [];
 }
 
-/**
- * Read all blog post slugs from the posts directory.
- */
 function getBlogPostPaths() {
-	try {
-		const postsDir = resolve(process.cwd(), 'portfolio/src/lib/posts');
-		return readdirSync(postsDir)
-			.filter((f) => f.endsWith('.md'))
-			.map((f) => `/blog/${f.replace('.md', '')}`);
-	} catch {
-		// If running from portfolio/ directory
+	for (const dir of ['portfolio/src/lib/posts', 'src/lib/posts']) {
 		try {
-			const postsDir = resolve(process.cwd(), 'src/lib/posts');
-			return readdirSync(postsDir)
+			return readdirSync(resolve(process.cwd(), dir))
 				.filter((f) => f.endsWith('.md'))
 				.map((f) => `/blog/${f.replace('.md', '')}`);
 		} catch {
-			return [];
+			/* try next */
 		}
 	}
+	return [];
 }
 
 // ---------------------------------------------------------------------------
@@ -184,9 +142,7 @@ function getChangedFiles(beforeRef) {
 			encoding: 'utf8',
 			cwd: resolve(process.cwd())
 		}).trim();
-
-		if (!output) return [];
-		return output.split('\n').filter(Boolean);
+		return output ? output.split('\n').filter(Boolean) : [];
 	} catch (e) {
 		console.warn(`[warn] git diff failed: ${e.message}`);
 		return [];
@@ -199,45 +155,80 @@ function getChangedFiles(beforeRef) {
 
 async function fetchUrlsFromSitemap(domain) {
 	const urls = [];
-
-	for (const sitemapPath of ['/sitemap.xml', '/blog-sitemap.xml']) {
+	for (const path of ['/sitemap.xml', '/blog-sitemap.xml']) {
 		try {
-			const resp = await fetch(`https://${domain}${sitemapPath}`);
+			const resp = await fetch(`https://${domain}${path}`);
 			if (!resp.ok) continue;
 			const xml = await resp.text();
-			const matches = xml.matchAll(/<loc>([^<]+)<\/loc>/g);
-			for (const match of matches) {
-				const url = match[1];
-				// Extract path from full URL
+			for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
 				try {
-					const parsed = new URL(url);
-					urls.push(parsed.pathname);
+					urls.push(new URL(match[1]).pathname);
 				} catch {
-					urls.push(url);
+					urls.push(match[1]);
 				}
 			}
 		} catch (e) {
-			console.warn(`[warn] Failed to fetch ${sitemapPath} from ${domain}: ${e.message}`);
+			console.warn(`[warn] Failed to fetch ${path}: ${e.message}`);
 		}
 	}
-
 	return urls;
 }
 
 // ---------------------------------------------------------------------------
-// IndexNow submission
+// URL detection (main logic)
 // ---------------------------------------------------------------------------
 
-async function submitToIndexNow(domain, urlPaths) {
-	const fullUrls = urlPaths.map((p) => `https://${domain}${p}`);
-
-	// IndexNow allows up to 10,000 URLs per request
-	const batches = [];
-	for (let i = 0; i < fullUrls.length; i += MAX_URLS_PER_REQUEST) {
-		batches.push(fullUrls.slice(i, i + MAX_URLS_PER_REQUEST));
+async function detectUrlPaths() {
+	if (manualUrls) {
+		const paths = manualUrls.split(',').map((u) => u.trim());
+		console.log(`[mode] Manual URLs: ${paths.length} paths provided`);
+		return paths;
 	}
 
-	for (const batch of batches) {
+	if (useSitemap) {
+		console.log('[mode] Sitemap fallback: fetching all URLs from sitemaps...');
+		const paths = await fetchUrlsFromSitemap(DOMAINS[0]);
+		console.log(`  Found ${paths.length} URLs from sitemaps`);
+		return paths;
+	}
+
+	console.log('[mode] Git diff detection');
+	const changedFiles = getChangedFiles(beforeSha);
+
+	if (changedFiles.length === 0) {
+		console.log('  No changed files detected. Falling back to sitemap...');
+		const paths = await fetchUrlsFromSitemap(DOMAINS[0]);
+		console.log(`  Found ${paths.length} URLs from sitemaps`);
+		return paths;
+	}
+
+	console.log(`  ${changedFiles.length} files changed:`);
+	changedFiles.forEach((f) => console.log(`    ${f}`));
+
+	const urlSet = new Set();
+	for (const file of changedFiles) {
+		sourceFileToUrls(file).forEach((u) => urlSet.add(u));
+	}
+
+	const paths = [...urlSet];
+	if (paths.length === 0) {
+		console.log('\n  No indexable page changes detected.');
+	} else {
+		console.log(`\n  Mapped to ${paths.length} unique URL paths:`);
+		paths.forEach((u) => console.log(`    ${u}`));
+	}
+	return paths;
+}
+
+// ---------------------------------------------------------------------------
+// Submission: IndexNow
+// ---------------------------------------------------------------------------
+
+async function submitIndexNow(domain, urlPaths) {
+	const fullUrls = urlPaths.map((p) => `https://${domain}${p}`);
+
+	for (let i = 0; i < fullUrls.length; i += MAX_URLS_PER_REQUEST) {
+		const batch = fullUrls.slice(i, i + MAX_URLS_PER_REQUEST);
 		const payload = {
 			host: domain,
 			key: INDEXNOW_KEY,
@@ -246,9 +237,8 @@ async function submitToIndexNow(domain, urlPaths) {
 		};
 
 		if (dryRun) {
-			console.log(`\n[dry-run] Would submit ${batch.length} URLs to IndexNow for ${domain}:`);
-			batch.forEach((url) => console.log(`  ${url}`));
-			continue;
+			console.log(`  [dry-run] Would submit ${batch.length} URLs for ${domain}`);
+			return;
 		}
 
 		try {
@@ -257,20 +247,37 @@ async function submitToIndexNow(domain, urlPaths) {
 				headers: { 'Content-Type': 'application/json; charset=utf-8' },
 				body: JSON.stringify(payload)
 			});
-
-			const status = resp.status;
-			const statusText = {
-				200: 'OK - URLs submitted successfully',
-				202: 'Accepted - URLs received, validation pending',
-				400: 'Bad Request - Invalid format',
-				403: 'Forbidden - Key not valid',
-				422: 'Unprocessable - URLs don\'t match host',
-				429: 'Too Many Requests - Rate limited'
-			}[status] || resp.statusText;
-
-			console.log(`  ${domain} → HTTP ${status} (${statusText}) [${batch.length} URLs]`);
+			const label =
+				{ 200: 'OK', 202: 'Accepted', 400: 'Bad Request', 403: 'Forbidden', 422: 'Unprocessable', 429: 'Rate Limited' }[
+					resp.status
+				] || resp.statusText;
+			console.log(`  ${domain} → HTTP ${resp.status} (${label}) [${batch.length} URLs]`);
 		} catch (e) {
 			console.error(`  ${domain} → FAILED: ${e.message}`);
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Submission: WebSub (Google PubSubHubbub)
+// ---------------------------------------------------------------------------
+
+async function submitWebSub(domain) {
+	for (const feed of FEEDS) {
+		const feedUrl = `https://${domain}${feed}`;
+		if (dryRun) {
+			console.log(`  [dry-run] Would ping ${feedUrl}`);
+			continue;
+		}
+		try {
+			const resp = await fetch(WEBSUB_HUB, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: `hub.mode=publish&hub.url=${encodeURIComponent(feedUrl)}`
+			});
+			console.log(`  ${domain}${feed} → HTTP ${resp.status}`);
+		} catch (e) {
+			console.error(`  ${domain}${feed} → FAILED: ${e.message}`);
 		}
 	}
 }
@@ -280,51 +287,10 @@ async function submitToIndexNow(domain, urlPaths) {
 // ---------------------------------------------------------------------------
 
 async function main() {
-	console.log('=== IndexNow Smart Submission ===\n');
+	console.log('=== SEO Submission ===\n');
 
-	let urlPaths = [];
-
-	if (manualUrls) {
-		// Manual URL paths provided via CLI
-		urlPaths = manualUrls.split(',').map((u) => u.trim());
-		console.log(`[mode] Manual URLs: ${urlPaths.length} paths provided`);
-	} else if (useSitemap) {
-		// Fallback: fetch from sitemaps
-		console.log('[mode] Sitemap fallback: fetching all URLs from sitemaps...');
-		urlPaths = await fetchUrlsFromSitemap(DOMAINS[0]);
-		console.log(`  Found ${urlPaths.length} URLs from sitemaps`);
-	} else {
-		// Smart: detect from git diff
-		console.log('[mode] Git diff detection');
-		const changedFiles = getChangedFiles(beforeSha);
-
-		if (changedFiles.length === 0) {
-			console.log('  No changed files detected. Falling back to sitemap...');
-			urlPaths = await fetchUrlsFromSitemap(DOMAINS[0]);
-			console.log(`  Found ${urlPaths.length} URLs from sitemaps`);
-		} else {
-			console.log(`  ${changedFiles.length} files changed:`);
-			changedFiles.forEach((f) => console.log(`    ${f}`));
-
-			// Map changed files to URL paths
-			const urlSet = new Set();
-			for (const file of changedFiles) {
-				const urls = sourceFileToUrls(file);
-				urls.forEach((u) => urlSet.add(u));
-			}
-			urlPaths = [...urlSet];
-
-			if (urlPaths.length === 0) {
-				console.log('\n  No indexable page changes detected. Nothing to submit.');
-				process.exit(0);
-			}
-
-			console.log(`\n  Mapped to ${urlPaths.length} unique URL paths:`);
-			urlPaths.forEach((u) => console.log(`    ${u}`));
-		}
-	}
-
-	// Deduplicate and sort
+	// 1. Detect changed URL paths
+	let urlPaths = await detectUrlPaths();
 	urlPaths = [...new Set(urlPaths)].sort();
 
 	if (urlPaths.length === 0) {
@@ -332,11 +298,16 @@ async function main() {
 		process.exit(0);
 	}
 
-	// Submit for each domain
-	console.log(`\n[IndexNow] Submitting ${urlPaths.length} URL paths for ${DOMAINS.length} domains...\n`);
-
+	// 2. IndexNow → Bing, Yandex, DuckDuckGo, Seznam, Naver
+	console.log(`\n[IndexNow] Submitting ${urlPaths.length} URLs for ${DOMAINS.length} domains...`);
 	for (const domain of DOMAINS) {
-		await submitToIndexNow(domain, urlPaths);
+		await submitIndexNow(domain, urlPaths);
+	}
+
+	// 3. WebSub → Google
+	console.log('\n[WebSub] Notifying Google via PubSubHubbub...');
+	for (const domain of DOMAINS) {
+		await submitWebSub(domain);
 	}
 
 	console.log('\n=== Done ===');
