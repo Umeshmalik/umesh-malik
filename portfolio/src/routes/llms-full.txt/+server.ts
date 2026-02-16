@@ -136,13 +136,11 @@ Key Responsibilities and Achievements:
 ### Master of Computer Application (MCA)
 - Institution: Deenbandhu Chhotu Ram University of Science and Technology
 - Location: Murthal, Sonipat, Haryana, India
-- Duration: 2021 - 2023
 - Focus: Computer Science
 
 ### Bachelor of Computer Application (BCA)
 - Institution: Deenbandhu Chhotu Ram University of Science and Technology
 - Location: Murthal, Sonipat, Haryana, India
-- Duration: 2018 - 2021
 - Focus: Computer Science
 
 ## Key Projects (Detailed)

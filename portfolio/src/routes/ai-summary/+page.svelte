@@ -98,12 +98,12 @@
     <li>
       <strong>Master of Computer Application (MCA)</strong> in Computer Science<br
       />
-      Deenbandhu Chhotu Ram University of Science and Technology (2021-2023)
+      Deenbandhu Chhotu Ram University of Science and Technology
     </li>
     <li>
       <strong>Bachelor of Computer Application (BCA)</strong> in Computer
       Science<br />
-      Deenbandhu Chhotu Ram University of Science and Technology (2018-2021)
+      Deenbandhu Chhotu Ram University of Science and Technology
     </li>
   </ul>
 

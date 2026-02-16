@@ -17,7 +17,6 @@ export interface Education {
   degree: string;
   field: string;
   institution: string;
-  period: string;
 }
 
 export interface Project {
@@ -136,13 +135,13 @@ export const education: Education[] = [
     degree: 'Master of Computer Application',
     field: 'Computer Science',
     institution: 'Deenbandhu Chhotu Ram University of Science and Technology',
-    period: 'July 2021 - June 2023',
+
   },
   {
     degree: 'Bachelor of Computer Application',
     field: 'Computer Science',
     institution: 'Deenbandhu Chhotu Ram University of Science and Technology',
-    period: 'July 2018 - June 2021',
+
   },
 ];
 

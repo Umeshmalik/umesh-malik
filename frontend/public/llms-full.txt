@@ -127,10 +127,10 @@ Tech: React.js, Node.js, MongoDB, PostgreSQL
 ## EDUCATION
 
 1. Master of Computer Application (MCA) in Computer Science
-   Deenbandhu Chhotu Ram University of Science and Technology (2021–2023)
+   Deenbandhu Chhotu Ram University of Science and Technology
 
 2. Bachelor of Computer Application (BCA) in Computer Science
-   Deenbandhu Chhotu Ram University of Science and Technology (2018–2021)
+   Deenbandhu Chhotu Ram University of Science and Technology
 
 ## AWARDS
 

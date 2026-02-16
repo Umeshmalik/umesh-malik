@@ -1,6 +1,13 @@
 ---
 import "../styles/global.css";
-import { personalInfo, experiences, skills, education, projects, awards } from "../data/resume";
+import {
+  personalInfo,
+  experiences,
+  skills,
+  education,
+  projects,
+  awards,
+} from "../data/resume";
 import { getYearsOfExperience, getSummary } from "../data/dynamic";
 
 interface Props {
@@ -20,7 +27,7 @@ const {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteUrl = "https://umesh-malik.com";
 const rawBase = import.meta.env.BASE_URL;
-const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const basePath = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
 const ogImageUrl = `${siteUrl}${basePath}og-image.png`;
 const years = getYearsOfExperience();
 const today = new Date().toISOString().split("T")[0];
@@ -65,11 +72,7 @@ const personSchema = JSON.stringify({
     "@type": "CollegeOrUniversity",
     name: edu.institution,
   })),
-  sameAs: [
-    personalInfo.linkedin,
-    personalInfo.github,
-    siteUrl,
-  ],
+  sameAs: [personalInfo.linkedin, personalInfo.github, siteUrl],
   knowsAbout: skills.map((s) => s.name),
   knowsLanguage: ["English", "Hindi"],
   hasOccupation: experiences.map((exp) => ({
@@ -87,7 +90,12 @@ const websiteSchema = JSON.stringify({
   "@type": "WebSite",
   "@id": `${siteUrl}/#website`,
   name: "Umesh Malik — Senior Frontend Engineer",
-  alternateName: ["Umesh Malik Portfolio", "Umesh Malik", "umesh malik", "umesh-malik.com"],
+  alternateName: [
+    "Umesh Malik Portfolio",
+    "Umesh Malik",
+    "umesh malik",
+    "umesh-malik.com",
+  ],
   url: siteUrl,
   description: `Portfolio website of Umesh Malik, a Senior Frontend Engineer at Expedia Group specializing in React, TypeScript, and modern web development.`,
   publisher: { "@id": `${siteUrl}/#person` },
@@ -111,7 +119,10 @@ const profilePageSchema = JSON.stringify({
 const breadcrumbItems = [{ name: "Home", url: `${siteUrl}${basePath}` }];
 const pageMap: Record<string, { name: string; url: string }> = {
   about: { name: "About Umesh Malik", url: `${siteUrl}${basePath}about/` },
-  experience: { name: "Work Experience", url: `${siteUrl}${basePath}experience/` },
+  experience: {
+    name: "Work Experience",
+    url: `${siteUrl}${basePath}experience/`,
+  },
   projects: { name: "Projects", url: `${siteUrl}${basePath}projects/` },
   skills: { name: "Technical Skills", url: `${siteUrl}${basePath}skills/` },
   contact: { name: "Contact", url: `${siteUrl}${basePath}contact/` },
@@ -135,7 +146,8 @@ const itemListSchema = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "ItemList",
   name: "Projects by Umesh Malik",
-  description: "Portfolio projects built by Umesh Malik, Senior Frontend Engineer",
+  description:
+    "Portfolio projects built by Umesh Malik, Senior Frontend Engineer",
   numberOfItems: projects.length,
   itemListElement: projects.map((project, i) => ({
     "@type": "ListItem",
@@ -221,11 +233,19 @@ const navLinks = [
 ];
 
 // Skill categories for SEO content
-const frontendSkills = skills.filter(s => s.category === 'frontend').map(s => s.name);
-const backendSkills = skills.filter(s => s.category === 'backend').map(s => s.name);
-const toolSkills = skills.filter(s => s.category === 'tools').map(s => s.name);
-const conceptSkills = skills.filter(s => s.category === 'concepts').map(s => s.name);
-const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
+const frontendSkills = skills
+  .filter((s) => s.category === "frontend")
+  .map((s) => s.name);
+const backendSkills = skills
+  .filter((s) => s.category === "backend")
+  .map((s) => s.name);
+const toolSkills = skills
+  .filter((s) => s.category === "tools")
+  .map((s) => s.name);
+const conceptSkills = skills
+  .filter((s) => s.category === "concepts")
+  .map((s) => s.name);
+const aiSkills = skills.filter((s) => s.category === "ai").map((s) => s.name);
 ---
 
 <!doctype html>
@@ -243,9 +263,18 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <meta name="author" content="Umesh Malik" />
     <meta name="creator" content="Umesh Malik" />
     <meta name="publisher" content="Umesh Malik" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta
+      name="googlebot"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta
+      name="bingbot"
+      content="index, follow, max-image-preview:large, max-snippet:-1"
+    />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- ═══════ OPEN GRAPH / FACEBOOK / LINKEDIN / WHATSAPP ═══════ -->
@@ -253,12 +282,18 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:site_name" content="Umesh Malik — Senior Frontend Engineer" />
+    <meta
+      property="og:site_name"
+      content="Umesh Malik — Senior Frontend Engineer"
+    />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:secure_url" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Umesh Malik — Senior Frontend Engineer at Expedia Group" />
+    <meta
+      property="og:image:alt"
+      content="Umesh Malik — Senior Frontend Engineer at Expedia Group"
+    />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="en_IN" />
@@ -271,7 +306,10 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
-    <meta name="twitter:image:alt" content="Umesh Malik — Senior Frontend Engineer at Expedia Group" />
+    <meta
+      name="twitter:image:alt"
+      content="Umesh Malik — Senior Frontend Engineer at Expedia Group"
+    />
     <meta name="twitter:site" content="@UmeshMalik" />
     <meta name="twitter:creator" content="@UmeshMalik" />
 
@@ -281,45 +319,101 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <meta name="geo.position" content="28.4595;77.0266" />
     <meta name="ICBM" content="28.4595, 77.0266" />
     <meta name="msapplication-TileColor" content="#000080" />
-    <meta name="msapplication-TileImage" content={`${basePath}favicon-192.png`} />
+    <meta
+      name="msapplication-TileImage"
+      content={`${basePath}favicon-192.png`}
+    />
     <meta name="msapplication-config" content="none" />
 
     <!-- ═══════ APPLE / iOS ═══════ -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <meta name="apple-mobile-web-app-title" content="Umesh Malik" />
-    <link rel="apple-touch-icon" sizes="180x180" href={`${basePath}apple-touch-icon.png`} />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href={`${basePath}apple-touch-icon.png`}
+    />
 
     <!-- ═══════ AI CRAWLERS / LLMs ═══════ -->
-    <meta name="ai-content-declaration" content="This is a personal portfolio website of Umesh Malik, a Senior Frontend Engineer at Expedia Group with expertise in React, TypeScript, and JavaScript." />
-    <link rel="alternate" type="text/plain" href={`${siteUrl}${basePath}llms.txt`} title="LLM-friendly site summary" />
-    <link rel="alternate" type="text/plain" href={`${siteUrl}${basePath}llms-full.txt`} title="Comprehensive LLM site information" />
+    <meta
+      name="ai-content-declaration"
+      content="This is a personal portfolio website of Umesh Malik, a Senior Frontend Engineer at Expedia Group with expertise in React, TypeScript, and JavaScript."
+    />
+    <link
+      rel="alternate"
+      type="text/plain"
+      href={`${siteUrl}${basePath}llms.txt`}
+      title="LLM-friendly site summary"
+    />
+    <link
+      rel="alternate"
+      type="text/plain"
+      href={`${siteUrl}${basePath}llms-full.txt`}
+      title="Comprehensive LLM site information"
+    />
 
     <!-- ═══════ ADDITIONAL SEO ═══════ -->
-    <meta name="subject" content="Portfolio of Umesh Malik, Senior Frontend Engineer at Expedia Group" />
-    <meta name="classification" content="Portfolio, Technology, Software Engineering" />
+    <meta
+      name="subject"
+      content="Portfolio of Umesh Malik, Senior Frontend Engineer at Expedia Group"
+    />
+    <meta
+      name="classification"
+      content="Portfolio, Technology, Software Engineering"
+    />
     <meta name="category" content="Technology" />
     <meta name="coverage" content="Worldwide" />
     <meta name="distribution" content="global" />
     <meta name="rating" content="general" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
     <meta name="format-detection" content="telephone=no" />
-    <meta name="theme-color" content="#008080" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#004040" media="(prefers-color-scheme: dark)" />
+    <meta
+      name="theme-color"
+      content="#008080"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#004040"
+      media="(prefers-color-scheme: dark)"
+    />
     <meta name="color-scheme" content="light dark" />
     <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- ═══════ FAVICONS & ICONS ═══════ -->
     <link rel="icon" type="image/svg+xml" href={`${basePath}favicon.svg`} />
     <link rel="icon" type="image/x-icon" href={`${basePath}favicon.ico`} />
-    <link rel="icon" type="image/png" sizes="192x192" href={`${basePath}favicon-192.png`} />
-    <link rel="icon" type="image/png" sizes="512x512" href={`${basePath}favicon-512.png`} />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href={`${basePath}favicon-192.png`}
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href={`${basePath}favicon-512.png`}
+    />
     <link rel="manifest" href={`${basePath}manifest.json`} />
 
     <!-- ═══════ DISCOVERY & SYNDICATION ═══════ -->
-    <link rel="sitemap" type="application/xml" href={`${basePath}sitemap-index.xml`} />
+    <link
+      rel="sitemap"
+      type="application/xml"
+      href={`${basePath}sitemap-index.xml`}
+    />
     <link rel="author" href={`${basePath}humans.txt`} />
-    <link rel="alternate" type="application/rss+xml" title="Umesh Malik — Updates" href={`${basePath}rss.xml`} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Umesh Malik — Updates"
+      href={`${basePath}rss.xml`}
+    />
 
     <!-- ═══════ JSON-LD STRUCTURED DATA (6 schemas) ═══════ -->
     <script type="application/ld+json" set:html={personSchema} />
@@ -330,7 +424,10 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <script type="application/ld+json" set:html={faqSchema} />
 
     <!-- Easter Egg -->
-    <meta name="crafted-with" content="Cursor AI + Claude | Vibe-coded by Umesh Malik" />
+    <meta
+      name="crafted-with"
+      content="Cursor AI + Claude | Vibe-coded by Umesh Malik"
+    />
 
     <!-- ═══════ RESOURCE HINTS ═══════ -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com" />
@@ -339,9 +436,27 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
 
     <!-- Preload critical fonts -->
-    <link rel="preload" href="https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isRFJXGdg.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="https://fonts.gstatic.com/s/pressstart2p/v15/e3t4euO8T-267oIAQAu6jDQyK3nVivM.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2" as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isRFJXGdg.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/pressstart2p/v15/e3t4euO8T-267oIAQAu6jDQyK3nVivM.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     <!-- Prefetch key pages -->
     <link rel="prefetch" href={`${basePath}about/`} />
@@ -353,130 +468,243 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
 
   <body itemscope itemtype="https://schema.org/WebPage">
     <!-- Semantic navigation -->
-    <nav class="sr-only" aria-label="Main navigation" itemscope itemtype="https://schema.org/SiteNavigationElement">
+    <nav
+      class="sr-only"
+      aria-label="Main navigation"
+      itemscope
+      itemtype="https://schema.org/SiteNavigationElement"
+    >
       <ul>
-        {navLinks.map((link) => (
-          <li>
-            <a href={link.href} aria-current={currentPage === link.page ? "page" : undefined} itemprop="url">
-              <span itemprop="name">{link.label}</span>
-            </a>
-          </li>
-        ))}
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                aria-current={currentPage === link.page ? "page" : undefined}
+                itemprop="url"
+              >
+                <span itemprop="name">{link.label}</span>
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
 
     <!-- Main interactive application (client-rendered) -->
-    <div id="desktop-root" role="application" aria-label="Umesh Malik Interactive Portfolio">
+    <div
+      id="desktop-root"
+      role="application"
+      aria-label="Umesh Malik Interactive Portfolio"
+    >
       <slot />
     </div>
 
     <!-- ═══════ SERVER-RENDERED SEO CONTENT ═══════ -->
     <!-- Crawlable by: Google, Bing, ChatGPT, Claude, Perplexity, DuckDuckGo, Yandex, Baidu -->
     <!-- Visually hidden but fully accessible to screen readers and all crawlers -->
-    <main class="sr-only" aria-label="Portfolio content" itemprop="mainContentOfPage">
+    <main
+      class="sr-only"
+      aria-label="Portfolio content"
+      itemprop="mainContentOfPage"
+    >
       <slot name="seo-content">
         <!-- Default comprehensive SEO content -->
         <article itemscope itemtype="https://schema.org/Person">
           <h1 itemprop="name">Umesh Malik — Senior Frontend Engineer</h1>
           <p itemprop="description">{getSummary()}</p>
-          <p><span itemprop="jobTitle">Senior Frontend Engineer</span> at <span itemprop="worksFor" itemscope itemtype="https://schema.org/Organization"><span itemprop="name">Expedia Group</span></span>, based in <span itemprop="address" itemscope itemtype="https://schema.org/PostalAddress"><span itemprop="addressLocality">Gurugram</span>, <span itemprop="addressRegion">Haryana</span>, <span itemprop="addressCountry">India</span></span>.</p>
+          <p>
+            <span itemprop="jobTitle">Senior Frontend Engineer</span> at <span
+              itemprop="worksFor"
+              itemscope
+              itemtype="https://schema.org/Organization"
+              ><span itemprop="name">Expedia Group</span></span
+            >, based in <span
+              itemprop="address"
+              itemscope
+              itemtype="https://schema.org/PostalAddress"
+              ><span itemprop="addressLocality">Gurugram</span>, <span
+                itemprop="addressRegion">Haryana</span
+              >, <span itemprop="addressCountry">India</span></span
+            >.
+          </p>
 
           <section aria-label="Contact Information">
             <h2>Contact Umesh Malik</h2>
             <ul>
-              <li>Email: <a href={`mailto:${personalInfo.email}`} itemprop="email">{personalInfo.email}</a></li>
-              <li>LinkedIn: <a href={personalInfo.linkedin} itemprop="sameAs" rel="noopener">linkedin.com/in/umesh-malik</a></li>
-              <li>GitHub: <a href={personalInfo.github} itemprop="sameAs" rel="noopener">github.com/Umeshmalik</a></li>
-              <li>Website: <a href={personalInfo.website} itemprop="url">umesh-malik.com</a></li>
+              <li>
+                Email: <a href={`mailto:${personalInfo.email}`} itemprop="email"
+                  >{personalInfo.email}</a>
+              </li>
+              <li>
+                LinkedIn: <a
+                  href={personalInfo.linkedin}
+                  itemprop="sameAs"
+                  rel="noopener">linkedin.com/in/umesh-malik</a>
+              </li>
+              <li>
+                GitHub: <a
+                  href={personalInfo.github}
+                  itemprop="sameAs"
+                  rel="noopener">github.com/Umeshmalik</a>
+              </li>
+              <li>
+                Website: <a href={personalInfo.website} itemprop="url"
+                  >umesh-malik.com</a>
+              </li>
             </ul>
           </section>
 
           <section aria-label="Professional Experience">
             <h2>Work Experience of Umesh Malik</h2>
-            {experiences.map((exp) => (
-              <article>
-                <h3>{exp.role} at {exp.company}</h3>
-                <p><strong>Duration:</strong> {exp.period} | <strong>Location:</strong> {exp.location}</p>
-                <ul>
-                  {exp.highlights.map((h) => <li>{h}</li>)}
-                </ul>
-              </article>
-            ))}
+            {
+              experiences.map((exp) => (
+                <article>
+                  <h3>
+                    {exp.role} at {exp.company}
+                  </h3>
+                  <p>
+                    <strong>Duration:</strong> {exp.period} |{" "}
+                    <strong>Location:</strong> {exp.location}
+                  </p>
+                  <ul>
+                    {exp.highlights.map((h) => (
+                      <li>{h}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))
+            }
           </section>
 
           <section aria-label="Technical Skills">
             <h2>Technical Skills of Umesh Malik</h2>
             <h3>Frontend Development</h3>
-            <p>{frontendSkills.join(', ')}</p>
+            <p>{frontendSkills.join(", ")}</p>
             <h3>Backend Development</h3>
-            <p>{backendSkills.join(', ')}</p>
+            <p>{backendSkills.join(", ")}</p>
             <h3>Developer Tools & Testing</h3>
-            <p>{toolSkills.join(', ')}</p>
+            <p>{toolSkills.join(", ")}</p>
             <h3>Architecture & Concepts</h3>
-            <p>{conceptSkills.join(', ')}</p>
+            <p>{conceptSkills.join(", ")}</p>
             <h3>AI-Assisted Development</h3>
-            <p>{aiSkills.join(', ')}</p>
+            <p>{aiSkills.join(", ")}</p>
           </section>
 
           <section aria-label="Portfolio Projects">
             <h2>Projects by Umesh Malik</h2>
-            {projects.map((project) => (
-              <article>
-                <h3>{project.name}</h3>
-                <p>{project.description}</p>
-                <p><strong>Technologies:</strong> {project.tech.join(', ')}</p>
-                {project.url && <p><a href={project.url} rel="noopener">View Project</a></p>}
-                <ul>
-                  {project.highlights.map((h) => <li>{h}</li>)}
-                </ul>
-              </article>
-            ))}
+            {
+              projects.map((project) => (
+                <article>
+                  <h3>{project.name}</h3>
+                  <p>{project.description}</p>
+                  <p>
+                    <strong>Technologies:</strong> {project.tech.join(", ")}
+                  </p>
+                  {project.url && (
+                    <p>
+                      <a href={project.url} rel="noopener">
+                        View Project
+                      </a>
+                    </p>
+                  )}
+                  <ul>
+                    {project.highlights.map((h) => (
+                      <li>{h}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))
+            }
           </section>
 
           <section aria-label="Education">
             <h2>Education</h2>
-            {education.map((edu) => (
-              <article itemprop="alumniOf" itemscope itemtype="https://schema.org/CollegeOrUniversity">
-                <h3><span itemprop="name">{edu.degree} in {edu.field}</span></h3>
-                <p>{edu.institution} ({edu.period})</p>
-              </article>
-            ))}
+            {
+              education.map((edu) => (
+                <article
+                  itemprop="alumniOf"
+                  itemscope
+                  itemtype="https://schema.org/CollegeOrUniversity"
+                >
+                  <h3>
+                    <span itemprop="name">
+                      {edu.degree} in {edu.field}
+                    </span>
+                  </h3>
+                  <p>{edu.institution}</p>
+                </article>
+              ))
+            }
           </section>
 
           <section aria-label="Awards and Recognition">
             <h2>Awards & Recognition</h2>
-            {awards.map((award) => (
-              <article>
-                <h3>{award.title}</h3>
-                <p>{award.company} — {award.date}</p>
-                <p>{award.description}</p>
-              </article>
-            ))}
+            {
+              awards.map((award) => (
+                <article>
+                  <h3>{award.title}</h3>
+                  <p>
+                    {award.company} — {award.date}
+                  </p>
+                  <p>{award.description}</p>
+                </article>
+              ))
+            }
           </section>
 
           <section aria-label="Frequently Asked Questions">
             <h2>Frequently Asked Questions about Umesh Malik</h2>
             <dl>
               <dt>Who is Umesh Malik?</dt>
-              <dd>Umesh Malik is a Senior Frontend Engineer (SDE-2) at Expedia Group with {years}+ years of experience in React, TypeScript, and full-stack web development. He is based in Gurugram, Haryana, India.</dd>
+              <dd>
+                Umesh Malik is a Senior Frontend Engineer (SDE-2) at Expedia
+                Group with {years}+ years of experience in React, TypeScript,
+                and full-stack web development. He is based in Gurugram,
+                Haryana, India.
+              </dd>
 
               <dt>What is Umesh Malik's tech stack?</dt>
-              <dd>Umesh specializes in React, TypeScript, JavaScript, Next.js, Node.js, Tailwind CSS, MongoDB, PostgreSQL, and AI-assisted development tools including Cursor AI and Claude.</dd>
+              <dd>
+                Umesh specializes in React, TypeScript, JavaScript, Next.js,
+                Node.js, Tailwind CSS, MongoDB, PostgreSQL, and AI-assisted
+                development tools including Cursor AI and Claude.
+              </dd>
 
               <dt>Where has Umesh Malik worked?</dt>
-              <dd>Umesh has worked at Expedia Group (current — SDE-2), Tekion Corp (Software Engineer), and BYJU's (Module Lead & Associate Software Engineer).</dd>
+              <dd>
+                Umesh has worked at Expedia Group (current — SDE-2), Tekion Corp
+                (Software Engineer), and BYJU's (Module Lead & Associate
+                Software Engineer).
+              </dd>
 
               <dt>How can I hire or contact Umesh Malik?</dt>
-              <dd>You can contact Umesh via email at {personalInfo.email}, connect on LinkedIn at linkedin.com/in/umesh-malik, or visit his GitHub at github.com/Umeshmalik.</dd>
+              <dd>
+                You can contact Umesh via email at {personalInfo.email}, connect
+                on LinkedIn at linkedin.com/in/umesh-malik, or visit his GitHub
+                at github.com/Umeshmalik.
+              </dd>
 
               <dt>What projects has Umesh Malik built?</dt>
-              <dd>Notable projects include a real-time Chat Application, enterprise Workflow Orchestration Platform at Expedia, Finance & Insurance Module at Tekion, and an Order & Payment System processing $10M+ monthly at BYJU's.</dd>
+              <dd>
+                Notable projects include a real-time Chat Application,
+                enterprise Workflow Orchestration Platform at Expedia, Finance &
+                Insurance Module at Tekion, and an Order & Payment System
+                processing $10M+ monthly at BYJU's.
+              </dd>
 
               <dt>What is Umesh Malik's education?</dt>
-              <dd>Umesh holds an MCA and BCA in Computer Science from Deenbandhu Chhotu Ram University of Science and Technology.</dd>
+              <dd>
+                Umesh holds an MCA and BCA in Computer Science from Deenbandhu
+                Chhotu Ram University of Science and Technology.
+              </dd>
 
               <dt>Is Umesh Malik open to new opportunities?</dt>
-              <dd>Visit the contact page at umesh-malik.com/contact/ to get in touch with Umesh for collaboration, freelance, or career opportunities.</dd>
+              <dd>
+                Visit the contact page at umesh-malik.com/contact/ to get in
+                touch with Umesh for collaboration, freelance, or career
+                opportunities.
+              </dd>
             </dl>
           </section>
         </article>
@@ -486,18 +714,42 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <!-- Noscript fallback -->
     <noscript>
       <style>
-        .sr-only { position: static !important; width: auto !important; height: auto !important; padding: inherit !important; margin: inherit !important; overflow: visible !important; clip: auto !important; white-space: normal !important; }
-        #desktop-root { display: none !important; }
+        .sr-only {
+          position: static !important;
+          width: auto !important;
+          height: auto !important;
+          padding: inherit !important;
+          margin: inherit !important;
+          overflow: visible !important;
+          clip: auto !important;
+          white-space: normal !important;
+        }
+        #desktop-root {
+          display: none !important;
+        }
       </style>
-      <div style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: system-ui, sans-serif; color: #333; line-height: 1.8;">
+      <div
+        style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: system-ui, sans-serif; color: #333; line-height: 1.8;"
+      >
         <header>
           <h1 style="font-size: 2em; margin-bottom: 0.5em;">Umesh Malik</h1>
-          <p style="font-size: 1.2em; color: #555;"><strong>{personalInfo.title}</strong></p>
-          <p>{personalInfo.location} | <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a></p>
-          <nav style="margin: 20px 0; padding: 10px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;">
-            {navLinks.map((link) => (
-              <a href={link.href} style="margin-right: 20px; color: #0066cc;">{link.label}</a>
-            ))}
+          <p style="font-size: 1.2em; color: #555;">
+            <strong>{personalInfo.title}</strong>
+          </p>
+          <p>
+            {personalInfo.location} | <a href={`mailto:${personalInfo.email}`}
+              >{personalInfo.email}</a>
+          </p>
+          <nav
+            style="margin: 20px 0; padding: 10px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;"
+          >
+            {
+              navLinks.map((link) => (
+                <a href={link.href} style="margin-right: 20px; color: #0066cc;">
+                  {link.label}
+                </a>
+              ))
+            }
           </nav>
         </header>
 
@@ -508,57 +760,95 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
 
         <section>
           <h2>Experience</h2>
-          {experiences.map((exp) => (
-            <div style="margin-bottom: 20px;">
-              <h3 style="margin-bottom: 5px;">{exp.role} — {exp.company}</h3>
-              <p style="color: #666; font-size: 0.9em;">{exp.period} | {exp.location}</p>
-              <ul>
-                {exp.highlights.map((h) => <li>{h}</li>)}
-              </ul>
-            </div>
-          ))}
+          {
+            experiences.map((exp) => (
+              <div style="margin-bottom: 20px;">
+                <h3 style="margin-bottom: 5px;">
+                  {exp.role} — {exp.company}
+                </h3>
+                <p style="color: #666; font-size: 0.9em;">
+                  {exp.period} | {exp.location}
+                </p>
+                <ul>
+                  {exp.highlights.map((h) => (
+                    <li>{h}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
         </section>
 
         <section>
           <h2>Technical Skills</h2>
-          <p><strong>Frontend:</strong> {frontendSkills.join(', ')}</p>
-          <p><strong>Backend:</strong> {backendSkills.join(', ')}</p>
-          <p><strong>Tools:</strong> {toolSkills.join(', ')}</p>
-          <p><strong>Concepts:</strong> {conceptSkills.join(', ')}</p>
-          <p><strong>AI Development:</strong> {aiSkills.join(', ')}</p>
+          <p><strong>Frontend:</strong> {frontendSkills.join(", ")}</p>
+          <p><strong>Backend:</strong> {backendSkills.join(", ")}</p>
+          <p><strong>Tools:</strong> {toolSkills.join(", ")}</p>
+          <p><strong>Concepts:</strong> {conceptSkills.join(", ")}</p>
+          <p><strong>AI Development:</strong> {aiSkills.join(", ")}</p>
         </section>
 
         <section>
           <h2>Projects</h2>
-          {projects.map((project) => (
-            <div style="margin-bottom: 15px;">
-              <h3>{project.name}</h3>
-              <p>{project.description}</p>
-              <p><em>Tech: {project.tech.join(', ')}</em></p>
-              {project.url && <p><a href={project.url} style="color: #0066cc;">View Project</a></p>}
-            </div>
-          ))}
+          {
+            projects.map((project) => (
+              <div style="margin-bottom: 15px;">
+                <h3>{project.name}</h3>
+                <p>{project.description}</p>
+                <p>
+                  <em>Tech: {project.tech.join(", ")}</em>
+                </p>
+                {project.url && (
+                  <p>
+                    <a href={project.url} style="color: #0066cc;">
+                      View Project
+                    </a>
+                  </p>
+                )}
+              </div>
+            ))
+          }
         </section>
 
         <section>
           <h2>Education</h2>
-          {education.map((edu) => (
-            <p><strong>{edu.degree}</strong> in {edu.field} — {edu.institution} ({edu.period})</p>
-          ))}
+          {
+            education.map((edu) => (
+              <p>
+                <strong>{edu.degree}</strong> in {edu.field} — {edu.institution}
+              </p>
+            ))
+          }
         </section>
 
         <section>
           <h2>Contact</h2>
           <ul>
-            <li>Email: <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a></li>
-            <li>LinkedIn: <a href={personalInfo.linkedin}>linkedin.com/in/umesh-malik</a></li>
-            <li>GitHub: <a href={personalInfo.github}>github.com/Umeshmalik</a></li>
+            <li>
+              Email: <a href={`mailto:${personalInfo.email}`}
+                >{personalInfo.email}</a>
+            </li>
+            <li>
+              LinkedIn: <a href={personalInfo.linkedin}
+                >linkedin.com/in/umesh-malik</a>
+            </li>
+            <li>
+              GitHub: <a href={personalInfo.github}>github.com/Umeshmalik</a>
+            </li>
           </ul>
         </section>
 
-        <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
-          <p>&copy; {new Date().getFullYear()} Umesh Malik. All rights reserved.</p>
-          <p><em>This website features an interactive retro-themed experience. Please enable JavaScript for the full experience.</em></p>
+        <footer
+          style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;"
+        >
+          <p>
+            &copy; {new Date().getFullYear()} Umesh Malik. All rights reserved.
+          </p>
+          <p>
+            <em
+              >This website features an interactive retro-themed experience.
+              Please enable JavaScript for the full experience.</em>
+          </p>
         </footer>
       </div>
     </noscript>
@@ -566,10 +856,14 @@ const aiSkills = skills.filter(s => s.category === 'ai').map(s => s.name);
     <!-- Semantic footer -->
     <footer class="sr-only" itemscope itemtype="https://schema.org/WPFooter">
       <p>&copy; {new Date().getFullYear()} Umesh Malik. All rights reserved.</p>
-      <p>Senior Frontend Engineer at Expedia Group | React, TypeScript, JavaScript Expert | Gurugram, India</p>
+      <p>
+        Senior Frontend Engineer at Expedia Group | React, TypeScript,
+        JavaScript Expert | Gurugram, India
+      </p>
       <p>Previously: Tekion Corp, BYJU's (Think & Learn)</p>
       <nav aria-label="Footer links">
-        <a href={personalInfo.linkedin} rel="noopener noreferrer me">LinkedIn</a> |
+        <a href={personalInfo.linkedin} rel="noopener noreferrer me">LinkedIn</a
+        > |
         <a href={personalInfo.github} rel="noopener noreferrer me">GitHub</a> |
         <a href={`mailto:${personalInfo.email}`} rel="me">Email</a> |
         <a href={`${basePath}llms.txt`}>LLMs Info</a> |

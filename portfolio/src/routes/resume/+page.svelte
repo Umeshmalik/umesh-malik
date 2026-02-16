@@ -119,9 +119,6 @@
               {edu.institution}
             </p>
           </div>
-          <p class="label-mono text-brand-text-muted">
-            {edu.period}
-          </p>
         </div>
       {/each}
     </div>

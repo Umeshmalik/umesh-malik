@@ -124,7 +124,6 @@ export default function AboutContent() {
             <div key={i} style={{ marginBottom: '12px', paddingLeft: '16px', borderLeft: '2px solid #333' }}>
               <div style={{ color: '#00ff41', fontSize: '16px' }}>{edu.degree}</div>
               <div style={{ color: '#808080', fontSize: '14px' }}>{edu.institution}</div>
-              <div style={{ color: '#555', fontSize: '14px' }}>{edu.period}</div>
             </div>
           ))}
         </div>

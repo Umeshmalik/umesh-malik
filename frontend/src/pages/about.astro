@@ -8,7 +8,7 @@ import { getYearsOfExperience, getSummary } from "../data/dynamic";
 
 const years = getYearsOfExperience();
 const rawBase = import.meta.env.BASE_URL;
-const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const basePath = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
 ---
 
 <Desktop
@@ -36,32 +36,57 @@ const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 
     <section>
       <h2>Professional Summary</h2>
-      <p>Umesh Malik is a {personalInfo.title} based in {personalInfo.location}. With {years}+ years of professional experience, he currently works as a Software Development Engineer 2 (SDE-2) at Expedia Group, where he builds enterprise-grade frontend applications using React, TypeScript, and modern web technologies.</p>
-      <p>Before Expedia, Umesh worked at Tekion Corp as a Software Engineer and at BYJU's (Think & Learn) as a Module Lead, where he led development of critical payment and order management modules.</p>
+      <p>
+        Umesh Malik is a {personalInfo.title} based in {personalInfo.location}.
+        With {years}+ years of professional experience, he currently works as a
+        Software Development Engineer 2 (SDE-2) at Expedia Group, where he
+        builds enterprise-grade frontend applications using React, TypeScript,
+        and modern web technologies.
+      </p>
+      <p>
+        Before Expedia, Umesh worked at Tekion Corp as a Software Engineer and
+        at BYJU's (Think & Learn) as a Module Lead, where he led development of
+        critical payment and order management modules.
+      </p>
     </section>
 
     <section>
       <h2>Education</h2>
-      {education.map((edu) => (
-        <article>
-          <h3>{edu.degree} in {edu.field}</h3>
-          <p>{edu.institution} ({edu.period})</p>
-        </article>
-      ))}
+      {
+        education.map((edu) => (
+          <article>
+            <h3>
+              {edu.degree} in {edu.field}
+            </h3>
+            <p>{edu.institution}</p>
+          </article>
+        ))
+      }
     </section>
 
     <section>
       <h2>Awards & Recognition</h2>
-      {awards.map((award) => (
-        <p><strong>{award.title}</strong> — {award.company}, {award.date}. {award.description}</p>
-      ))}
+      {
+        awards.map((award) => (
+          <p>
+            <strong>{award.title}</strong> — {award.company}, {award.date}.{" "}
+            {award.description}
+          </p>
+        ))
+      }
     </section>
 
     <section>
       <h2>Contact Umesh Malik</h2>
       <ul>
-        <li>Email: <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a></li>
-        <li>LinkedIn: <a href={personalInfo.linkedin}>linkedin.com/in/umesh-malik</a></li>
+        <li>
+          Email: <a href={`mailto:${personalInfo.email}`}
+            >{personalInfo.email}</a>
+        </li>
+        <li>
+          LinkedIn: <a href={personalInfo.linkedin}
+            >linkedin.com/in/umesh-malik</a>
+        </li>
         <li>GitHub: <a href={personalInfo.github}>github.com/Umeshmalik</a></li>
       </ul>
     </section>

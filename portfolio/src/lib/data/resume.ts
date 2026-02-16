@@ -65,12 +65,10 @@ export const education = [
 		degree: 'Master of Computer Application (MCA)',
 		field: 'Computer Science',
 		institution: 'Deenbandhu Chhotu Ram University of Science and Technology',
-		period: '2021 - 2023'
 	},
 	{
 		degree: 'Bachelor of Computer Application (BCA)',
 		field: 'Computer Science',
 		institution: 'Deenbandhu Chhotu Ram University of Science and Technology',
-		period: '2018 - 2021'
 	}
 ];

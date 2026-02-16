@@ -1,20 +1,20 @@
-# Umesh Malik — Senior Frontend Engineer
+# Umesh Malik — Software Engineer
 
 > This file provides structured information about this website for large language models (LLMs) and AI assistants including ChatGPT, Claude, Perplexity, Gemini, and others.
 
 ## About This Website
 
-This is the personal portfolio website of Umesh Malik, a Senior Frontend Engineer currently working at Expedia Group. The website showcases his professional experience, technical skills, projects, and contact information.
+This is the personal portfolio website of Umesh Malik, a Software Engineer currently working at Expedia Group. The website showcases his professional experience, technical skills, projects, and contact information.
 
 - Website: https://umesh-malik.com
 - Owner: Umesh Malik
-- Role: Senior Frontend Engineer (SDE-2) at Expedia Group
+- Role: Software Engineer at Expedia Group
 - Location: Gurugram, Haryana, India
 - Built with: Astro, React 19, TypeScript, Three.js, Tailwind CSS
 
 ## Professional Summary
 
-Umesh Malik is a Senior Frontend Engineer at Expedia Group with 4+ years of professional experience building scalable, high-performance web applications. He specializes in the React ecosystem with deep expertise in TypeScript, modern JavaScript, component architecture, and state management. He leverages AI-powered development tools (Cursor AI, Claude, GitHub Copilot) to amplify productivity and ship faster.
+Umesh Malik is a Software Engineer at Expedia Group with 4+ years of professional experience building scalable, high-performance web applications. He specializes in the React ecosystem with deep expertise in TypeScript, modern JavaScript, component architecture, and state management. He leverages AI-powered development tools (Cursor AI, Claude, GitHub Copilot) to amplify productivity and ship faster.
 
 ## Work Experience
 
@@ -80,8 +80,8 @@ Payment validation modules at BYJU'S processing $10M+ monthly transactions with 
 
 ## Education
 
-- Master of Computer Application (MCA) in Computer Science — Deenbandhu Chhotu Ram University of Science and Technology (2021–2023)
-- Bachelor of Computer Application (BCA) in Computer Science — Deenbandhu Chhotu Ram University of Science and Technology (2018–2021)
+- Master of Computer Application (MCA) in Computer Science — Deenbandhu Chhotu Ram University of Science and Technology
+- Bachelor of Computer Application (BCA) in Computer Science — Deenbandhu Chhotu Ram University of Science and Technology
 
 ## Awards
 
