@@ -13,11 +13,16 @@ export interface BlogPost {
 	featured: boolean;
 	published: boolean;
 	readingTime: string;
-	content?: any;
+	content?: string;
 }
 
 export interface BlogCategory {
 	name: string;
 	count: number;
 	slug: string;
+}
+
+export interface BlogPostModule {
+	metadata: BlogPost;
+	default: string;
 }

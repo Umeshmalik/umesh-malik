@@ -24,7 +24,7 @@ export const GET: RequestHandler = async () => {
 	const body = `# ${S.author.name} - ${S.author.jobTitle} & Technical Blogger
 
 > ${S.author.jobTitle} at ${S.author.company} specializing in React, TypeScript, and modern web architecture.
-> Technical blogger writing about JavaScript, TypeScript, React, SvelteKit, and frontend development.
+> Technical blogger writing about JavaScript, TypeScript, React, SvelteKit, and software development.
 > For the extended version of this file, see: ${S.url}/llms-full.txt
 
 ## Quick Facts
@@ -52,7 +52,7 @@ Concepts: Microfrontend Architecture, Component Reusability, Performance Optimiz
 ## Current Role (June 2024 - Present)
 
 Software Development Engineer 2 at ${S.author.company}
-- Core frontend engineer for Workflow Orchestration Platform
+- Core software engineer for Workflow Orchestration Platform
 - Migrated legacy Vue.js to React (3x velocity improvement)
 - Built reusable component libraries
 - Created visual workflow diagram editor

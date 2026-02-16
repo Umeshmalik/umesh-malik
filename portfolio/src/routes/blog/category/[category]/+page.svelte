@@ -37,9 +37,9 @@
 </script>
 
 <SEO
-  title="{data.category} Articles - Frontend Development Blog | Umesh Malik"
-  description="Read {data.category} articles and tutorials by Umesh Malik, Senior Frontend Engineer at Expedia Group. In-depth guides, best practices, and practical tips."
-  keywords="{data.category}, {data.category} tutorials, {data.category} best practices, Umesh Malik blog, frontend development"
+  title="Umesh Malik's Blog - {data.category} Articles | {data.category} Tutorials"
+  description="Explore {data.category} articles and tutorials by Umesh Malik, Software Engineer at Expedia Group. Learn {data.category} best practices, practical tips, and in-depth guides."
+  keywords="{data.category}, {data.category} tutorials, {data.category} best practices, Umesh Malik blog, software development, {data.category} guides"
 />
 
 <svelte:head>

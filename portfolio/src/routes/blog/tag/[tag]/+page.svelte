@@ -21,7 +21,7 @@
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: `Articles tagged "${data.tag}"`,
-    description: `Browse articles tagged with "${data.tag}" by Umesh Malik. Tutorials, guides, and insights on ${data.tag} for frontend developers.`,
+    description: `Explore articles tagged with "${data.tag}" by Umesh Malik, Senior Engineer at Expedia Group. Learn {data.tag} best practices, practical tips, and in-depth guides.`,
     url: `https://umesh-malik.com/blog/tag/${data.tag.toLowerCase()}`,
     isPartOf: {
       "@type": "Blog",
@@ -37,9 +37,9 @@
 </script>
 
 <SEO
-  title="{data.tag} Articles - Frontend Development Blog | Umesh Malik"
-  description="Browse articles tagged with {data.tag} by Umesh Malik, Senior Frontend Engineer at Expedia Group. Tutorials, guides, and practical insights."
-  keywords="{data.tag}, {data.tag} tutorials, frontend development, Umesh Malik blog"
+  title="Umesh Malik's Blog - {data.tag} Articles | {data.tag} Tutorials"
+  description="Explore articles tagged with {data.tag} by Umesh Malik, Senior Engineer at Expedia Group. Learn {data.tag} best practices, practical tips, and in-depth guides."
+  keywords="{data.tag}, {data.tag} tutorials, {data.tag} best practices, Umesh Malik blog, {data.tag} guides"
 />
 
 <svelte:head>

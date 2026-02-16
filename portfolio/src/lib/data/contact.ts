@@ -32,7 +32,7 @@ export const contactChannels: ContactChannel[] = [
 		label: 'X',
 		value: '@lumeshmalik',
 		href: 'https://x.com/lumeshmalik',
-		description: 'Follow for frontend tips, tech opinions, and the occasional thread on web architecture.',
+		description: 'Follow for professional networking, software development tips, tech opinions, and the occasional thread on web architecture.',
 		primary: false
 	}
 ];

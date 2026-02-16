@@ -39,7 +39,7 @@
   <h1 class="section-title mb-4 text-white">Get in Touch</h1>
   <p class="body-large mb-16 text-brand-text-secondary">
     Whether it's a professional inquiry, open-source collaboration, or just a
-    conversation about frontend architecture — I'd like to hear from you.
+    conversation about software architecture — I'd like to hear from you.
   </p>
 
   <div class="grid gap-6 md:grid-cols-2">

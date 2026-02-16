@@ -15,8 +15,8 @@
 </script>
 
 <SEO
-  title="About Umesh Malik - Senior Frontend Engineer"
-  description="Learn about Umesh Malik's journey as a Senior Frontend Engineer. 4+ years experience building scalable web applications at Expedia Group, Tekion, and BYJU'S."
+  title="About Umesh Malik - Software Engineer"
+  description="Learn about Umesh Malik's journey as a Software Engineer. 4+ years experience building scalable software applications at Expedia Group, Tekion, and BYJU'S."
 />
 
 <svelte:head>
@@ -71,7 +71,7 @@
     <h2>What Drives Me</h2>
     <ul>
       <li>
-        <strong>Building Scalable Systems:</strong> Creating frontend architectures
+        <strong>Building Scalable Systems:</strong> Creating software architectures
         that can handle millions of users and evolve with business needs
       </li>
       <li>
@@ -86,7 +86,7 @@
 
     <h2>Beyond Code</h2>
     <p>
-      When I'm not coding, you'll find me exploring new frontend frameworks,
+      When I'm not coding, you'll find me exploring new software frameworks,
       contributing to open-source projects, or experimenting with AI-assisted
       development tools like Claude and Cursor AI.
     </p>
@@ -95,11 +95,11 @@
     <ul>
       <li>
         <strong>Working on:</strong> Workflow Orchestration Platform at Expedia Group
-        — building visual editors and reusable component libraries
+        — building visual editors and reusable software libraries
       </li>
       <li>
-        <strong>Learning:</strong> Svelte 5 runes, advanced TypeScript patterns, and
-        system design at scale
+        <strong>Learning:</strong> Svelte 5 runes, advanced TypeScript patterns,
+        and system design at scale
       </li>
       <li>
         <strong>Reading:</strong> "Designing Data-Intensive Applications" by Martin
@@ -110,23 +110,23 @@
         4, and MDsveX
       </li>
       <li>
-        <strong>Exploring:</strong> AI-assisted development workflows with Claude and
-        Cursor AI
+        <strong>Exploring:</strong> AI-assisted development workflows with Claude
+        and Cursor AI
       </li>
     </ul>
 
     <h2>Fun Facts</h2>
     <ul>
       <li>
-        Promoted from Associate Engineer to Module Lead in just 8 months at BYJU'S
-        — one of the fastest promotions in the team's history
+        Promoted from Associate Engineer to Module Lead in just 8 months at
+        BYJU'S — one of the fastest promotions in the team's history
       </li>
       <li>
         Consistently hit 95+ Lighthouse scores across production applications
       </li>
       <li>
-        Worked across 3 industries in 4 years: fintech (BYJU'S), automotive (Tekion),
-        and travel (Expedia)
+        Worked across 3 industries in 4 years: fintech (BYJU'S), automotive
+        (Tekion), and travel (Expedia)
       </li>
       <li>
         Built payment systems that processed over $10 million monthly with zero
@@ -141,7 +141,7 @@
     <h2>Let's Connect</h2>
     <p>
       I'm always interested in connecting with fellow engineers, discussing
-      frontend architecture, or exploring new opportunities. Reach out via
+      software architecture, or exploring new opportunities. Reach out via
       <a href="mailto:lucky.umeshmalik@gmail.com">email</a> or connect with me
       on
       <a

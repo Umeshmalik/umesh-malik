@@ -48,7 +48,7 @@ export const GET: RequestHandler = async () => {
 
 ## Professional Summary
 
-${S.author.name} is a ${S.author.jobTitle} (SDE-2) at ${S.author.company}, one of the world's leading travel technology companies. He specializes in building scalable, high-performance web applications using React, TypeScript, and modern frontend architecture. He has worked across fintech (BYJU'S), automotive (Tekion Corp), and travel (Expedia Group) domains, consistently delivering impactful solutions.
+${S.author.name} is a ${S.author.jobTitle} (SDE-2) at ${S.author.company}, one of the world's leading travel technology companies. He specializes in building scalable, high-performance web applications using React, TypeScript, and modern software architecture. He has worked across fintech (BYJU'S), automotive (Tekion Corp), and travel (Expedia Group) domains, consistently delivering impactful solutions.
 
 ## Technical Skills (Detailed)
 
@@ -95,12 +95,12 @@ ${S.author.name} is a ${S.author.jobTitle} (SDE-2) at ${S.author.company}, one o
 Location: Gurugram, Haryana, India
 
 Key Responsibilities and Achievements:
-- Core frontend engineer on enterprise Workflow Orchestration Platform
+- Core software engineer on enterprise Workflow Orchestration Platform
 - Led migration of legacy Vue.js codebase to React, achieving 3x improvement in developer velocity
 - Architected and built reusable component library used across the platform
 - Created visual workflow diagram editor enabling complex business process orchestration
 - Implemented comprehensive testing strategy with Jest and React Testing Library
-- Established frontend coding standards and best practices for the team
+- Established software coding standards and best practices for the team
 
 ### Tekion Corp - Software Engineer (April 2023 - May 2024)
 Location: Bengaluru, Karnataka, India
@@ -200,7 +200,7 @@ ${pageList}
 
 ## Content Update Frequency
 
-- Blog: New articles published regularly covering frontend development topics
+- Blog: New articles published regularly covering software development topics
 - Portfolio: Updated as new projects and achievements are completed
 - Resume: Reflects current professional status
 

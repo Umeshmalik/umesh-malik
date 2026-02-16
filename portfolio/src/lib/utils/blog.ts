@@ -1,18 +1,18 @@
 import { error } from '@sveltejs/kit';
-import type { BlogPost, BlogCategory } from '$lib/types/blog';
+import type { BlogPost, BlogCategory, BlogPostModule } from '$lib/types/blog';
 
 export async function getAllPosts(): Promise<BlogPost[]> {
 	const modules = import.meta.glob('$lib/posts/*.md');
 	const posts: BlogPost[] = [];
 
 	for (const path in modules) {
-		const post = (await modules[path]()) as any;
+		const post = (await modules[path]()) as BlogPostModule;
 		const slug = path.split('/').pop()?.replace('.md', '');
 
 		if (post.metadata?.published) {
 			posts.push({
 				...post.metadata,
-				slug
+				slug: slug ?? ''
 			});
 		}
 	}
@@ -31,7 +31,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
 			throw error(404, 'Post not found');
 		}
 
-		const post = (await modules[matchingPath]()) as any;
+		const post = (await modules[matchingPath]()) as BlogPostModule;
 
 		if (!post.metadata?.published) {
 			throw error(404, 'Post not found');
@@ -40,7 +40,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
 		return {
 			...post.metadata,
 			slug,
-			content: post.default
+			content: post.default ?? ''
 		};
 	} catch (e: any) {
 		if (e?.status === 404) throw e;

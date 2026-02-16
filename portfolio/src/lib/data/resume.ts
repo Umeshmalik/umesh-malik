@@ -5,7 +5,7 @@ export const experience = [
 		period: 'June 2024 - Present',
 		location: 'Gurugram, Haryana',
 		description:
-			'Core frontend engineer for enterprise Workflow Orchestration Platform. Led migration from Vue.js to React, built reusable component libraries, and created visual workflow diagram editors.',
+			'Core software engineer for enterprise Workflow Orchestration Platform. Led migration from Vue.js to React, built reusable component libraries, and created visual workflow diagram editors.',
 		highlights: [
 			'Led Vue.js to React migration improving developer velocity by 3x',
 			'Built reusable component library accelerating feature development',

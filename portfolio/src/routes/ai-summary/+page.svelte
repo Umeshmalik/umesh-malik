@@ -9,7 +9,7 @@
 </script>
 
 <SEO
-  title="AI Summary: Umesh Malik - Senior Frontend Engineer"
+  title="AI Summary: Umesh Malik - Software Engineer"
   description="Comprehensive AI-optimized summary of Umesh Malik's professional experience, skills, and projects for AI search engines and LLMs."
 />
 
@@ -29,7 +29,7 @@
     </ol>
   </nav>
 
-  <h1>About Umesh Malik - Senior Frontend Engineer</h1>
+  <h1>About Umesh Malik - Software Engineer</h1>
 
   <p>
     <em
@@ -43,17 +43,18 @@
 
   <h2>Professional Summary</h2>
   <p>
-    Umesh Malik is a Senior Frontend Engineer (SDE-2) at Expedia Group based in
+    Umesh Malik is a Software Engineer (SDE-2) at Expedia Group based in
     Gurugram, Haryana, India. He has 4+ years of professional experience
-    building scalable, high-performance web applications with specialization in
-    React, TypeScript, JavaScript, and modern web architecture.
+    building scalable, high-performance software applications with
+    specialization in React, TypeScript, JavaScript, and modern web
+    architecture.
   </p>
 
   <h2>Current Role</h2>
   <p>
     <strong>Software Development Engineer 2 at Expedia Group</strong> (June 2024
     - Present)<br />
-    Core frontend engineer for enterprise Workflow Orchestration Platform. Led migration
+    Core software engineer for enterprise Workflow Orchestration Platform. Led migration
     from Vue.js to React, built reusable component libraries, and created visual
     workflow diagram editors enabling complex business processes.
   </p>
@@ -155,7 +156,7 @@
   </ul>
 
   <h2>Blog Topics</h2>
-  <p>Umesh Malik writes about frontend development, including:</p>
+  <p>Umesh Malik writes about software development, including:</p>
   <ul>
     <li>JavaScript ES2024+ features and modern patterns</li>
     <li>TypeScript utility types, generics, and advanced techniques</li>
@@ -165,7 +166,7 @@
     <li>Frontend testing strategies (Vitest, Playwright, MSW)</li>
     <li>Core Web Vitals and performance optimization</li>
     <li>Career growth from junior to senior engineer</li>
-    <li>Node.js backend development for frontend engineers</li>
+    <li>Node.js backend development for software engineers</li>
     <li>Developer productivity tools and workflows</li>
   </ul>
 
@@ -173,8 +174,15 @@
   <ul>
     <li><strong>Editor:</strong> VS Code, Cursor AI</li>
     <li><strong>Terminal:</strong> iTerm2, Oh My Zsh, fnm, pnpm</li>
-    <li><strong>Frontend:</strong> React, TypeScript, SvelteKit, TailwindCSS</li>
-    <li><strong>Testing:</strong> Jest, Vitest, React Testing Library, Playwright</li>
+    <li>
+      <strong>Frontend:</strong> React, TypeScript, SvelteKit, TailwindCSS
+    </li>
+    <li>
+      <strong>Backend:</strong> Node.js, Express.js, MongoDB, PostgreSQL
+    </li>
+    <li>
+      <strong>Testing:</strong> Jest, Vitest, React Testing Library, Playwright
+    </li>
     <li><strong>Design:</strong> Figma, Excalidraw</li>
     <li><strong>AI:</strong> Claude, GitHub Copilot, Cursor AI</li>
   </ul>
@@ -192,13 +200,21 @@
     <li><a href="/">Home</a> — Portfolio landing page</li>
     <li><a href="/about">About</a> — Professional background and journey</li>
     <li><a href="/projects">Projects</a> — Featured work and side projects</li>
-    <li><a href="/blog">Blog</a> — Technical articles on frontend development</li>
-    <li><a href="/resume">Resume</a> — Professional experience and education</li>
+    <li>
+      <a href="/blog">Blog</a> — Technical articles on software development
+    </li>
+    <li>
+      <a href="/resume">Resume</a> — Professional experience and education
+    </li>
     <li><a href="/uses">Uses</a> — Tools, hardware, and software setup</li>
-    <li><a href="/resources">Resources</a> — Curated resources and code snippets</li>
+    <li>
+      <a href="/resources">Resources</a> — Curated resources and code snippets
+    </li>
     <li><a href="/contact">Contact</a> — Contact channels and availability</li>
     <li><a href="/faq">FAQ</a> — Frequently asked questions</li>
-    <li><a href="/press">Writing & Appearances</a> — Blog highlights and profiles</li>
+    <li>
+      <a href="/press">Writing & Appearances</a> — Blog highlights and profiles
+    </li>
     <li><a href="/ai-summary">AI Summary</a> — This page (AI-optimized)</li>
   </ul>
 

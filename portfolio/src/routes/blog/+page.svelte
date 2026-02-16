@@ -11,7 +11,7 @@
     "@type": "Blog",
     name: "Umesh Malik's Blog",
     description:
-      "Articles about JavaScript, TypeScript, React, SvelteKit, frontend development, and web performance by Umesh Malik",
+      "Articles about JavaScript, TypeScript, React, SvelteKit, software development, and web performance by Umesh Malik",
     url: "https://umesh-malik.com/blog",
     author: {
       "@type": "Person",
@@ -22,9 +22,9 @@
 </script>
 
 <SEO
-  title="Blog - JavaScript, TypeScript & Frontend Development | Umesh Malik"
-  description="Read articles about JavaScript, TypeScript, React, SvelteKit, frontend architecture, and web performance. Written by Umesh Malik, Senior Frontend Engineer at Expedia Group."
-  keywords="JavaScript blog, TypeScript tutorials, React best practices, SvelteKit guides, frontend development, web performance, Umesh Malik blog"
+  title="Blog - JavaScript, TypeScript & Software Development | Umesh Malik"
+  description="Read articles about JavaScript, TypeScript, React, SvelteKit, software architecture, and web performance. Written by Umesh Malik, Software Engineer at Expedia Group."
+  keywords="JavaScript blog, TypeScript tutorials, React best practices, SvelteKit guides, software development, web performance, Umesh Malik blog"
 />
 
 <svelte:head>
@@ -36,7 +36,7 @@
     <h1 class="section-title mb-8 text-white">Blog</h1>
     <p class="body-large text-brand-text-secondary">
       Deep dives into JavaScript, TypeScript, React, SvelteKit, and modern
-      frontend development. Practical tutorials, architecture patterns, and
+      software development. Practical tutorials, architecture patterns, and
       performance optimization.
     </p>
   </div>

@@ -14,7 +14,7 @@ export const GET: RequestHandler = async () => {
 		home_page_url: siteConfig.url,
 		feed_url: `${siteConfig.url}/feed.json`,
 		description:
-			'Articles about JavaScript, TypeScript, React, SvelteKit, frontend architecture, and web performance',
+			'Articles about JavaScript, TypeScript, React, SvelteKit, software architecture, and web performance',
 		language: siteConfig.language,
 		authors: [
 			{

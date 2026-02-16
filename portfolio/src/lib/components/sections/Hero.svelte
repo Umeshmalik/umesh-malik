@@ -29,14 +29,14 @@
         in:fly={{ y: 30, duration: 600, delay: 50 }}
       >
         I build scalable<br class="hidden md:block" />
-        frontend <span class="text-brand-accent">systems</span>.
+        software <span class="text-brand-accent">systems</span>.
       </h1>
       <p
         class="body-large mb-14 max-w-2xl text-brand-text-secondary"
         in:fly={{ y: 30, duration: 600, delay: 100 }}
       >
         From $10M payment systems to enterprise workflow platforms — I build
-        frontends that handle real-world scale at
+        software systems that handle real-world scale at
         <span class="text-white">Expedia Group</span>.
       </p>
       <div

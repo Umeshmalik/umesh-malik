@@ -8,7 +8,7 @@
     {
       title: "Architecture & Scalability",
       description:
-        "Building frontend systems that scale with business needs. From component libraries to microfrontend architectures.",
+        "Building software systems that scale with business needs. From component libraries to microfrontend architectures.",
       metric: "Led Vue to React migration -- 3x velocity improvement",
     },
     {
@@ -30,7 +30,9 @@
   id="expertise"
   class="relative px-6 py-20 md:py-32 lg:px-12"
   use:inview={{ threshold: 0.2 }}
-  oninview_change={(e) => { if (e.detail.inView) hasBeenInView = true; }}
+  oninview_change={(e) => {
+    if (e.detail.inView) hasBeenInView = true;
+  }}
 >
   <div class="pointer-events-none absolute inset-0 gold-glow"></div>
 

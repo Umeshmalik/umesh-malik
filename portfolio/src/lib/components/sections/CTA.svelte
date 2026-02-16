@@ -9,7 +9,9 @@
 <section
   class="relative border-t border-brand-border px-6 py-20 md:py-32 lg:px-12"
   use:inview={{ threshold: 0.3 }}
-  oninview_change={(e) => { if (e.detail.inView) hasBeenInView = true; }}
+  oninview_change={(e) => {
+    if (e.detail.inView) hasBeenInView = true;
+  }}
 >
   <div class="pointer-events-none absolute inset-0 gold-glow"></div>
 
@@ -25,7 +27,7 @@
         class="body-large mx-auto mb-12 max-w-xl text-brand-text-secondary"
         in:fly={{ y: 30, duration: 600, delay: 150 }}
       >
-        I'm always interested in discussing frontend architecture, new
+        I'm always interested in discussing software development, new
         opportunities, or interesting projects. Let's connect.
       </p>
       <div

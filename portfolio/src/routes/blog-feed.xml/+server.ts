@@ -6,22 +6,22 @@ import { escapeXml, xmlHeaders } from '$lib/utils/xml';
 export const prerender = true;
 
 export const GET: RequestHandler = async () => {
-	const posts = await getAllPosts();
+  const posts = await getAllPosts();
 
-	const rss = `<?xml version="1.0" encoding="UTF-8"?>
+  const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
      xmlns:atom="http://www.w3.org/2005/Atom"
      xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>${siteConfig.author.name}'s Blog - JavaScript, TypeScript &amp; Frontend Development</title>
+    <title>${siteConfig.author.name}'s Blog - JavaScript, TypeScript &amp; Software Development</title>
     <link>${siteConfig.url}/blog</link>
-    <description>Articles about JavaScript, TypeScript, React, SvelteKit, frontend architecture, and web performance</description>
+    <description>Articles about JavaScript, TypeScript, React, SvelteKit, software architecture, and web performance</description>
     <language>en-us</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${siteConfig.url}/blog-feed.xml" rel="self" type="application/rss+xml"/>
     ${posts
-			.map(
-				(post) => `<item>
+      .map(
+        (post) => `<item>
       <title>${escapeXml(post.title)}</title>
       <link>${siteConfig.url}/blog/${post.slug}</link>
       <description>${escapeXml(post.description)}</description>
@@ -31,10 +31,10 @@ export const GET: RequestHandler = async () => {
       ${post.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join('\n      ')}
       <author>${siteConfig.author.email} (${siteConfig.author.name})</author>
     </item>`
-			)
-			.join('\n    ')}
+      )
+      .join('\n    ')}
   </channel>
 </rss>`;
 
-	return new Response(rss, { headers: xmlHeaders() });
+  return new Response(rss, { headers: xmlHeaders() });
 };

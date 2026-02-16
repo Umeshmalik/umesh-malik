@@ -51,7 +51,7 @@
       outlet: "X",
       url: "https://x.com/lumeshmalik",
       description:
-        "Frontend tips, tech opinions, and occasional threads on web architecture",
+        "Software tips, tech opinions, and occasional threads on web architecture",
     },
   ];
 

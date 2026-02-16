@@ -13,7 +13,7 @@
 
 <SEO
   title="Resume - Umesh Malik | Senior Frontend Engineer"
-  description="View Umesh Malik's professional resume. 4+ years of frontend engineering experience at Expedia Group, Tekion Corp, and BYJU'S with expertise in React and TypeScript."
+  description="View Umesh Malik's professional resume. 4+ years of software engineering experience at Expedia Group, Tekion Corp, and BYJU'S with expertise in React and TypeScript."
 />
 
 <svelte:head>

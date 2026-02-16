@@ -1,7 +1,7 @@
 export const testimonials = [
 	{
 		quote:
-			'Umesh consistently delivers high-quality frontend solutions. His migration of our platform from Vue.js to React was executed flawlessly and improved our team velocity significantly.',
+			'Umesh consistently delivers high-quality software solutions. His migration of our platform from Vue.js to React was executed flawlessly and improved our team velocity significantly.',
 		author: 'Engineering Manager',
 		role: 'Expedia Group',
 		relationship: 'Direct Manager'
