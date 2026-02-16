@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { BlogPost, BlogCategory, BlogPostModule } from '$lib/types/blog';
+import { escapeXml } from './xml';
 
 export async function getAllPosts(): Promise<BlogPost[]> {
 	const modules = import.meta.glob('$lib/posts/*.md');
@@ -83,15 +84,18 @@ export function getAllCategories(posts: BlogPost[]): BlogCategory[] {
 		categoryMap.set(post.category, count + 1);
 	});
 
-	return Array.from(categoryMap.entries()).map(([name, count]) => ({
+	const categories = Array.from(categoryMap.entries()).map(([name, count]) => ({
 		name,
 		count,
-		slug: name.toLowerCase().replace(/\s+/g, '-')
+		slug: escapeXml(name) ?? ''
 	}));
+
+	return categories.sort((a, b) => b.count - a.count);
 }
 
 export function getAllTags(posts: BlogPost[]): string[] {
 	const tags = new Set<string>();
 	posts.forEach((post) => post.tags.forEach((tag) => tags.add(tag)));
-	return Array.from(tags).sort();
+	const tagsArray = Array.from(tags);
+	return tagsArray.map(tag => escapeXml(tag) ?? '').sort((a, b) => b.length - a.length);
 }
