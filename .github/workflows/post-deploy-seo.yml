@@ -5,31 +5,138 @@ on:
     branches: [main]
     paths:
       - 'portfolio/**'
+      - 'frontend/**'
   workflow_dispatch:
 
 jobs:
-  wait-for-deploy:
-    name: Wait for Cloudflare Pages
+  # ---------------------------------------------------------------------------
+  # 1. Detect which pages changed and build the URL list
+  # ---------------------------------------------------------------------------
+  detect-changes:
+    name: Detect changed pages
     runs-on: ubuntu-latest
+    outputs:
+      url_paths: ${{ steps.detect.outputs.url_paths }}
+      url_count: ${{ steps.detect.outputs.url_count }}
+      has_changes: ${{ steps.detect.outputs.has_changes }}
     steps:
-      - name: Wait for Cloudflare Pages deploy
-        run: |
-          echo "Waiting 90s for Cloudflare Pages to complete deployment..."
-          sleep 90
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Need previous commit for diff
 
-      - name: Verify sites are live
+      - name: Detect changed URLs from git diff
+        id: detect
         run: |
-          COM=$(curl -s -o /dev/null -w "%{http_code}" "https://umesh-malik.com")
-          IN=$(curl -s -o /dev/null -w "%{http_code}" "https://umesh-malik.in")
-          echo ".com → $COM"
-          echo ".in  → $IN"
-          if [ "$COM" != "200" ] && [ "$IN" != "200" ]; then
-            echo "::warning::Both sites returned non-200 — deploy may still be in progress"
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No changed files detected, will use sitemap fallback"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "url_count=0" >> $GITHUB_OUTPUT
+            echo "url_paths=" >> $GITHUB_OUTPUT
+            exit 0
           fi
 
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          URL_PATHS=""
+          SUBMIT_ALL_STATIC=false
+          SUBMIT_ALL_BLOG=false
+
+          while IFS= read -r file; do
+            # Blog post changed/added
+            if echo "$file" | grep -qE '^portfolio/src/lib/posts/(.+)\.md$'; then
+              SLUG=$(echo "$file" | sed -E 's|^portfolio/src/lib/posts/(.+)\.md$|\1|')
+              URL_PATHS="$URL_PATHS /blog/$SLUG"
+              URL_PATHS="$URL_PATHS /blog"
+            fi
+
+            # Route page changed
+            if echo "$file" | grep -qE '^portfolio/src/routes/[^[]+/\+page\.(svelte|ts)$'; then
+              ROUTE=$(echo "$file" | sed -E 's|^portfolio/src/routes/(.+)/\+page\.(svelte\|ts\|server\.ts)$|\1|')
+              # Skip special routes (xml, json, txt generators)
+              if ! echo "$ROUTE" | grep -qE '\.(xml|json|txt)'; then
+                URL_PATHS="$URL_PATHS /$ROUTE"
+              fi
+            fi
+
+            # Layout, global CSS, or config changed → submit all static pages
+            if echo "$file" | grep -qE '^portfolio/src/(routes/\+layout|app\.(html|css)|lib/components/layout/|lib/config/site\.ts)'; then
+              SUBMIT_ALL_STATIC=true
+            fi
+
+            # Blog components or utility changed → submit all blog posts
+            if echo "$file" | grep -qE '^portfolio/src/lib/(utils/blog\.ts|components/blog/)'; then
+              SUBMIT_ALL_BLOG=true
+            fi
+
+            # Frontend (retro-portfolio) changed
+            if echo "$file" | grep -qE '^frontend/'; then
+              URL_PATHS="$URL_PATHS /projects/retro-portfolio"
+              URL_PATHS="$URL_PATHS /projects/retro-portfolio/about"
+              URL_PATHS="$URL_PATHS /projects/retro-portfolio/experience"
+              URL_PATHS="$URL_PATHS /projects/retro-portfolio/projects"
+              URL_PATHS="$URL_PATHS /projects/retro-portfolio/skills"
+              URL_PATHS="$URL_PATHS /projects/retro-portfolio/contact"
+            fi
+          done <<< "$CHANGED_FILES"
+
+          # If layout/config changed, add all static pages
+          if [ "$SUBMIT_ALL_STATIC" = "true" ]; then
+            for page in "" "/blog" "/projects" "/about" "/resume" "/faq" "/contact" "/uses" "/resources" "/ai-summary" "/press" \
+              "/projects/retro-portfolio" "/projects/retro-portfolio/about" "/projects/retro-portfolio/experience" \
+              "/projects/retro-portfolio/projects" "/projects/retro-portfolio/skills" "/projects/retro-portfolio/contact"; do
+              URL_PATHS="$URL_PATHS $page"
+            done
+          fi
+
+          # If blog infrastructure changed, add all blog post URLs
+          if [ "$SUBMIT_ALL_BLOG" = "true" ]; then
+            URL_PATHS="$URL_PATHS /blog"
+            for md in portfolio/src/lib/posts/*.md; do
+              SLUG=$(basename "$md" .md)
+              URL_PATHS="$URL_PATHS /blog/$SLUG"
+            done
+          fi
+
+          # Deduplicate and clean
+          UNIQUE_PATHS=$(echo "$URL_PATHS" | tr ' ' '\n' | sort -u | grep -v '^$' | tr '\n' ',' | sed 's/,$//')
+
+          COUNT=$(echo "$UNIQUE_PATHS" | tr ',' '\n' | grep -c '[^[:space:]]' || echo "0")
+
+          echo "Detected $COUNT unique URL paths to submit:"
+          echo "$UNIQUE_PATHS" | tr ',' '\n'
+
+          echo "url_paths=$UNIQUE_PATHS" >> $GITHUB_OUTPUT
+          echo "url_count=$COUNT" >> $GITHUB_OUTPUT
+
+          if [ "$COUNT" -gt 0 ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+  # ---------------------------------------------------------------------------
+  # 2. Wait 90s for deployment to propagate
+  # ---------------------------------------------------------------------------
+  wait:
+    name: Wait for deploy propagation
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait 90s
+        run: |
+          echo "Waiting 90s for deployment to propagate..."
+          sleep 90
+
+  # ---------------------------------------------------------------------------
+  # 3. WebSub → Google
+  # ---------------------------------------------------------------------------
   websub-google:
     name: WebSub → Google
-    needs: wait-for-deploy
+    needs: wait
     runs-on: ubuntu-latest
     steps:
       - name: Notify Google via PubSubHubbub
@@ -44,75 +151,136 @@ jobs:
             done
           done
 
-  indexnow-bing:
+  # ---------------------------------------------------------------------------
+  # 4. IndexNow → Bing, Yandex, DuckDuckGo, Seznam, Naver
+  #    Submits only the URLs that actually changed
+  # ---------------------------------------------------------------------------
+  indexnow:
     name: IndexNow → Bing/Yandex/DuckDuckGo
-    needs: wait-for-deploy
+    needs: [detect-changes, wait]
     runs-on: ubuntu-latest
     steps:
-      - name: Submit URLs to IndexNow
+      - name: Submit changed URLs to IndexNow
+        env:
+          INDEXNOW_KEY: b52fd35b0ee3234d8074e58fa2591da9
+          URL_PATHS: ${{ needs.detect-changes.outputs.url_paths }}
         run: |
-          KEY="b52fd35b0ee3234d8074e58fa2591da9"
+          echo "=== IndexNow Submission ==="
+          echo "URLs to submit: $URL_PATHS"
+          echo ""
 
           for DOMAIN in "umesh-malik.com" "umesh-malik.in"; do
-            BLOG_URLS=$(curl -sf "https://${DOMAIN}/blog-sitemap.xml" \
-              | grep -o '<loc>[^<]*</loc>' \
-              | sed 's/<[^>]*>//g' \
-              | head -5 || echo "")
+            # Build JSON array of full URLs from comma-separated paths
+            URL_JSON=""
+            IFS=',' read -ra PATHS <<< "$URL_PATHS"
+            for path in "${PATHS[@]}"; do
+              path=$(echo "$path" | xargs)  # trim whitespace
+              [ -z "$path" ] && continue
+              # Handle root path (empty string becomes /)
+              if [ "$path" = "" ] || [ "$path" = "/" ]; then
+                FULL_URL="https://${DOMAIN}/"
+              else
+                FULL_URL="https://${DOMAIN}${path}"
+              fi
+              if [ -z "$URL_JSON" ]; then
+                URL_JSON="\"${FULL_URL}\""
+              else
+                URL_JSON="${URL_JSON}, \"${FULL_URL}\""
+              fi
+            done
 
-            URL_JSON="\"https://${DOMAIN}/\", \"https://${DOMAIN}/blog\""
-            while IFS= read -r url; do
-              [ -n "$url" ] && URL_JSON="${URL_JSON}, \"${url}\""
-            done <<< "$BLOG_URLS"
+            if [ -z "$URL_JSON" ]; then
+              echo "${DOMAIN} → No URLs to submit"
+              continue
+            fi
+
+            PAYLOAD="{
+              \"host\": \"${DOMAIN}\",
+              \"key\": \"${INDEXNOW_KEY}\",
+              \"keyLocation\": \"https://${DOMAIN}/${INDEXNOW_KEY}.txt\",
+              \"urlList\": [${URL_JSON}]
+            }"
+
+            echo "Submitting to ${DOMAIN}:"
+            echo "$PAYLOAD" | python3 -m json.tool 2>/dev/null || echo "$PAYLOAD"
+            echo ""
 
             RESP=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.indexnow.org/indexnow" \
-              -H "Content-Type: application/json" \
-              -d "{
-                \"host\": \"${DOMAIN}\",
-                \"key\": \"${KEY}\",
-                \"keyLocation\": \"https://${DOMAIN}/${KEY}.txt\",
-                \"urlList\": [${URL_JSON}]
-              }")
-            echo "${DOMAIN} → HTTP $RESP"
+              -H "Content-Type: application/json; charset=utf-8" \
+              -d "$PAYLOAD")
+
+            case $RESP in
+              200) STATUS="OK — URLs submitted successfully" ;;
+              202) STATUS="Accepted — URLs received, validation pending" ;;
+              400) STATUS="Bad Request — Invalid format" ;;
+              403) STATUS="Forbidden — Key not valid" ;;
+              422) STATUS="Unprocessable — URLs don't match host" ;;
+              429) STATUS="Too Many Requests — Rate limited" ;;
+              *)   STATUS="Unknown response" ;;
+            esac
+
+            echo "${DOMAIN} → HTTP ${RESP} (${STATUS})"
+            echo ""
           done
 
+  # ---------------------------------------------------------------------------
+  # 5. Bing URL Submission API (requires BING_API_KEY secret)
+  # ---------------------------------------------------------------------------
   bing-url-submission:
     name: Bing URL Submission API
-    needs: wait-for-deploy
+    needs: [detect-changes, wait]
     runs-on: ubuntu-latest
-    # Requires BING_API_KEY secret — skip if not set
     if: ${{ vars.BING_API_KEY != '' || secrets.BING_API_KEY != '' }}
     steps:
-      - name: Submit URLs to Bing
+      - name: Submit changed URLs to Bing
         env:
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
+          URL_PATHS: ${{ needs.detect-changes.outputs.url_paths }}
         run: |
           for DOMAIN in "umesh-malik.com" "umesh-malik.in"; do
+            # Build URL list from detected changes
+            URL_JSON=""
+            IFS=',' read -ra PATHS <<< "$URL_PATHS"
+            for path in "${PATHS[@]}"; do
+              path=$(echo "$path" | xargs)
+              [ -z "$path" ] && continue
+              if [ "$path" = "" ] || [ "$path" = "/" ]; then
+                FULL_URL="https://${DOMAIN}/"
+              else
+                FULL_URL="https://${DOMAIN}${path}"
+              fi
+              if [ -z "$URL_JSON" ]; then
+                URL_JSON="\"${FULL_URL}\""
+              else
+                URL_JSON="${URL_JSON}, \"${FULL_URL}\""
+              fi
+            done
+
             RESP=$(curl -s -w "\nHTTP: %{http_code}" \
               -X POST "https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=${BING_API_KEY}" \
               -H "Content-Type: application/json" \
               -d "{
                 \"siteUrl\": \"https://${DOMAIN}\",
-                \"urlList\": [
-                  \"https://${DOMAIN}/blog/ai-agent-attacks-developer-matplotlib-open-source\",
-                  \"https://${DOMAIN}/blog\",
-                  \"https://${DOMAIN}/\"
-                ]
+                \"urlList\": [${URL_JSON}]
               }")
             echo "${DOMAIN}:"
             echo "$RESP"
             echo ""
           done
 
+  # ---------------------------------------------------------------------------
+  # 6. Google Indexing API (requires GOOGLE_SERVICE_ACCOUNT_KEY secret)
+  # ---------------------------------------------------------------------------
   google-indexing-api:
     name: Google Indexing API
-    needs: wait-for-deploy
+    needs: [detect-changes, wait]
     runs-on: ubuntu-latest
-    # Requires GOOGLE_SERVICE_ACCOUNT_KEY secret — skip if not set
     if: ${{ vars.GOOGLE_SERVICE_ACCOUNT_KEY != '' || secrets.GOOGLE_SERVICE_ACCOUNT_KEY != '' }}
     steps:
-      - name: Request Google indexing
+      - name: Request Google indexing for changed URLs
         env:
           GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          URL_PATHS: ${{ needs.detect-changes.outputs.url_paths }}
         run: |
           # Write service account key to temp file
           echo "$GOOGLE_SA_KEY" > /tmp/sa-key.json
@@ -138,14 +306,21 @@ jobs:
 
           if [ -z "$ACCESS_TOKEN" ]; then
             echo "::error::Failed to get Google access token"
+            rm -f /tmp/sa-key.json
             exit 1
           fi
 
-          # Submit URLs for indexing
-          for URL in \
-            "https://umesh-malik.com/blog/ai-agent-attacks-developer-matplotlib-open-source" \
-            "https://umesh-malik.com/blog" \
-            "https://umesh-malik.com/"; do
+          # Submit each changed URL for indexing
+          IFS=',' read -ra PATHS <<< "$URL_PATHS"
+          for path in "${PATHS[@]}"; do
+            path=$(echo "$path" | xargs)
+            [ -z "$path" ] && continue
+            if [ "$path" = "" ] || [ "$path" = "/" ]; then
+              URL="https://umesh-malik.com/"
+            else
+              URL="https://umesh-malik.com${path}"
+            fi
+
             RESP=$(curl -s -w "\nHTTP: %{http_code}" \
               -X POST "https://indexing.googleapis.com/v3/urlNotifications:publish" \
               -H "Authorization: Bearer ${ACCESS_TOKEN}" \
@@ -158,20 +333,38 @@ jobs:
 
           rm -f /tmp/sa-key.json
 
+  # ---------------------------------------------------------------------------
+  # 7. Summary
+  # ---------------------------------------------------------------------------
   summary:
     name: Summary
-    needs: [websub-google, indexnow-bing, bing-url-submission, google-indexing-api]
+    needs: [detect-changes, websub-google, indexnow, bing-url-submission, google-indexing-api]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Write summary
+        env:
+          URL_COUNT: ${{ needs.detect-changes.outputs.url_count }}
+          URL_PATHS: ${{ needs.detect-changes.outputs.url_paths }}
         run: |
           echo "## SEO Notification Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**${URL_COUNT} changed URLs detected and submitted:**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # List submitted URLs
+          IFS=',' read -ra PATHS <<< "$URL_PATHS"
+          for path in "${PATHS[@]}"; do
+            path=$(echo "$path" | xargs)
+            [ -z "$path" ] && continue
+            echo "- \`${path}\`" >> $GITHUB_STEP_SUMMARY
+          done
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Method | Engines | Status | Setup |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|---------|--------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| WebSub | Google | ${{ needs.websub-google.result }} | No secrets needed |" >> $GITHUB_STEP_SUMMARY
-          echo "| IndexNow | Bing, Yandex, DuckDuckGo | ${{ needs.indexnow-bing.result }} | No secrets needed |" >> $GITHUB_STEP_SUMMARY
+          echo "| IndexNow | Bing, Yandex, DuckDuckGo, Seznam, Naver | ${{ needs.indexnow.result }} | No secrets needed |" >> $GITHUB_STEP_SUMMARY
           echo "| Bing URL Submission | Bing | ${{ needs.bing-url-submission.result }} | Needs \`BING_API_KEY\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Google Indexing API | Google | ${{ needs.google-indexing-api.result }} | Needs \`GOOGLE_SERVICE_ACCOUNT_KEY\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
