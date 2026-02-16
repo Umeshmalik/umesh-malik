@@ -1,5 +1,5 @@
 import type { RequestHandler } from './$types';
-import { getAllPosts, getAllCategories, getAllTags } from '$lib/utils/blog';
+import { getAllPosts, getAllCategories, getAllTags, slugify } from '$lib/utils/blog';
 import { siteConfig } from '$lib/config/site';
 import { xmlHeaders } from '$lib/utils/xml';
 
@@ -37,7 +37,7 @@ export const GET: RequestHandler = async () => {
   ${tags
       .map(
         (tag) => `<url>
-    <loc>${siteConfig.url}/blog/tag/${tag}</loc>
+    <loc>${siteConfig.url}/blog/tag/${slugify(tag)}</loc>
     <lastmod>${now}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

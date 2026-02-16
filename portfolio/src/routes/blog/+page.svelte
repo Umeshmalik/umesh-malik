@@ -3,6 +3,7 @@
   import SEO from "$lib/components/layout/SEO.svelte";
   import BlogCard from "$lib/components/blog/BlogCard.svelte";
   import Tag from "$lib/components/ui/Tag.svelte";
+  import { slugify } from "$lib/utils/blog";
 
   let { data }: { data: PageData } = $props();
 
@@ -94,7 +95,7 @@
       <h2 class="label-mono mb-5 text-brand-text-muted">Popular Tags</h2>
       <div class="flex flex-wrap gap-2">
         {#each data.tags as tag}
-          <Tag href="/blog/tag/{tag.toLowerCase()}">{tag}</Tag>
+          <Tag href="/blog/tag/{slugify(tag)}">{tag}</Tag>
         {/each}
       </div>
     </div>

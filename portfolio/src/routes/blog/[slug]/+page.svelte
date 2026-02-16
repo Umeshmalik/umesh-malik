@@ -8,6 +8,7 @@
     createArticleSchema,
     createBreadcrumbSchema,
   } from "$lib/utils/schema";
+  import { slugify } from "$lib/utils/blog";
 
   let { data }: { data: PageData } = $props();
 
@@ -33,7 +34,7 @@
       { name: "Blog", url: "https://umesh-malik.com/blog" },
       {
         name: data.post.category,
-        url: `https://umesh-malik.com/blog/category/${data.post.category.toLowerCase()}`,
+        url: `https://umesh-malik.com/blog/category/${slugify(data.post.category)}`,
       },
       {
         name: data.post.title,
@@ -79,7 +80,7 @@
       <li class="mx-1">/</li>
       <li>
         <a
-          href="/blog/category/{data.post.category.toLowerCase()}"
+          href="/blog/category/{slugify(data.post.category)}"
           class="transition-colors hover:text-brand-accent"
         >
           {data.post.category}
@@ -93,7 +94,7 @@
   <header class="mb-12">
     <div class="mb-6">
       <a
-        href="/blog/category/{data.post.category.toLowerCase()}"
+        href="/blog/category/{slugify(data.post.category)}"
         class="label-mono text-brand-accent hover:underline"
       >
         {data.post.category}
@@ -119,7 +120,7 @@
     <div class="flex flex-wrap gap-2">
       {#each data.post.tags as tag}
         <a
-          href="/blog/tag/{tag.toLowerCase()}"
+          href="/blog/tag/{slugify(tag)}"
           class="border border-brand-border bg-brand-surface px-3 py-1 font-mono text-xs uppercase tracking-wider text-brand-text-secondary transition-colors hover:border-brand-accent hover:text-brand-accent"
         >
           #{tag}

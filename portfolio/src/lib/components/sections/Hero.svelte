@@ -44,7 +44,7 @@
         in:fly={{ y: 30, duration: 600, delay: 150 }}
       >
         <Button variant="primary" size="lg" href="/resume">View Resume</Button>
-        <Button variant="secondary" size="lg" href="#projects">
+        <Button variant="secondary" size="lg" href="/projects">
           View Work
         </Button>
       </div>

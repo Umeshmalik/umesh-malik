@@ -10,7 +10,11 @@ export const entries: EntryGenerator = async () => {
 export const load: PageServerLoad = async ({ params }) => {
 	const allPosts = await getAllPosts();
 	const posts = getPostsByCategory(allPosts, params.category);
-	const category = params.category.charAt(0).toUpperCase() + params.category.slice(1);
+
+	// Find the display name from the categories list
+	const categories = getAllCategories(allPosts);
+	const matched = categories.find((cat) => cat.slug === params.category);
+	const category = matched?.name ?? params.category;
 
 	return {
 		posts,

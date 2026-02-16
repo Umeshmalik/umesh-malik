@@ -3,6 +3,7 @@
   import SEO from "$lib/components/layout/SEO.svelte";
   import BlogCard from "$lib/components/blog/BlogCard.svelte";
   import { createBreadcrumbSchema } from "$lib/utils/schema";
+  import { slugify } from "$lib/utils/blog";
 
   let { data }: { data: PageData } = $props();
 
@@ -12,7 +13,7 @@
       { name: "Blog", url: "https://umesh-malik.com/blog" },
       {
         name: data.tag,
-        url: `https://umesh-malik.com/blog/tag/${data.tag.toLowerCase()}`,
+        url: `https://umesh-malik.com/blog/tag/${slugify(data.tag)}`,
       },
     ]),
   );
@@ -22,7 +23,7 @@
     "@type": "CollectionPage",
     name: `Articles tagged "${data.tag}"`,
     description: `Explore articles tagged with "${data.tag}" by Umesh Malik, Senior Engineer at Expedia Group. Learn {data.tag} best practices, practical tips, and in-depth guides.`,
-    url: `https://umesh-malik.com/blog/tag/${data.tag.toLowerCase()}`,
+    url: `https://umesh-malik.com/blog/tag/${slugify(data.tag)}`,
     isPartOf: {
       "@type": "Blog",
       name: "Umesh Malik's Blog",

@@ -34,7 +34,7 @@
 </script>
 
 {#if href}
-  <a {href} class={classes} {download}>
+  <a {href} class={classes} download={download || undefined}>
     {@render children()}
   </a>
 {:else}

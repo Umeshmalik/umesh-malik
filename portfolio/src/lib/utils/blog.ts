@@ -1,6 +1,13 @@
 import { error } from '@sveltejs/kit';
 import type { BlogPost, BlogCategory, BlogPostModule } from '$lib/types/blog';
-import { escapeXml } from './xml';
+
+/** Create a URL-safe slug from a string */
+export function slugify(str: string): string {
+	return str
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '');
+}
 
 export async function getAllPosts(): Promise<BlogPost[]> {
 	const modules = import.meta.glob('$lib/posts/*.md');
@@ -49,12 +56,12 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
 	}
 }
 
-export function getPostsByCategory(posts: BlogPost[], category: string): BlogPost[] {
-	return posts.filter((post) => post.category.toLowerCase() === category.toLowerCase());
+export function getPostsByCategory(posts: BlogPost[], categorySlug: string): BlogPost[] {
+	return posts.filter((post) => slugify(post.category) === categorySlug.toLowerCase());
 }
 
-export function getPostsByTag(posts: BlogPost[], tag: string): BlogPost[] {
-	return posts.filter((post) => post.tags.some((t) => t.toLowerCase() === tag.toLowerCase()));
+export function getPostsByTag(posts: BlogPost[], tagSlug: string): BlogPost[] {
+	return posts.filter((post) => post.tags.some((t) => slugify(t) === tagSlug.toLowerCase()));
 }
 
 export function getFeaturedPosts(posts: BlogPost[], limit = 3): BlogPost[] {
@@ -87,7 +94,7 @@ export function getAllCategories(posts: BlogPost[]): BlogCategory[] {
 	const categories = Array.from(categoryMap.entries()).map(([name, count]) => ({
 		name,
 		count,
-		slug: escapeXml(name) ?? ''
+		slug: slugify(name)
 	}));
 
 	return categories.sort((a, b) => b.count - a.count);
@@ -97,5 +104,5 @@ export function getAllTags(posts: BlogPost[]): string[] {
 	const tags = new Set<string>();
 	posts.forEach((post) => post.tags.forEach((tag) => tags.add(tag)));
 	const tagsArray = Array.from(tags);
-	return tagsArray.map(tag => escapeXml(tag) ?? '').sort((a, b) => b.length - a.length);
+	return tagsArray.sort((a, b) => b.length - a.length);
 }
