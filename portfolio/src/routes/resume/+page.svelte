@@ -1,7 +1,6 @@
 <script lang="ts">
   import SEO from "$lib/components/layout/SEO.svelte";
   import Badge from "$lib/components/ui/Badge.svelte";
-  import ResumeTimeline from "$lib/components/sections/ResumeTimeline.svelte";
   import { experience, education } from "$lib/data/resume";
   import { skillCategories } from "$lib/data/skills";
   import { createBreadcrumbSchema } from "$lib/utils/schema";
@@ -66,24 +65,54 @@
     >
   </div>
 
-  <!-- Experience Timeline -->
+  <!-- Experience -->
   <section class="mb-16">
     <h2
       class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-white"
     >
       Experience
     </h2>
-    <ResumeTimeline entries={experience} />
+    <div class="space-y-10">
+      {#each experience as job}
+        <div class="border-l-2 border-brand-accent pl-6">
+          <h3 class="text-lg font-medium text-white">{job.role}</h3>
+          <p class="label-mono mt-1 text-brand-accent">{job.company}</p>
+          <p class="mt-2 text-sm text-brand-text-muted">{job.period}</p>
+          <p class="text-sm text-brand-text-muted">{job.location}</p>
+          <ul class="mt-4 space-y-2">
+            {#each job.highlights as highlight}
+              <li class="text-sm font-light text-brand-text-secondary">
+                <span class="mr-2 text-brand-accent">&bull;</span>{highlight}
+              </li>
+            {/each}
+          </ul>
+          <div class="mt-4 flex flex-wrap gap-2">
+            {#each job.tech as tech}
+              <Badge>{tech}</Badge>
+            {/each}
+          </div>
+        </div>
+      {/each}
+    </div>
   </section>
 
-  <!-- Education Timeline -->
+  <!-- Education -->
   <section class="mb-16">
     <h2
       class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-white"
     >
       Education
     </h2>
-    <ResumeTimeline entries={education} />
+    <div class="space-y-6">
+      {#each education as edu}
+        <div class="border-l-2 border-brand-accent pl-6">
+          <h3 class="font-medium text-white">{edu.degree}</h3>
+          <p class="label-mono mt-1 text-brand-accent">{edu.field}</p>
+          <p class="mt-2 text-sm text-brand-text-secondary">{edu.institution}</p>
+          <p class="mt-1 text-sm text-brand-text-muted">{edu.period}</p>
+        </div>
+      {/each}
+    </div>
   </section>
 
   <!-- Skills -->
