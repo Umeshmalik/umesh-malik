@@ -1,0 +1,61 @@
+name: Blog Syndication
+
+on:
+  workflow_run:
+    workflows: ["Post-Deploy SEO Ping"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Blog post slug to syndicate (leave empty for auto-detect)'
+        type: string
+        default: ''
+      dry_run:
+        description: 'Preview without posting'
+        type: boolean
+        default: false
+
+jobs:
+  syndicate:
+    name: Cross-post new blog articles
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check for new blog posts
+        id: check
+        run: |
+          NEW_POSTS=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- 'portfolio/src/lib/posts/*.md' || true)
+          if [ -z "$NEW_POSTS" ] && [ -z "${{ inputs.slug }}" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "No new blog posts detected."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "New posts detected:"
+            echo "$NEW_POSTS"
+          fi
+
+      - name: Syndicate blog posts
+        if: steps.check.outputs.skip != 'true'
+        env:
+          DEV_TO_API_KEY: ${{ secrets.DEV_TO_API_KEY }}
+          HASHNODE_TOKEN: ${{ secrets.HASHNODE_TOKEN }}
+          HASHNODE_PUBLICATION_ID: ${{ secrets.HASHNODE_PUBLICATION_ID }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+        run: >-
+          node portfolio/scripts/blog-syndicate.mjs
+          ${{ inputs.slug && format('--slug {0}', inputs.slug) || '' }}
+          ${{ inputs.dry_run && '--dry-run' || '' }}

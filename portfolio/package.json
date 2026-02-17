@@ -15,7 +15,9 @@
 		"seo:indexnow:sitemap": "node scripts/indexnow-submit.mjs --sitemap",
 		"seo:google": "node scripts/google-indexing.mjs",
 		"seo:google:sitemap": "node scripts/google-indexing.mjs --sitemap",
-		"seo:all": "node scripts/indexnow-submit.mjs && node scripts/google-indexing.mjs"
+		"seo:all": "node scripts/indexnow-submit.mjs && node scripts/google-indexing.mjs",
+		"syndicate": "node scripts/blog-syndicate.mjs",
+		"syndicate:dry": "node scripts/blog-syndicate.mjs --dry-run"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",
