@@ -1,6 +1,21 @@
 import { error } from '@sveltejs/kit';
 import type { BlogPost, BlogCategory, BlogPostModule } from '$lib/types/blog';
 
+const DEFAULT_COVER_IMAGE = '/blog/default-cover.jpg';
+
+// Detect available blog images at build time via Vite glob
+const availableBlogImages = new Set(
+	Object.keys(import.meta.glob('/static/blog/*.{jpg,jpeg,png,webp}')).map((p) =>
+		p.replace(/^\/static/, '')
+	)
+);
+
+/** Check if a frontmatter image exists on disk; fall back to default if not */
+function resolveImage(image: string | undefined): string {
+	if (!image) return DEFAULT_COVER_IMAGE;
+	return availableBlogImages.has(image) ? image : DEFAULT_COVER_IMAGE;
+}
+
 /** Create a URL-safe slug from a string */
 export function slugify(str: string): string {
 	return str
@@ -20,6 +35,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 		if (post.metadata?.published) {
 			posts.push({
 				...post.metadata,
+				image: resolveImage(post.metadata.image),
 				slug: slug ?? ''
 			});
 		}
@@ -47,6 +63,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
 
 		return {
 			...post.metadata,
+			image: resolveImage(post.metadata.image),
 			slug,
 			content: post.default ?? ''
 		};

@@ -19,7 +19,7 @@
  *   node scripts/blog-sync.mjs --dry-run                  # preview without submitting
  */
 
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 // ---------------------------------------------------------------------------
@@ -103,6 +103,23 @@ function appendBacklink(body, canonicalUrl) {
 	return `${body}\n\n---\n\n*Originally published at [umesh-malik.com](${canonicalUrl})*`;
 }
 
+/**
+ * Check if a frontmatter image actually exists on disk.
+ * Returns the image path if it exists, or DEFAULT_COVER_IMAGE if not.
+ */
+function resolveImage(imagePath) {
+	if (!imagePath) return DEFAULT_COVER_IMAGE;
+
+	// imagePath is like "/blog/xyz.jpg" — maps to "static/blog/xyz.jpg" on disk
+	const staticDirs = ['portfolio/static', 'static'];
+	for (const base of staticDirs) {
+		const fullPath = resolve(process.cwd(), base, imagePath.replace(/^\//, ''));
+		if (existsSync(fullPath)) return imagePath;
+	}
+
+	return DEFAULT_COVER_IMAGE;
+}
+
 // ---------------------------------------------------------------------------
 // Read and parse a post by slug
 // ---------------------------------------------------------------------------
@@ -120,7 +137,7 @@ function readPost(slug) {
 				title: meta.title || slug,
 				description: meta.description || '',
 				tags: Array.isArray(meta.tags) ? meta.tags : [],
-				image: meta.image || '',
+				image: resolveImage(meta.image),
 				publishDate: meta.publishDate || '',
 				published: meta.published !== false,
 				canonicalUrl: `${SITE_URL}/blog/${meta.slug || slug}`,
