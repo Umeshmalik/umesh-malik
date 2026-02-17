@@ -272,14 +272,18 @@ async function postToHashnode(post) {
 		}
 	`;
 
+	const coverUrl = `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`;
+	// Prepend cover image in body so Hashnode always shows it as thumbnail
+	const bodyWithCover = `![cover](${coverUrl})\n\n${post.body}`;
+
 	const variables = {
 		input: {
 			title: post.title,
-			contentMarkdown: appendBacklink(post.body, post.canonicalUrl),
+			contentMarkdown: appendBacklink(bodyWithCover, post.canonicalUrl),
 			publicationId: HASHNODE_PUBLICATION_ID,
 			tags,
 			originalArticleURL: post.canonicalUrl,
-			coverImageOptions: { coverImageURL: `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}` },
+			coverImageOptions: { coverImageURL: coverUrl },
 			...(post.publishDate ? { publishedAt: new Date(post.publishDate).toISOString() } : {})
 		}
 	};

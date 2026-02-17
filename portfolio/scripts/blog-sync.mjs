@@ -473,12 +473,16 @@ function buildHashnodeInput(post) {
 		name: t
 	}));
 
+	const coverUrl = `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`;
+	// Prepend cover image in body so Hashnode always shows it as thumbnail
+	const bodyWithCover = `![cover](${coverUrl})\n\n${post.body}`;
+
 	return {
 		title: post.title,
-		contentMarkdown: appendBacklink(post.body, post.canonicalUrl),
+		contentMarkdown: appendBacklink(bodyWithCover, post.canonicalUrl),
 		tags,
 		originalArticleURL: post.canonicalUrl,
-		coverImageOptions: { coverImageURL: `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}` },
+		coverImageOptions: { coverImageURL: coverUrl },
 		...(post.publishDate ? { publishedAt: new Date(post.publishDate).toISOString() } : {})
 	};
 }
@@ -617,8 +621,10 @@ async function syncHashnode(posts) {
 				counts.failed++;
 			}
 		} else {
-			// Compare content (include backlink footer so uploaded body matches)
-			const localBody = normalizeContent(appendBacklink(post.body, post.canonicalUrl));
+			// Compare content — Hashnode body includes prepended cover image + backlink
+			const coverUrl = `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`;
+			const bodyWithCover = `![cover](${coverUrl})\n\n${post.body}`;
+			const localBody = normalizeContent(appendBacklink(bodyWithCover, post.canonicalUrl));
 			const remoteBody = normalizeContent(match.content?.markdown || '');
 			const bodyChanged = localBody !== remoteBody;
 
