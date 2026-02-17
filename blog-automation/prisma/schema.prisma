@@ -1,0 +1,92 @@
+// ============================================
+// Blog Automation System — Prisma Schema
+// ============================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Models ──────────────────────────────────────────────────────────
+
+model BlogPost {
+  id              String       @id @default(uuid())
+  title           String
+  content         String       @db.Text
+  slug            String       @unique
+  category        PostCategory
+  status          PostStatus   @default(DRAFT)
+  researchSources Json?        @map("research_sources") @db.JsonB
+  scheduledFor    DateTime?    @map("scheduled_for")
+  publishedAt     DateTime?    @map("published_at")
+  metadata        Json?        @db.JsonB // SEO title, description, tags, open graph, etc.
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  publishLogs PublishLog[]
+
+  @@index([status])
+  @@index([category])
+  @@index([scheduledFor])
+  @@index([publishedAt])
+  @@index([createdAt])
+  @@map("blog_posts")
+}
+
+model TopicQueue {
+  id        String       @id @default(uuid())
+  topic     String
+  category  PostCategory
+  priority  Int          @default(0)
+  used      Boolean      @default(false)
+  usedAt    DateTime?    @map("used_at")
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  @@index([used, priority])
+  @@index([category])
+  @@index([createdAt])
+  @@map("topic_queue")
+}
+
+model PublishLog {
+  id           String   @id @default(uuid())
+  postId       String   @map("post_id")
+  success      Boolean
+  errorMessage String?  @map("error_message") @db.Text
+  attemptedAt  DateTime @default(now()) @map("attempted_at")
+
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@index([attemptedAt])
+  @@index([success])
+  @@map("publish_logs")
+}
+
+model SystemConfig {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     Json     @db.JsonB
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("system_config")
+}
+
+// ── Enums ───────────────────────────────────────────────────────────
+
+enum PostCategory {
+  JAVASCRIPT
+  TYPESCRIPT
+  FRONTEND
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  FAILED
+}

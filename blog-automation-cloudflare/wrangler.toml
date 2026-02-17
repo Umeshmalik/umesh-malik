@@ -1,0 +1,86 @@
+# ============================================
+# Blog Automation — Cloudflare Workers Config
+# ============================================
+#
+# Deploy:  npx wrangler deploy
+# Dev:     npx wrangler dev
+# Tail:    npx wrangler tail
+#
+# ============================================
+
+name = "blog-automation"
+main = "src/index.ts"
+compatibility_date = "2025-02-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ── D1 Database ──────────────────────────────────────────────────────
+[[d1_databases]]
+binding = "DB"
+database_name = "blog-automation-db"
+database_id = "YOUR_D1_DATABASE_ID"       # Replace after `wrangler d1 create`
+migrations_dir = "migrations"
+
+# ── KV Namespace (cache layer) ───────────────────────────────────────
+[[kv_namespaces]]
+binding = "CACHE"
+id = "YOUR_KV_NAMESPACE_ID"              # Replace after `wrangler kv namespace create CACHE`
+
+# ── R2 Bucket (asset storage) ───────────────────────────────────────
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "blog-automation-assets"
+
+# ── Queue — Producer ────────────────────────────────────────────────
+[[queues.producers]]
+binding = "PUBLISH_QUEUE"
+queue = "blog-publish-queue"
+
+# ── Queue — Consumer ────────────────────────────────────────────────
+[[queues.consumers]]
+queue = "blog-publish-queue"
+max_batch_size = 5
+max_batch_timeout = 30
+max_retries = 3
+dead_letter_queue = "blog-publish-dlq"
+
+# ── Cron Triggers ───────────────────────────────────────────────────
+[triggers]
+crons = [
+  "0 9 * * *",   # Morning content generation (9 AM UTC)
+  "0 18 * * *",  # Afternoon content generation (6 PM UTC)
+  "*/15 * * * *", # Publish check every 15 minutes
+]
+
+# ── Environment Variables (non-secret) ──────────────────────────────
+[vars]
+WEBSITE_TYPE = "custom"
+POSTS_PER_DAY = "2"
+SCHEDULE_WINDOW_START = "9"
+SCHEDULE_WINDOW_END = "21"
+MIN_POST_SPACING_HOURS = "4"
+SCHEDULE_TIMEZONE = "America/New_York"
+MIN_WORD_COUNT = "1500"
+MAX_WORD_COUNT = "2500"
+CLAUDE_MODEL = "claude-sonnet-4-20250514"
+MAX_TOKENS = "4096"
+DRY_RUN = "false"
+LOG_LEVEL = "info"
+
+# ── Secrets (set via `wrangler secret put`) ─────────────────────────
+# ANTHROPIC_API_KEY   → wrangler secret put ANTHROPIC_API_KEY
+# WEBSITE_API_URL     → wrangler secret put WEBSITE_API_URL
+# WEBSITE_API_KEY     → wrangler secret put WEBSITE_API_KEY
+# WP_USERNAME         → wrangler secret put WP_USERNAME (if WordPress)
+# WP_APP_PASSWORD     → wrangler secret put WP_APP_PASSWORD (if WordPress)
+# SLACK_WEBHOOK_URL   → wrangler secret put SLACK_WEBHOOK_URL (optional)
+
+# ── Staging Environment ─────────────────────────────────────────────
+[env.staging]
+name = "blog-automation-staging"
+vars = { DRY_RUN = "true", LOG_LEVEL = "debug" }
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "blog-automation-db-staging"
+database_id = "YOUR_STAGING_D1_ID"
+migrations_dir = "migrations"

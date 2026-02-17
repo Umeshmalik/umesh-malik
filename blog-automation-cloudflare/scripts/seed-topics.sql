@@ -1,0 +1,35 @@
+-- ============================================
+-- Seed Initial Topics for Blog Automation
+-- ============================================
+
+INSERT INTO topic_queue (topic, category, priority) VALUES
+  ('Advanced TypeScript Generic Patterns in React Components', 'TYPESCRIPT', 7),
+  ('JavaScript Event Loop Deep Dive: Microtasks vs Macrotasks', 'JAVASCRIPT', 7),
+  ('Building Accessible Modal Dialogs with React and ARIA', 'FRONTEND', 7),
+  ('TypeScript Template Literal Types: Practical Use Cases', 'TYPESCRIPT', 6),
+  ('Modern CSS Container Queries for Component-Based Design', 'FRONTEND', 6),
+  ('JavaScript Proxy and Reflect: Building Reactive State', 'JAVASCRIPT', 6),
+  ('Server Components vs Client Components in Next.js 15', 'FRONTEND', 8),
+  ('TypeScript Conditional Types and Infer Keyword Mastery', 'TYPESCRIPT', 6),
+  ('Optimizing React Re-renders with useMemo and useCallback', 'FRONTEND', 7),
+  ('JavaScript WeakRef and FinalizationRegistry Explained', 'JAVASCRIPT', 5),
+  ('Building Type-Safe API Clients with TypeScript Generics', 'TYPESCRIPT', 7),
+  ('CSS Grid Subgrid: Advanced Layout Patterns', 'FRONTEND', 5),
+  ('JavaScript Decorators Stage 3: Practical Applications', 'JAVASCRIPT', 6),
+  ('React Suspense and Streaming SSR in Production', 'FRONTEND', 8),
+  ('TypeScript Satisfies Operator: When and How to Use It', 'TYPESCRIPT', 6),
+  ('Web Animations API: Beyond CSS Transitions', 'FRONTEND', 5),
+  ('JavaScript Structured Clone Algorithm Deep Dive', 'JAVASCRIPT', 5),
+  ('Building a Design System with Tailwind CSS and React', 'FRONTEND', 7),
+  ('TypeScript Module Augmentation and Declaration Merging', 'TYPESCRIPT', 5),
+  ('JavaScript Generator Functions for Lazy Data Processing', 'JAVASCRIPT', 5),
+  ('React Server Actions: Full-Stack TypeScript Patterns', 'FRONTEND', 8),
+  ('Advanced Error Handling Patterns in TypeScript', 'TYPESCRIPT', 7),
+  ('View Transitions API: Smooth Page Transitions on the Web', 'FRONTEND', 6),
+  ('JavaScript AbortController: Cancelling Async Operations', 'JAVASCRIPT', 6),
+  ('TypeScript Branded Types for Domain-Driven Design', 'TYPESCRIPT', 6),
+  ('Performance Optimization with React Compiler', 'FRONTEND', 8),
+  ('JavaScript Iterator and Iterable Protocols in Practice', 'JAVASCRIPT', 5),
+  ('Building Micro-Frontends with Module Federation', 'FRONTEND', 6),
+  ('TypeScript Type-Level Programming: Compute at Compile Time', 'TYPESCRIPT', 5),
+  ('JavaScript Temporal API: The Future of Date Handling', 'JAVASCRIPT', 7);

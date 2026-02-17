@@ -1,0 +1,24 @@
+{
+  "name": "blog-automation-cloudflare",
+  "version": "1.0.0",
+  "description": "Blog automation system on Cloudflare Workers + D1 + Queues + R2",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging",
+    "db:create": "wrangler d1 create blog-automation-db",
+    "db:migrate": "wrangler d1 migrations apply blog-automation-db",
+    "db:migrate:local": "wrangler d1 migrations apply blog-automation-db --local",
+    "db:studio": "wrangler d1 execute blog-automation-db --command 'SELECT 1'",
+    "db:seed": "wrangler d1 execute blog-automation-db --file=./scripts/seed-topics.sql",
+    "typecheck": "tsc --noEmit",
+    "tail": "wrangler tail"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250205.0",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.0.0"
+  }
+}
