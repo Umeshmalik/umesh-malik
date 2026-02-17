@@ -73,14 +73,43 @@ export function getRelatedPosts(
 	currentPost: BlogPost,
 	limit = 3
 ): BlogPost[] {
-	const related = posts.filter((post) => {
-		if (post.slug === currentPost.slug) return false;
-		const sameCategory = post.category === currentPost.category;
-		const sharedTags = post.tags.some((tag) => currentPost.tags.includes(tag));
-		return sameCategory || sharedTags;
-	});
+	const scored = posts
+		.filter((post) => post.slug !== currentPost.slug)
+		.map((post) => {
+			let score = 0;
+			if (post.category === currentPost.category) score += 3;
+			score += post.tags.filter((tag) => currentPost.tags.includes(tag)).length;
+			return { post, score };
+		})
+		.filter(({ score }) => score > 0)
+		.sort((a, b) => {
+			if (b.score !== a.score) return b.score - a.score;
+			return new Date(b.post.publishDate).getTime() - new Date(a.post.publishDate).getTime();
+		});
 
-	return related.slice(0, limit);
+	return scored.slice(0, limit).map(({ post }) => post);
+}
+
+export function getAdjacentPosts(
+	posts: BlogPost[],
+	currentPost: BlogPost
+): { prev: BlogPost | null; next: BlogPost | null } {
+	const index = posts.findIndex((p) => p.slug === currentPost.slug);
+	return {
+		prev: index > 0 ? posts[index - 1] : null,
+		next: index < posts.length - 1 ? posts[index + 1] : null
+	};
+}
+
+export function getTagCounts(
+	posts: BlogPost[],
+	tags: string[]
+): { name: string; slug: string; count: number }[] {
+	return tags.map((tag) => ({
+		name: tag,
+		slug: slugify(tag),
+		count: posts.filter((post) => post.tags.includes(tag)).length
+	}));
 }
 
 export function getAllCategories(posts: BlogPost[]): BlogCategory[] {

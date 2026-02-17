@@ -3,6 +3,8 @@
   import SEO from "$lib/components/layout/SEO.svelte";
   import ShareButtons from "$lib/components/blog/ShareButtons.svelte";
   import RelatedPosts from "$lib/components/blog/RelatedPosts.svelte";
+  import PostNavigation from "$lib/components/blog/PostNavigation.svelte";
+  import ExploreTags from "$lib/components/blog/ExploreTags.svelte";
   import ReadingProgress from "$lib/components/blog/ReadingProgress.svelte";
   import {
     createArticleSchema,
@@ -178,4 +180,8 @@
   {#if data.relatedPosts.length > 0}
     <RelatedPosts posts={data.relatedPosts} />
   {/if}
+
+  <ExploreTags tags={data.tagCounts} />
+
+  <PostNavigation prevPost={data.prevPost} nextPost={data.nextPost} />
 </article>

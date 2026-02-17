@@ -1,4 +1,10 @@
-import { getPostBySlug, getAllPosts, getRelatedPosts } from '$lib/utils/blog';
+import {
+	getPostBySlug,
+	getAllPosts,
+	getRelatedPosts,
+	getAdjacentPosts,
+	getTagCounts
+} from '$lib/utils/blog';
 import type { PageLoad } from './$types';
 import type { EntryGenerator } from './$types';
 
@@ -11,9 +17,14 @@ export const load: PageLoad = async ({ params }) => {
 	const post = await getPostBySlug(params.slug);
 	const allPosts = await getAllPosts();
 	const relatedPosts = getRelatedPosts(allPosts, post);
+	const { prev: prevPost, next: nextPost } = getAdjacentPosts(allPosts, post);
+	const tagCounts = getTagCounts(allPosts, post.tags);
 
 	return {
 		post,
-		relatedPosts
+		relatedPosts,
+		prevPost,
+		nextPost,
+		tagCounts
 	};
 };

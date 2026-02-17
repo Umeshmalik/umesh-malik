@@ -11,8 +11,11 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"build:full": "bash scripts/build-microfrontends.sh",
-		"ping:seo": "bash scripts/ping-search-engines.sh",
-		"ping:google": "node scripts/google-indexing.mjs"
+		"seo:indexnow": "node scripts/indexnow-submit.mjs",
+		"seo:indexnow:sitemap": "node scripts/indexnow-submit.mjs --sitemap",
+		"seo:google": "node scripts/google-indexing.mjs",
+		"seo:google:sitemap": "node scripts/google-indexing.mjs --sitemap",
+		"seo:all": "node scripts/indexnow-submit.mjs && node scripts/google-indexing.mjs"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",

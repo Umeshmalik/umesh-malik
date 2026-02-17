@@ -1,3 +1,5 @@
+import type { Component } from 'svelte';
+
 export interface BlogPost {
 	title: string;
 	slug: string;
@@ -13,7 +15,7 @@ export interface BlogPost {
 	featured: boolean;
 	published: boolean;
 	readingTime: string;
-	content?: string;
+	content?: Component;
 }
 
 export interface BlogCategory {
@@ -24,5 +26,5 @@ export interface BlogCategory {
 
 export interface BlogPostModule {
 	metadata: BlogPost;
-	default: string;
+	default: Component;
 }
