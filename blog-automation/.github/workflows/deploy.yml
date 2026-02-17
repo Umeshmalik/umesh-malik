@@ -1,0 +1,141 @@
+# ============================================
+# CD — Deploy on Merge to Main
+# ============================================
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+      - '.github/workflows/test.yml'
+
+  # Allow manual deployment
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ── Run Tests First ──────────────────────────────────────────────
+  test:
+    name: Pre-deploy Tests
+    uses: ./.github/workflows/test.yml
+
+  # ── Build & Deploy ──────────────────────────────────────────────
+  deploy:
+    name: Deploy to ${{ github.event.inputs.environment || 'production' }}
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: ${{ github.event.inputs.environment || 'production' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: blog-automation/package-lock.json
+
+      - name: Install dependencies
+        working-directory: blog-automation
+        run: npm ci --omit=dev
+
+      - name: Generate Prisma client
+        working-directory: blog-automation
+        run: npx prisma generate
+
+      - name: Build TypeScript
+        working-directory: blog-automation
+        run: npm run build
+
+      - name: Deploy to server
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          # Set up SSH key
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+          # Sync built files to server
+          rsync -avz --delete \
+            --exclude='.env' \
+            --exclude='node_modules' \
+            --exclude='logs' \
+            --exclude='.git' \
+            -e "ssh -i ~/.ssh/deploy_key" \
+            blog-automation/ \
+            "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
+
+          # Run remote deployment
+          ssh -i ~/.ssh/deploy_key "${DEPLOY_USER}@${DEPLOY_HOST}" << 'ENDSSH'
+            cd ${{ secrets.DEPLOY_PATH }}
+
+            # Install production dependencies
+            npm ci --omit=dev
+
+            # Generate Prisma client
+            npx prisma generate
+
+            # Run migrations
+            npx prisma migrate deploy
+
+            # Restart PM2
+            if pm2 describe blog-automation > /dev/null 2>&1; then
+              pm2 reload ecosystem.config.js --update-env
+            else
+              pm2 start ecosystem.config.js
+            fi
+            pm2 save
+
+            echo "Deployment complete"
+          ENDSSH
+
+      - name: Verify health check
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          HEALTH_PORT: ${{ secrets.HEALTH_CHECK_PORT || '3000' }}
+        run: |
+          echo "Waiting for application to start..."
+          sleep 15
+
+          for i in $(seq 1 10); do
+            if curl -sf "http://${DEPLOY_HOST}:${HEALTH_PORT}/health" > /dev/null 2>&1; then
+              echo "Health check passed!"
+              exit 0
+            fi
+            echo "Retry $i/10..."
+            sleep 5
+          done
+
+          echo "::error::Health check failed after 10 attempts"
+          exit 1
+
+      - name: Notify on success
+        if: success()
+        run: echo "Deployment to ${{ github.event.inputs.environment || 'production' }} succeeded"
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "::error::Deployment to ${{ github.event.inputs.environment || 'production' }} failed"

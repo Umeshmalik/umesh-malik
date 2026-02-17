@@ -1,0 +1,21 @@
+# ============================================
+# Local Development Environment Variables
+# ============================================
+#
+# Copy this file to .dev.vars and fill in your values.
+# This file is loaded automatically by `wrangler dev`.
+#
+# NEVER commit .dev.vars to version control.
+#
+# ============================================
+
+ANTHROPIC_API_KEY=sk-ant-your-key-here
+WEBSITE_API_URL=https://your-website.com/api
+WEBSITE_API_KEY=your-api-key-here
+
+# WordPress (only if WEBSITE_TYPE=wordpress)
+# WP_USERNAME=admin
+# WP_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx
+
+# Slack notifications (optional)
+# SLACK_WEBHOOK_URL=https://hooks.slack.com/services/xxx/xxx/xxx

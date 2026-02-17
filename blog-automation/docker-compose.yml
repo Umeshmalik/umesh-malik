@@ -1,0 +1,125 @@
+# ============================================
+# Blog Automation System — Docker Compose
+# ============================================
+#
+# Services:
+#   - app:      Blog automation scheduler daemon
+#   - postgres: PostgreSQL database
+#
+# Usage:
+#   docker-compose up -d          # Start all services
+#   docker-compose logs -f app    # Follow app logs
+#   docker-compose exec app sh    # Shell into the app container
+#   docker-compose down           # Stop all services
+#
+# ============================================
+
+version: '3.8'
+
+services:
+  # ── PostgreSQL Database ──────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: blog-automation-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-bloguser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-blogpass}
+      POSTGRES_DB: ${POSTGRES_DB:-blog_automation}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bloguser} -d ${POSTGRES_DB:-blog_automation}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - blog-network
+
+  # ── Blog Automation App ──────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blog-automation-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Database — uses the postgres service hostname
+      DATABASE_URL: postgresql://${POSTGRES_USER:-bloguser}:${POSTGRES_PASSWORD:-blogpass}@postgres:5432/${POSTGRES_DB:-blog_automation}?schema=public
+
+      # Anthropic API (must be set in .env or shell)
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      CLAUDE_MODEL: ${CLAUDE_MODEL:-claude-sonnet-4-20250514}
+      MAX_TOKENS: ${MAX_TOKENS:-4096}
+
+      # Website / CMS
+      WEBSITE_TYPE: ${WEBSITE_TYPE:-custom}
+      WEBSITE_API_URL: ${WEBSITE_API_URL}
+      WEBSITE_API_KEY: ${WEBSITE_API_KEY}
+      WP_USERNAME: ${WP_USERNAME:-}
+      WP_APP_PASSWORD: ${WP_APP_PASSWORD:-}
+      PUBLISH_DRY_RUN: ${PUBLISH_DRY_RUN:-false}
+      PUBLISH_TIMEOUT: ${PUBLISH_TIMEOUT:-30000}
+
+      # Scheduling
+      POSTS_PER_DAY: ${POSTS_PER_DAY:-2}
+      SCHEDULE_WINDOW_START: ${SCHEDULE_WINDOW_START:-9}
+      SCHEDULE_WINDOW_END: ${SCHEDULE_WINDOW_END:-21}
+      MIN_POST_SPACING_HOURS: ${MIN_POST_SPACING_HOURS:-4}
+      SKIP_WEEKENDS: ${SKIP_WEEKENDS:-false}
+      SCHEDULE_TIMEZONE: ${SCHEDULE_TIMEZONE:-America/New_York}
+      GENERATION_CRON: ${GENERATION_CRON:-0 2 * * *}
+      PUBLISH_CHECK_CRON: ${PUBLISH_CHECK_CRON:-0 * * * *}
+      HEALTH_CHECK_PORT: ${HEALTH_CHECK_PORT:-3000}
+
+      # Content
+      DEFAULT_LANGUAGE: ${DEFAULT_LANGUAGE:-en}
+      MIN_WORD_COUNT: ${MIN_WORD_COUNT:-1500}
+      MAX_WORD_COUNT: ${MAX_WORD_COUNT:-2500}
+
+      # Application
+      NODE_ENV: ${NODE_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    ports:
+      - "${HEALTH_CHECK_PORT:-3000}:3000"
+    volumes:
+      - app_logs:/app/logs
+    networks:
+      - blog-network
+
+  # ── Database Migrations (one-shot) ──────────────────────────────
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blog-automation-migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-bloguser}:${POSTGRES_PASSWORD:-blogpass}@postgres:5432/${POSTGRES_DB:-blog_automation}?schema=public
+    command: ["npx", "prisma", "migrate", "deploy"]
+    networks:
+      - blog-network
+    # Only runs once then exits
+    restart: "no"
+
+# ── Volumes ────────────────────────────────────────────────────────
+
+volumes:
+  postgres_data:
+    driver: local
+  app_logs:
+    driver: local
+
+# ── Networks ───────────────────────────────────────────────────────
+
+networks:
+  blog-network:
+    driver: bridge

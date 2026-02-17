@@ -1,0 +1,17 @@
+node_modules
+dist
+coverage
+logs
+.env
+.git
+.github
+*.md
+tests
+scripts
+setup.sh
+deploy.sh
+docker-compose.yml
+.dockerignore
+jest.config.ts
+tsconfig.test.json
+nodemon.json
