@@ -17,8 +17,22 @@ jobs:
         with:
           fetch-depth: 2
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install google-auth-library
+        run: npm install --no-save google-auth-library
+        working-directory: portfolio
+
       - name: Wait 90s for deploy propagation
         run: sleep 90
 
-      - name: Submit to search engines
+      - name: Submit to search engines (IndexNow + WebSub)
         run: node portfolio/scripts/indexnow-submit.mjs
+
+      - name: Submit to Google Indexing API
+        if: ${{ secrets.SERVICE_ACCOUNT != '' }}
+        env:
+          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+        run: node portfolio/scripts/google-indexing.mjs
