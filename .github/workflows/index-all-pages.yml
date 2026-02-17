@@ -1,0 +1,42 @@
+name: Index All Sitemap Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Preview URLs without submitting'
+        type: boolean
+        default: false
+      skip_google:
+        description: 'Skip Google Indexing API (IndexNow + WebSub only)'
+        type: boolean
+        default: false
+
+jobs:
+  index-all:
+    name: Submit all sitemap URLs to search engines
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install google-auth-library
+        if: ${{ !inputs.skip_google }}
+        run: npm install --no-save google-auth-library
+        working-directory: portfolio
+
+      - name: Submit all URLs (IndexNow + WebSub)
+        run: >
+          node portfolio/scripts/indexnow-submit.mjs --sitemap
+          ${{ inputs.dry_run && '--dry-run' || '' }}
+
+      - name: Submit all URLs (Google Indexing API)
+        if: ${{ !inputs.skip_google }}
+        env:
+          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+        run: >
+          node portfolio/scripts/google-indexing.mjs --sitemap
+          ${{ inputs.dry_run && '--dry-run' || '' }}

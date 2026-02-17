@@ -154,24 +154,57 @@ function getChangedFiles(beforeRef) {
 // ---------------------------------------------------------------------------
 
 async function fetchUrlsFromSitemap(domain) {
-	const urls = [];
-	for (const path of ['/sitemap.xml', '/blog-sitemap.xml']) {
+	const visited = new Set();
+	const urls = new Set();
+
+	async function crawl(sitemapUrl, depth) {
+		if (depth > 5 || visited.has(sitemapUrl)) return;
+		visited.add(sitemapUrl);
+
+		let xml;
 		try {
-			const resp = await fetch(`https://${domain}${path}`);
-			if (!resp.ok) continue;
-			const xml = await resp.text();
-			for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
-				try {
-					urls.push(new URL(match[1]).pathname);
-				} catch {
-					urls.push(match[1]);
-				}
+			const resp = await fetch(sitemapUrl);
+			if (!resp.ok) {
+				console.warn(`  [warn] ${sitemapUrl} → HTTP ${resp.status}`);
+				return;
 			}
+			xml = await resp.text();
 		} catch (e) {
-			console.warn(`[warn] Failed to fetch ${path}: ${e.message}`);
+			console.warn(`  [warn] Failed to fetch ${sitemapUrl}: ${e.message}`);
+			return;
+		}
+
+		// Sitemap index → follow child sitemaps recursively
+		if (xml.includes('<sitemapindex')) {
+			const children = [...xml.matchAll(/<sitemap>[\s\S]*?<loc>([^<]+)<\/loc>[\s\S]*?<\/sitemap>/g)];
+			console.log(`  Sitemap index (${children.length} children): ${sitemapUrl}`);
+			for (const m of children) await crawl(m[1].trim(), depth + 1);
+			return;
+		}
+
+		// Regular sitemap → collect page URLs
+		const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)];
+		console.log(`  Sitemap (${locs.length} URLs): ${sitemapUrl}`);
+		for (const m of locs) {
+			try {
+				urls.add(new URL(m[1].trim()).pathname);
+			} catch {
+				urls.add(m[1].trim());
+			}
 		}
 	}
-	return urls;
+
+	// Start from sitemap-index.xml, then fall back to direct sitemaps
+	await crawl(`https://${domain}/sitemap-index.xml`, 0);
+
+	// Also try common paths that might not be referenced in the index
+	for (const path of ['/sitemap.xml', '/blog-sitemap.xml']) {
+		if (!visited.has(`https://${domain}${path}`)) {
+			await crawl(`https://${domain}${path}`, 0);
+		}
+	}
+
+	return [...urls];
 }
 
 // ---------------------------------------------------------------------------
