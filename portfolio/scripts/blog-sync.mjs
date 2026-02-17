@@ -27,6 +27,7 @@ import { resolve } from 'node:path';
 // ---------------------------------------------------------------------------
 
 const SITE_URL = 'https://umesh-malik.com';
+const DEFAULT_COVER_IMAGE = '/blog/default-cover.jpg';
 
 const DEV_TO_API_KEY = process.env.DEV_TO_API_KEY || '';
 const HASHNODE_TOKEN = process.env.HASHNODE_TOKEN || '';
@@ -96,6 +97,10 @@ function makeAbsoluteUrls(markdown) {
 		/(\]\()(\/(.*?))\)/g,
 		(_, prefix, path) => `${prefix}${SITE_URL}${path})`
 	);
+}
+
+function appendBacklink(body, canonicalUrl) {
+	return `${body}\n\n---\n\n*Originally published at [umesh-malik.com](${canonicalUrl})*`;
 }
 
 // ---------------------------------------------------------------------------
@@ -221,12 +226,12 @@ function buildDevToPayload(post) {
 	return {
 		article: {
 			title: post.title,
-			body_markdown: post.body,
+			body_markdown: appendBacklink(post.body, post.canonicalUrl),
 			published: true,
 			canonical_url: post.canonicalUrl,
 			description: post.description,
 			tags,
-			...(post.image ? { main_image: `${SITE_URL}${post.image}` } : {})
+			main_image: `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`
 		}
 	};
 }
@@ -335,8 +340,8 @@ async function syncDevTo(posts) {
 				counts.failed++;
 			}
 		} else {
-			// Compare content
-			const localBody = normalizeContent(post.body);
+			// Compare content (include backlink footer so uploaded body matches)
+			const localBody = normalizeContent(appendBacklink(post.body, post.canonicalUrl));
 			const remoteBody = normalizeContent(match.body_markdown || '');
 
 			if (localBody === remoteBody) {
@@ -445,10 +450,10 @@ function buildHashnodeInput(post) {
 
 	return {
 		title: post.title,
-		contentMarkdown: post.body,
+		contentMarkdown: appendBacklink(post.body, post.canonicalUrl),
 		tags,
 		originalArticleURL: post.canonicalUrl,
-		...(post.image ? { coverImageOptions: { coverImageURL: `${SITE_URL}${post.image}` } } : {}),
+		coverImageOptions: { coverImageURL: `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}` },
 		...(post.publishDate ? { publishedAt: new Date(post.publishDate).toISOString() } : {})
 	};
 }
@@ -587,8 +592,8 @@ async function syncHashnode(posts) {
 				counts.failed++;
 			}
 		} else {
-			// Compare content
-			const localBody = normalizeContent(post.body);
+			// Compare content (include backlink footer so uploaded body matches)
+			const localBody = normalizeContent(appendBacklink(post.body, post.canonicalUrl));
 			const remoteBody = normalizeContent(match.content?.markdown || '');
 
 			if (localBody === remoteBody) {

@@ -28,6 +28,7 @@ import { createHmac, randomBytes } from 'node:crypto';
 
 const SITE_URL = 'https://umesh-malik.com';
 const POSTS_DIR = 'portfolio/src/lib/posts';
+const DEFAULT_COVER_IMAGE = '/blog/default-cover.jpg';
 
 const DEV_TO_API_KEY = process.env.DEV_TO_API_KEY || '';
 const HASHNODE_TOKEN = process.env.HASHNODE_TOKEN || '';
@@ -106,6 +107,10 @@ function makeAbsoluteUrls(markdown) {
 	);
 }
 
+function appendBacklink(body, canonicalUrl) {
+	return `${body}\n\n---\n\n*Originally published at [umesh-malik.com](${canonicalUrl})*`;
+}
+
 // ---------------------------------------------------------------------------
 // Git diff detection — only NEW .md files (not edits)
 // ---------------------------------------------------------------------------
@@ -180,12 +185,12 @@ async function postToDevTo(post) {
 	const payload = {
 		article: {
 			title: post.title,
-			body_markdown: post.body,
+			body_markdown: appendBacklink(post.body, post.canonicalUrl),
 			published: true,
 			canonical_url: post.canonicalUrl,
 			description: post.description,
 			tags,
-			...(post.image ? { main_image: `${SITE_URL}${post.image}` } : {})
+			main_image: `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`
 		}
 	};
 
@@ -195,7 +200,7 @@ async function postToDevTo(post) {
 		console.log(`    Canonical: ${post.canonicalUrl}`);
 		console.log(`    Tags: ${tags.join(', ')}`);
 		console.log(`    Body length: ${post.body.length} chars`);
-		if (post.image) console.log(`    Cover: ${SITE_URL}${post.image}`);
+		console.log(`    Cover: ${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`);
 		return { platform: 'devto', dryRun: true };
 	}
 
@@ -254,11 +259,11 @@ async function postToHashnode(post) {
 	const variables = {
 		input: {
 			title: post.title,
-			contentMarkdown: post.body,
+			contentMarkdown: appendBacklink(post.body, post.canonicalUrl),
 			publicationId: HASHNODE_PUBLICATION_ID,
 			tags,
 			originalArticleURL: post.canonicalUrl,
-			...(post.image ? { coverImageOptions: { coverImageURL: `${SITE_URL}${post.image}` } } : {}),
+			coverImageOptions: { coverImageURL: `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}` },
 			...(post.publishDate ? { publishedAt: new Date(post.publishDate).toISOString() } : {})
 		}
 	};
@@ -269,7 +274,7 @@ async function postToHashnode(post) {
 		console.log(`    Original URL: ${post.canonicalUrl}`);
 		console.log(`    Tags: ${tags.map((t) => t.name).join(', ')}`);
 		console.log(`    Body length: ${post.body.length} chars`);
-		if (post.image) console.log(`    Cover: ${SITE_URL}${post.image}`);
+		console.log(`    Cover: ${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`);
 		return { platform: 'hashnode', dryRun: true };
 	}
 
