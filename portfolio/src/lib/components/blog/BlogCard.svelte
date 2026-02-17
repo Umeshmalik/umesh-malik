@@ -12,9 +12,19 @@
 <article class="group">
   <a
     href="/blog/{post.slug}"
-    class="corner-brackets block border border-brand-card-border bg-brand-card p-8 transition-colors hover:border-brand-accent"
+    class="corner-brackets block overflow-hidden border border-brand-card-border bg-brand-card transition-colors hover:border-brand-accent"
   >
-    <div class="space-y-3">
+    <div class="aspect-video overflow-hidden">
+      <img
+        src={post.image}
+        alt={post.imageAlt || post.title}
+        width="600"
+        height="338"
+        loading="lazy"
+        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+    </div>
+    <div class="space-y-3 p-6">
       <div class="flex items-center gap-3">
         <span class="label-mono text-brand-accent">{post.category}</span>
         <span class="text-brand-text-muted">&bull;</span>

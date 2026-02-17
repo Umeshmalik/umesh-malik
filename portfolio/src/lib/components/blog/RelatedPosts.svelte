@@ -15,17 +15,29 @@
       {#each posts as post}
         <a
           href="/blog/{post.slug}"
-          class="group corner-brackets border border-brand-card-border bg-brand-card p-6 transition-colors hover:border-brand-accent"
+          class="group corner-brackets overflow-hidden border border-brand-card-border bg-brand-card transition-colors hover:border-brand-accent"
         >
-          <p class="label-mono mb-2 text-brand-accent">{post.category}</p>
-          <h3
-            class="mb-2 font-medium text-white transition-colors group-hover:text-brand-accent"
-          >
-            {post.title}
-          </h3>
-          <p class="body-medium line-clamp-2 text-brand-text-secondary">
-            {post.description}
-          </p>
+          <div class="aspect-video overflow-hidden">
+            <img
+              src={post.image}
+              alt={post.imageAlt || post.title}
+              width="400"
+              height="225"
+              loading="lazy"
+              class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+          <div class="p-6">
+            <p class="label-mono mb-2 text-brand-accent">{post.category}</p>
+            <h3
+              class="mb-2 font-medium text-white transition-colors group-hover:text-brand-accent"
+            >
+              {post.title}
+            </h3>
+            <p class="body-medium line-clamp-2 text-brand-text-secondary">
+              {post.description}
+            </p>
+          </div>
         </a>
       {/each}
     </div>
