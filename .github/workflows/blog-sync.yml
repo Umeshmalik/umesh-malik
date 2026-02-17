@@ -1,0 +1,38 @@
+name: Blog Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to sync to'
+        type: choice
+        options:
+          - all
+          - devto
+          - hashnode
+        default: 'all'
+      dry_run:
+        description: 'Preview without submitting'
+        type: boolean
+        default: false
+
+jobs:
+  sync:
+    name: Sync all blog posts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Sync blog posts
+        env:
+          DEV_TO_API_KEY: ${{ secrets.DEV_TO_API_KEY }}
+          HASHNODE_TOKEN: ${{ secrets.HASHNODE_TOKEN }}
+          HASHNODE_PUBLICATION_ID: ${{ secrets.HASHNODE_PUBLICATION_ID }}
+        run: >-
+          node portfolio/scripts/blog-sync.mjs
+          --platform ${{ inputs.platform }}
+          ${{ inputs.dry_run && '--dry-run' || '' }}
