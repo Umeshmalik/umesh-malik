@@ -7,7 +7,7 @@ author: "Umesh Malik"
 category: "AI & Entertainment"
 tags: ["AI", "Hollywood", "Copyright", "ByteDance", "Deepfakes", "AI Ethics"]
 keywords: "Seedance 2.0, ByteDance AI video generator, Hollywood AI crisis, Disney cease and desist ByteDance, Paramount Seedance, SAG-AFTRA AI response, Tom Cruise Brad Pitt AI fight, AI generated deepfakes, MPA Seedance statement, AI copyright infringement, Seedance vs Sora, text to video AI, AI threatens Hollywood, celebrity deepfakes 2026"
-image: "/blog/seedance-2-hollywood-ai-crisis.jpg"
+image: "/blog/default-cover.jpg"
 imageAlt: "AI-generated cinematic scene representing the collision between artificial intelligence and Hollywood's entertainment industry"
 featured: true
 published: true

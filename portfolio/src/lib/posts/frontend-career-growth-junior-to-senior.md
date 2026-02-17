@@ -7,7 +7,7 @@ author: "Umesh Malik"
 category: "Career"
 tags: ["Career", "Frontend", "Software Engineering", "Growth"]
 keywords: "frontend career growth, junior to senior engineer, software engineer career path, frontend engineer promotion, career advice developers, engineering growth"
-image: "/blog/frontend-career-growth.jpg"
+image: "/blog/default-cover.jpg"
 imageAlt: "Frontend career growth from junior to senior"
 featured: true
 published: true

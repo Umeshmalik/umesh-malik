@@ -7,7 +7,7 @@ author: "Umesh Malik"
 category: "SvelteKit"
 tags: ["SvelteKit", "Next.js", "React", "JavaScript", "Frontend"]
 keywords: "SvelteKit vs Next.js, best frontend framework, SvelteKit comparison, Next.js alternative, framework comparison 2024"
-image: "/blog/sveltekit-vs-nextjs.jpg"
+image: "/blog/default-cover.jpg"
 imageAlt: "SvelteKit vs Next.js comparison"
 featured: false
 published: true

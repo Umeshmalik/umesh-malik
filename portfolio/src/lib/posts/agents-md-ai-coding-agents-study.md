@@ -7,7 +7,7 @@ author: "Umesh Malik"
 category: "AI & Open Source"
 tags: ["AI", "Developer Experience", "Open Source", "Productivity", "Tools"]
 keywords: "AGENTS.md effectiveness 2026, AGENTS.md study, AI coding agents context files, AGENTS.md vs CLAUDE.md, coding agent instructions, AGENTS.md benchmark, AGENTbench, AI coding agent performance, repository context files AI, AGENTS.md best practices, coding agent documentation, AI developer tools 2026, LLM coding agent optimization, AGENTS.md OpenAI, coding agent context files study"
-image: "/blog/agents-md-coding-agents-study.jpg"
+image: "/blog/default-cover.jpg"
 imageAlt: "A visual showing an AGENTS.md file next to AI coding agent performance metrics and benchmark results"
 featured: true
 published: true
