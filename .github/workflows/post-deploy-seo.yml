@@ -32,7 +32,7 @@ jobs:
         run: node portfolio/scripts/indexnow-submit.mjs
 
       - name: Submit to Google Indexing API
-        if: ${{ secrets.SERVICE_ACCOUNT != '' }}
         env:
           SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+        if: env.SERVICE_ACCOUNT != ''
         run: node portfolio/scripts/google-indexing.mjs
