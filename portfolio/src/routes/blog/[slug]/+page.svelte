@@ -52,7 +52,7 @@
   title="{data.post.title} | Umesh Malik"
   description={data.post.description}
   keywords={data.post.keywords}
-  image={data.post.image || "https://umesh-malik.com/og-image.jpg"}
+  image={data.post.image}
   imageAlt={data.post.imageAlt || data.post.title}
   type="article"
   publishDate={data.post.publishDate}

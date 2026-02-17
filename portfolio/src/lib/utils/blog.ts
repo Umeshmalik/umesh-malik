@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { BlogPost, BlogCategory, BlogPostModule } from '$lib/types/blog';
+import { siteConfig } from '$lib/config/site';
 
 const DEFAULT_COVER_IMAGE = '/blog/default-cover.jpg';
 
@@ -10,10 +11,10 @@ const availableBlogImages = new Set(
 	)
 );
 
-/** Check if a frontmatter image exists on disk; fall back to default if not */
+/** Resolve image path — validates existence on disk, falls back to default, returns absolute URL */
 function resolveImage(image: string | undefined): string {
-	if (!image) return DEFAULT_COVER_IMAGE;
-	return availableBlogImages.has(image) ? image : DEFAULT_COVER_IMAGE;
+	const path = image && availableBlogImages.has(image) ? image : DEFAULT_COVER_IMAGE;
+	return `${siteConfig.url}${path}`;
 }
 
 /** Create a URL-safe slug from a string */

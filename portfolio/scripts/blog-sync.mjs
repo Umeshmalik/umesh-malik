@@ -360,21 +360,26 @@ async function syncDevTo(posts) {
 			// Compare content (include backlink footer so uploaded body matches)
 			const localBody = normalizeContent(appendBacklink(post.body, post.canonicalUrl));
 			const remoteBody = normalizeContent(match.body_markdown || '');
+			const bodyChanged = localBody !== remoteBody;
 
-			if (localBody === remoteBody) {
+			// Check if cover image is missing on remote (broken 404 URLs result in null)
+			const imageNeedsFix = !match.cover_image && post.image;
+
+			if (!bodyChanged && !imageNeedsFix) {
 				// SKIP
 				console.log(`  [skip] "${post.title}" — unchanged`);
 				counts.skipped++;
 			} else {
 				// UPDATE
+				const reasons = [bodyChanged && 'body', imageNeedsFix && 'cover image missing'].filter(Boolean).join(', ');
 				if (dryRun) {
-					console.log(`  [dry-run] UPDATE "${post.title}" (id: ${match.id})`);
+					console.log(`  [dry-run] UPDATE "${post.title}" (id: ${match.id}) — ${reasons}`);
 					counts.updated++;
 					continue;
 				}
 				try {
 					const url = await updateDevToArticle(match.id, post);
-					console.log(`  [updated] "${post.title}" → ${url}`);
+					console.log(`  [updated] "${post.title}" → ${url} — ${reasons}`);
 					counts.updated++;
 				} catch (e) {
 					console.error(`  [error] UPDATE "${post.title}" → ${e.message}`);
@@ -404,6 +409,9 @@ async function fetchHashnodePosts() {
 							id
 							title
 							url
+							coverImage {
+								url
+							}
 							content {
 								markdown
 							}
@@ -612,21 +620,26 @@ async function syncHashnode(posts) {
 			// Compare content (include backlink footer so uploaded body matches)
 			const localBody = normalizeContent(appendBacklink(post.body, post.canonicalUrl));
 			const remoteBody = normalizeContent(match.content?.markdown || '');
+			const bodyChanged = localBody !== remoteBody;
 
-			if (localBody === remoteBody) {
+			// Check if cover image is missing on remote (broken 404 URLs result in null)
+			const imageNeedsFix = !match.coverImage?.url && post.image;
+
+			if (!bodyChanged && !imageNeedsFix) {
 				// SKIP
 				console.log(`  [skip] "${post.title}" — unchanged`);
 				counts.skipped++;
 			} else {
 				// UPDATE
+				const reasons = [bodyChanged && 'body', imageNeedsFix && 'cover image missing'].filter(Boolean).join(', ');
 				if (dryRun) {
-					console.log(`  [dry-run] UPDATE "${post.title}" (id: ${match.id})`);
+					console.log(`  [dry-run] UPDATE "${post.title}" (id: ${match.id}) — ${reasons}`);
 					counts.updated++;
 					continue;
 				}
 				try {
 					const url = await updateHashnodePost(match.id, post);
-					console.log(`  [updated] "${post.title}" → ${url}`);
+					console.log(`  [updated] "${post.title}" → ${url} — ${reasons}`);
 					counts.updated++;
 				} catch (e) {
 					console.error(`  [error] UPDATE "${post.title}" → ${e.message}`);
