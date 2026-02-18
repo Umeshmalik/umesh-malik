@@ -33,7 +33,6 @@
 
   const canonicalUrl = $derived(siteConfig.url + page.url.pathname);
   const alternateUrl = $derived(siteConfig.alternateUrl + page.url.pathname);
-  const currentUrl = $derived(page.url.href);
   const robotsContent = $derived(
     noindex
       ? "noindex, nofollow"
@@ -93,7 +92,7 @@
 
   <!-- Open Graph -->
   <meta property="og:type" content={type} />
-  <meta property="og:url" content={currentUrl} />
+  <meta property="og:url" content={canonicalUrl} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={image} />
@@ -115,7 +114,7 @@
 
   <!-- X Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content={currentUrl} />
+  <meta name="twitter:url" content={canonicalUrl} />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={image} />

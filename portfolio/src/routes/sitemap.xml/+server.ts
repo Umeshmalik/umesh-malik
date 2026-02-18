@@ -13,11 +13,15 @@ export const GET: RequestHandler = async () => {
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   ${siteConfig.staticPages
       .map(
         (page) => `<url>
     <loc>${siteConfig.url}${page.path}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="${siteConfig.url}${page.path}" />
+    <xhtml:link rel="alternate" hreflang="en-IN" href="${siteConfig.alternateUrl}${page.path}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${siteConfig.url}${page.path}" />
     <lastmod>${now}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
@@ -28,6 +32,9 @@ export const GET: RequestHandler = async () => {
       .map(
         (cat) => `<url>
     <loc>${siteConfig.url}/blog/category/${cat.slug}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="${siteConfig.url}/blog/category/${cat.slug}" />
+    <xhtml:link rel="alternate" hreflang="en-IN" href="${siteConfig.alternateUrl}/blog/category/${cat.slug}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${siteConfig.url}/blog/category/${cat.slug}" />
     <lastmod>${now}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -38,6 +45,9 @@ export const GET: RequestHandler = async () => {
       .map(
         (tag) => `<url>
     <loc>${siteConfig.url}/blog/tag/${slugify(tag)}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="${siteConfig.url}/blog/tag/${slugify(tag)}" />
+    <xhtml:link rel="alternate" hreflang="en-IN" href="${siteConfig.alternateUrl}/blog/tag/${slugify(tag)}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${siteConfig.url}/blog/tag/${slugify(tag)}" />
     <lastmod>${now}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

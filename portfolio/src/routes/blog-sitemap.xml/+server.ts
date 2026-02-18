@@ -12,7 +12,8 @@ export const GET: RequestHandler = async () => {
 	const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   ${posts
 		.map(
 			(post) => {
@@ -20,6 +21,9 @@ export const GET: RequestHandler = async () => {
 				const isRecent = publishDate >= twoDaysAgo;
 				return `<url>
     <loc>${siteConfig.url}/blog/${post.slug}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="${siteConfig.url}/blog/${post.slug}" />
+    <xhtml:link rel="alternate" hreflang="en-IN" href="${siteConfig.alternateUrl}/blog/${post.slug}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${siteConfig.url}/blog/${post.slug}" />
     <lastmod>${post.updatedDate || post.publishDate}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

@@ -26,6 +26,8 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteUrl = "https://umesh-malik.com";
+const alternateUrl = "https://umesh-malik.in";
+const alternateURL = new URL(Astro.url.pathname, alternateUrl);
 const rawBase = import.meta.env.BASE_URL;
 const basePath = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
 const ogImageUrl = `${siteUrl}${basePath}og-image.png`;
@@ -276,6 +278,11 @@ const aiSkills = skills.filter((s) => s.category === "ai").map((s) => s.name);
       content="index, follow, max-image-preview:large, max-snippet:-1"
     />
     <link rel="canonical" href={canonicalURL} />
+
+    <!-- ═══════ HREFLANG — both domains serve the same content, .com is primary ═══════ -->
+    <link rel="alternate" hreflang="en" href={canonicalURL} />
+    <link rel="alternate" hreflang="en-IN" href={alternateURL} />
+    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
 
     <!-- ═══════ OPEN GRAPH / FACEBOOK / LINKEDIN / WHATSAPP ═══════ -->
     <meta property="og:type" content="website" />
