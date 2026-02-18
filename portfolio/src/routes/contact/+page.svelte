@@ -5,10 +5,11 @@
     createContactPageSchema,
   } from "$lib/utils/schema";
   import { contactChannels } from "$lib/data/contact";
+  import { siteConfig } from "$lib/config/site";
 
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: "Home", url: "https://umesh-malik.com" },
-    { name: "Contact", url: "https://umesh-malik.com/contact" },
+    { name: "Home", url: siteConfig.url },
+    { name: "Contact", url: `${siteConfig.url}/contact` },
   ]);
 
   const contactPageSchema = createContactPageSchema();

@@ -5,10 +5,11 @@
     createBreadcrumbSchema,
     createProfilePageSchema,
   } from "$lib/utils/schema";
+  import { siteConfig } from "$lib/config/site";
 
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: "Home", url: "https://umesh-malik.com" },
-    { name: "About", url: "https://umesh-malik.com/about" },
+    { name: "Home", url: siteConfig.url },
+    { name: "About", url: `${siteConfig.url}/about` },
   ]);
 
   const profileSchema = createProfilePageSchema();

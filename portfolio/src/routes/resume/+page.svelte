@@ -4,10 +4,11 @@
   import { experience, education } from "$lib/data/resume";
   import { skillCategories } from "$lib/data/skills";
   import { createBreadcrumbSchema } from "$lib/utils/schema";
+  import { siteConfig } from "$lib/config/site";
 
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: "Home", url: "https://umesh-malik.com" },
-    { name: "Resume", url: "https://umesh-malik.com/resume" },
+    { name: "Home", url: siteConfig.url },
+    { name: "Resume", url: `${siteConfig.url}/resume` },
   ]);
 </script>
 

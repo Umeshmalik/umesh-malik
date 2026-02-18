@@ -3,10 +3,11 @@
   import Badge from "$lib/components/ui/Badge.svelte";
   import { projects } from "$lib/data/projects";
   import { createBreadcrumbSchema } from "$lib/utils/schema";
+  import { siteConfig } from "$lib/config/site";
 
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: "Home", url: "https://umesh-malik.com" },
-    { name: "Projects", url: "https://umesh-malik.com/projects" },
+    { name: "Home", url: siteConfig.url },
+    { name: "Projects", url: `${siteConfig.url}/projects` },
   ]);
 </script>
 

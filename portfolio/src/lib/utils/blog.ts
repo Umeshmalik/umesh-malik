@@ -6,7 +6,7 @@ const DEFAULT_COVER_IMAGE = '/blog/default-cover.jpg';
 
 // Detect available blog images at build time via Vite glob
 const availableBlogImages = new Set(
-	Object.keys(import.meta.glob('/static/blog/*.{jpg,jpeg,png,webp}')).map((p) =>
+	Object.keys(import.meta.glob('/static/blog/*.{jpg,jpeg,png,webp,svg}')).map((p) =>
 		p.replace(/^\/static/, '')
 	)
 );

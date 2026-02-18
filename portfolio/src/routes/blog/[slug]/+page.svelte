@@ -11,6 +11,7 @@
     createBreadcrumbSchema,
   } from "$lib/utils/schema";
   import { slugify } from "$lib/utils/blog";
+  import { siteConfig } from "$lib/config/site";
 
   let { data }: { data: PageData } = $props();
 
@@ -32,15 +33,15 @@
 
   const breadcrumbSchema = $derived(
     createBreadcrumbSchema([
-      { name: "Home", url: "https://umesh-malik.com" },
-      { name: "Blog", url: "https://umesh-malik.com/blog" },
+      { name: "Home", url: siteConfig.url },
+      { name: "Blog", url: `${siteConfig.url}/blog` },
       {
         name: data.post.category,
-        url: `https://umesh-malik.com/blog/category/${slugify(data.post.category)}`,
+        url: `${siteConfig.url}/blog/category/${slugify(data.post.category)}`,
       },
       {
         name: data.post.title,
-        url: `https://umesh-malik.com/blog/${data.post.slug}`,
+        url: `${siteConfig.url}/blog/${data.post.slug}`,
       },
     ]),
   );
@@ -139,7 +140,7 @@
 
   <ShareButtons
     title={data.post.title}
-    url="https://umesh-malik.com/blog/{data.post.slug}"
+    url="{siteConfig.url}/blog/{data.post.slug}"
   />
 
   <!-- Author Bio -->

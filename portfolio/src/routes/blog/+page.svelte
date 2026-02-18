@@ -4,6 +4,7 @@
   import BlogCard from "$lib/components/blog/BlogCard.svelte";
   import Tag from "$lib/components/ui/Tag.svelte";
   import { slugify } from "$lib/utils/blog";
+  import { siteConfig } from "$lib/config/site";
 
   let { data }: { data: PageData } = $props();
 
@@ -13,11 +14,11 @@
     name: "Umesh Malik's Blog",
     description:
       "Articles about JavaScript, TypeScript, React, SvelteKit, software development, and web performance by Umesh Malik",
-    url: "https://umesh-malik.com/blog",
+    url: `${siteConfig.url}/blog`,
     author: {
       "@type": "Person",
       name: "Umesh Malik",
-      url: "https://umesh-malik.com",
+      url: siteConfig.url,
     },
   };
 </script>

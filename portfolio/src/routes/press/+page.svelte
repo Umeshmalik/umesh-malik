@@ -1,6 +1,7 @@
 <script lang="ts">
   import SEO from "$lib/components/layout/SEO.svelte";
   import { createBreadcrumbSchema } from "$lib/utils/schema";
+  import { siteConfig } from "$lib/config/site";
 
   const blogHighlights = [
     {
@@ -85,8 +86,8 @@
   ];
 
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: "Home", url: "https://umesh-malik.com" },
-    { name: "Writing & Appearances", url: "https://umesh-malik.com/press" },
+    { name: "Home", url: siteConfig.url },
+    { name: "Writing & Appearances", url: `${siteConfig.url}/press` },
   ]);
 </script>
 

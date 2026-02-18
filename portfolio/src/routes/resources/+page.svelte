@@ -1,6 +1,7 @@
 <script lang="ts">
   import SEO from "$lib/components/layout/SEO.svelte";
   import { createBreadcrumbSchema } from "$lib/utils/schema";
+  import { siteConfig } from "$lib/config/site";
   import {
     resources,
     codeSnippets,
@@ -8,8 +9,8 @@
   } from "$lib/data/resources";
 
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: "Home", url: "https://umesh-malik.com" },
-    { name: "Resources", url: "https://umesh-malik.com/resources" },
+    { name: "Home", url: siteConfig.url },
+    { name: "Resources", url: `${siteConfig.url}/resources` },
   ]);
 
   let activeCategory = $state("All");

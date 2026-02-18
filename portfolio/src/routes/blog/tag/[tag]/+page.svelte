@@ -4,16 +4,17 @@
   import BlogCard from "$lib/components/blog/BlogCard.svelte";
   import { createBreadcrumbSchema } from "$lib/utils/schema";
   import { slugify } from "$lib/utils/blog";
+  import { siteConfig } from "$lib/config/site";
 
   let { data }: { data: PageData } = $props();
 
   const breadcrumbSchema = $derived(
     createBreadcrumbSchema([
-      { name: "Home", url: "https://umesh-malik.com" },
-      { name: "Blog", url: "https://umesh-malik.com/blog" },
+      { name: "Home", url: siteConfig.url },
+      { name: "Blog", url: `${siteConfig.url}/blog` },
       {
         name: data.tag,
-        url: `https://umesh-malik.com/blog/tag/${slugify(data.tag)}`,
+        url: `${siteConfig.url}/blog/tag/${slugify(data.tag)}`,
       },
     ]),
   );
@@ -23,16 +24,16 @@
     "@type": "CollectionPage",
     name: `Articles tagged "${data.tag}"`,
     description: `Explore articles tagged with "${data.tag}" by Umesh Malik, Senior Engineer at Expedia Group. Learn {data.tag} best practices, practical tips, and in-depth guides.`,
-    url: `https://umesh-malik.com/blog/tag/${slugify(data.tag)}`,
+    url: `${siteConfig.url}/blog/tag/${slugify(data.tag)}`,
     isPartOf: {
       "@type": "Blog",
       name: "Umesh Malik's Blog",
-      url: "https://umesh-malik.com/blog",
+      url: `${siteConfig.url}/blog`,
     },
     author: {
       "@type": "Person",
       name: "Umesh Malik",
-      "@id": "https://umesh-malik.com/#person",
+      "@id": `${siteConfig.url}/#person`,
     },
   });
 </script>

@@ -1,11 +1,12 @@
 <script lang="ts">
 	import SEO from '$lib/components/layout/SEO.svelte';
 	import { createBreadcrumbSchema } from '$lib/utils/schema';
+	import { siteConfig } from '$lib/config/site';
 	import { usesCategories } from '$lib/data/uses';
 
 	const breadcrumbSchema = createBreadcrumbSchema([
-		{ name: 'Home', url: 'https://umesh-malik.com' },
-		{ name: 'Uses', url: 'https://umesh-malik.com/uses' }
+		{ name: 'Home', url: siteConfig.url },
+		{ name: 'Uses', url: `${siteConfig.url}/uses` }
 	]);
 </script>
 
