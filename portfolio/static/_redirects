@@ -1,3 +1,0 @@
-# www → non-www redirect (301 permanent)
-# Requires www.umesh-malik.com to be added as a custom domain in Cloudflare Pages
-https://www.umesh-malik.com/* https://umesh-malik.com/:splat 301
