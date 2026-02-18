@@ -3,12 +3,124 @@
 # https://umesh-malik.com
 # ═══════════════════════════════════════════════════════════════
 
-User-agent: *
-   Allow: /
-   Sitemap: https://umesh-malik.com/sitemap-index.xml
+# As a condition of accessing this website, you agree to abide by the following
+# content signals:
 
-# ═══════ AI-READABLE CONTENT ═══════
-# For AI crawlers: structured profile info available at:
-# - /llms.txt (summary)
-# - /llms-full.txt (comprehensive Q&A format)
-# - /rss.xml (RSS feed)
+# (a)  If a Content-Signal = yes, you may collect content for the corresponding
+#      use.
+# (b)  If a Content-Signal = no, you may not collect content for the
+#      corresponding use.
+# (c)  If the website operator does not include a Content-Signal for a
+#      corresponding use, the website operator neither grants nor restricts
+#      permission via Content-Signal with respect to the corresponding use.
+
+# The content signals and their meanings are:
+
+# search:   building a search index and providing search results (e.g., returning
+#           hyperlinks and short excerpts from your website's contents). Search does not
+#           include providing AI-generated search summaries.
+# ai-input: inputting content into one or more AI models (e.g., retrieval
+#           augmented generation, grounding, or other real-time taking of content for
+#           generative AI search answers).
+# ai-train: training or fine-tuning AI models.
+
+# ANY RESTRICTIONS EXPRESSED VIA CONTENT SIGNALS ARE EXPRESS RESERVATIONS OF
+# RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790 ON COPYRIGHT
+# AND RELATED RIGHTS IN THE DIGITAL SINGLE MARKET.
+
+# BEGIN Cloudflare Managed content
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+# END Cloudflare Managed Content
+
+# Robots.txt for https://umesh-malik.com
+# Last updated: 2026-02-17
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# AI Crawlers - Explicitly Allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Sitemaps — primary domain
+Sitemap: https://umesh-malik.com/sitemap-index.xml
+Sitemap: https://umesh-malik.com/sitemap.xml
+Sitemap: https://umesh-malik.com/blog-sitemap.xml
+
+# Sitemaps — alternate domain
+Sitemap: https://umesh-malik.in/sitemap-index.xml
+Sitemap: https://umesh-malik.in/sitemap.xml
+Sitemap: https://umesh-malik.in/blog-sitemap.xml
+
+# AI/LLM content files
+# Human-readable AI summary: https://umesh-malik.com/ai-summary
+# Machine-readable brief: https://umesh-malik.com/llms.txt
+# Machine-readable full: https://umesh-malik.com/llms-full.txt
+# Machine-readable full: https://umesh-malik.com/rss.xml
