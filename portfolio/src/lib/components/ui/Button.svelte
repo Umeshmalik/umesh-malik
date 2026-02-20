@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import type {
+    HTMLButtonAttributes,
+    HTMLAnchorAttributes,
+  } from "svelte/elements";
 
-  interface Props {
+  interface BaseProps {
     variant?: "primary" | "secondary";
     size?: "sm" | "md" | "lg";
     href?: string;
@@ -9,12 +13,16 @@
     children: Snippet;
   }
 
+  type Props = BaseProps & HTMLButtonAttributes & HTMLAnchorAttributes;
+
   let {
     variant = "primary",
     size = "md",
     href,
     download = false,
     children,
+    class: className,
+    ...rest
   }: Props = $props();
 
   const baseStyles = "btn-brackets transition-colors duration-300";
@@ -30,15 +38,17 @@
     lg: "px-7 py-3",
   };
 
-  const classes = $derived(`${baseStyles} ${variants[variant]} ${sizes[size]}`);
+  const classes = $derived(
+    `${baseStyles} ${variants[variant]} ${sizes[size]}${className ? ` ${className}` : ""}`,
+  );
 </script>
 
 {#if href}
-  <a {href} class={classes} download={download || undefined}>
+  <a {href} class={classes} download={download || undefined} {...rest}>
     {@render children()}
   </a>
 {:else}
-  <button type="button" class={classes}>
+  <button type="button" class={classes} {...rest}>
     {@render children()}
   </button>
 {/if}

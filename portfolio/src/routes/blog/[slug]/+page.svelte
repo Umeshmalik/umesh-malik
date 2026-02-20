@@ -6,6 +6,8 @@
   import PostNavigation from "$lib/components/blog/PostNavigation.svelte";
   import ExploreTags from "$lib/components/blog/ExploreTags.svelte";
   import ReadingProgress from "$lib/components/blog/ReadingProgress.svelte";
+  import TableOfContents from "$lib/components/blog/TableOfContents.svelte";
+  import ScrollToTop from "$lib/components/blog/ScrollToTop.svelte";
   import {
     createArticleSchema,
     createBreadcrumbSchema,
@@ -132,6 +134,8 @@
     </div>
   </header>
 
+  <TableOfContents />
+
   <div class="prose prose-lg max-w-none mb-12">
     {#if PostContent}
       <PostContent />
@@ -186,3 +190,5 @@
 
   <PostNavigation prevPost={data.prevPost} nextPost={data.nextPost} />
 </article>
+
+<ScrollToTop />
