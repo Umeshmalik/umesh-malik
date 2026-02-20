@@ -18,6 +18,34 @@ function rehypeLazyImages() {
 	return (tree) => walk(tree);
 }
 
+/** Rehype plugin: extracts h2/h3 headings (with IDs from rehype-slug) into frontmatter */
+function rehypeExtractHeadings() {
+	function getTextContent(node) {
+		if (node.type === 'text') return node.value || '';
+		if (node.children) return node.children.map(getTextContent).join('');
+		return '';
+	}
+	return (tree, file) => {
+		const headings = [];
+		function walk(node) {
+			if (node.tagName === 'h2' || node.tagName === 'h3') {
+				const id = node.properties?.id;
+				if (id) {
+					headings.push({
+						id,
+						text: getTextContent(node).trim(),
+						level: parseInt(node.tagName[1])
+					});
+				}
+			}
+			if (node.children) node.children.forEach(walk);
+		}
+		walk(tree);
+		file.data.fm = file.data.fm || {};
+		file.data.fm.headings = headings;
+	};
+}
+
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
 	extensions: ['.md', '.svx'],
@@ -26,6 +54,7 @@ const mdsvexOptions = {
 	},
 	rehypePlugins: [
 		rehypeSlug,
+		rehypeExtractHeadings,
 		[
 			rehypeAutolinkHeadings,
 			{

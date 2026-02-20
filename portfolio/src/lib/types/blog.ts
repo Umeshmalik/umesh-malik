@@ -1,5 +1,11 @@
 import type { Component } from 'svelte';
 
+export interface TocHeading {
+	id: string;
+	text: string;
+	level: number;
+}
+
 export interface BlogPost {
 	title: string;
 	slug: string;
@@ -15,6 +21,7 @@ export interface BlogPost {
 	featured: boolean;
 	published: boolean;
 	readingTime: string;
+	headings?: TocHeading[];
 	content?: Component;
 }
 

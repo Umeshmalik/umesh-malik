@@ -1,33 +1,24 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import type { TocHeading } from "$lib/types/blog";
 
-  interface TocHeading {
-    id: string;
-    text: string;
-    level: number;
+  interface Props {
+    headings: TocHeading[];
   }
 
-  let headings = $state<TocHeading[]>([]);
+  let { headings }: Props = $props();
+
   let activeId = $state("");
   let isExpanded = $state(true);
 
   onMount(() => {
-    const container = document.querySelector(".prose");
-    if (!container) return;
-
-    const elements = Array.from(
-      container.querySelectorAll<HTMLElement>("h2, h3"),
-    );
-
-    headings = elements
-      .filter((el) => el.id)
-      .map((el) => ({
-        id: el.id,
-        text: el.textContent?.trim() || "",
-        level: parseInt(el.tagName[1]),
-      }));
-
     if (headings.length === 0) return;
+
+    const elements = headings
+      .map((h) => document.getElementById(h.id))
+      .filter(Boolean) as HTMLElement[];
+
+    if (elements.length === 0) return;
 
     let ticking = false;
 
@@ -36,19 +27,16 @@
       const docHeight = document.documentElement.scrollHeight;
       const winHeight = window.innerHeight;
 
-      // If near the bottom of the page, activate the last heading
       if (scrollY + winHeight >= docHeight - 50) {
-        const lastHeading = headings[headings.length - 1];
-        if (lastHeading) activeId = lastHeading.id;
+        const last = headings[headings.length - 1];
+        if (last) activeId = last.id;
         ticking = false;
         return;
       }
 
       let current = "";
       for (const el of elements) {
-        if (!el.id) continue;
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= 120) {
+        if (el.getBoundingClientRect().top <= 120) {
           current = el.id;
         }
       }

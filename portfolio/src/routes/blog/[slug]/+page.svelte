@@ -131,7 +131,7 @@
   </header>
 
   {#key data.post.slug}
-    <TableOfContents />
+    <TableOfContents headings={data.post.headings ?? []} />
   {/key}
 
   <div class="prose prose-lg max-w-none mb-12">
