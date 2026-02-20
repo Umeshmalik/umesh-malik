@@ -99,7 +99,7 @@
 
   async function fetchLive(): Promise<void> {
     try {
-      const res = await fetch("/api/analytics/live", { headers: getHeaders() });
+      const res = await fetch("/api/analytics/live");
       if (!res.ok) throw new Error("Failed to fetch live count");
       const data = await res.json();
       liveCount = data.count;
@@ -188,12 +188,15 @@
     return () => clearInterval(interval);
   });
 
-  // Refetch stats when days changes
+  // Refetch stats only when user changes the day range (not on initial mount)
+  let prevDays = $state(7);
   $effect(() => {
+    const currentDays = days;
     if (!authenticated || !browser) return;
-    // Access `days` to track it reactively
-    const _d = days;
-    fetchStats();
+    if (currentDays !== prevDays) {
+      prevDays = currentDays;
+      fetchStats();
+    }
   });
 </script>
 

@@ -5,6 +5,13 @@
 
   const HEARTBEAT_INTERVAL = 30_000;
 
+  function isBot(): boolean {
+    const ua = navigator.userAgent.toLowerCase();
+    return /bot|crawl|spider|slurp|baiduspider|yandex|duckduck|facebookexternalhit|twitterbot|linkedinbot|embedly|quora|pinterest|redditbot|applebot|semrush|ahrefs|mj12bot|dotbot|petalbot|bytespider|gptbot|claude|chatgpt|anthropic|google-extended|ccbot|ia_archiver|archive\.org/i.test(
+      ua,
+    );
+  }
+
   function getSource(): string {
     const params = new URLSearchParams(window.location.search);
     const utmSource = params.get("utm_source");
@@ -28,9 +35,14 @@
       if (host.includes("duckduckgo")) return "duckduckgo";
       if (host.includes("yahoo")) return "yahoo";
       if (host.includes("linkedin")) return "linkedin";
-      if (host.includes("twitter") || host.includes("t.co") || host.includes("x.com"))
+      if (
+        host.includes("twitter") ||
+        host.includes("t.co") ||
+        host.includes("x.com")
+      )
         return "twitter";
-      if (host.includes("facebook") || host.includes("fb.com")) return "facebook";
+      if (host.includes("facebook") || host.includes("fb.com"))
+        return "facebook";
       if (host.includes("github")) return "github";
       if (host.includes("reddit")) return "reddit";
       if (host.includes("youtube")) return "youtube";
@@ -51,27 +63,36 @@
     return id;
   }
 
-  function sendEvent(path: string, sessionId: string, source: string): void {
+  function sendEvent(
+    path: string,
+    sessionId: string,
+    source: string,
+    type: "pageview" | "heartbeat",
+  ): void {
     const payload = JSON.stringify({
       path,
       referrer: document.referrer,
       source,
       sessionId,
+      type,
     });
     const blob = new Blob([payload], { type: "application/json" });
     navigator.sendBeacon("/api/analytics/event", blob);
   }
 
   onMount(() => {
+    // Skip tracking for bots/crawlers entirely
+    if (isBot()) return;
+
     const sessionId = getSessionId();
     const source = getSource();
 
     // Send initial page view
-    sendEvent(page.url.pathname, sessionId, source);
+    sendEvent(page.url.pathname, sessionId, source, "pageview");
 
-    // Heartbeat to keep live session alive
+    // Heartbeat only keeps the live session alive — does NOT count as a page view
     const heartbeat = setInterval(() => {
-      sendEvent(page.url.pathname, sessionId, source);
+      sendEvent(page.url.pathname, sessionId, source, "heartbeat");
     }, HEARTBEAT_INTERVAL);
 
     return () => clearInterval(heartbeat);
@@ -84,9 +105,11 @@
     if (!browser) return;
     const currentPath = page.url.pathname;
     if (lastPath && lastPath !== currentPath) {
-      const sessionId = getSessionId();
-      const source = getSource();
-      sendEvent(currentPath, sessionId, source);
+      if (!isBot()) {
+        const sessionId = getSessionId();
+        const source = getSource();
+        sendEvent(currentPath, sessionId, source, "pageview");
+      }
     }
     lastPath = currentPath;
   });

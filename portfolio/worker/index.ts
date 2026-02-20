@@ -9,11 +9,22 @@ interface EventBody {
 	referrer: string;
 	source: string;
 	sessionId: string;
+	type: 'pageview' | 'heartbeat';
 }
 
 interface DailyCounter {
 	count: number;
 }
+
+const ALLOWED_ORIGINS = [
+	'https://umesh-malik.com',
+	'https://www.umesh-malik.com',
+	'https://umesh-malik.in',
+	'https://www.umesh-malik.in',
+];
+
+const MAX_PATH_LENGTH = 200;
+const MAX_SOURCE_LENGTH = 50;
 
 function todayKey(): string {
 	return new Date().toISOString().slice(0, 10);
@@ -29,18 +40,20 @@ function dateKeys(days: number): string[] {
 	return keys;
 }
 
-function corsHeaders(): HeadersInit {
+function corsHeaders(request: Request): HeadersInit {
+	const origin = request.headers.get('Origin') || '';
+	const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
 	return {
-		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Origin': allowed,
 		'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 		'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 	};
 }
 
-function jsonResponse(data: unknown, status = 200): Response {
+function jsonResponse(request: Request, data: unknown, status = 200): Response {
 	return new Response(JSON.stringify(data), {
 		status,
-		headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+		headers: { 'Content-Type': 'application/json', ...corsHeaders(request) },
 	});
 }
 
@@ -58,46 +71,81 @@ function isAuthorized(request: Request, env: Env): boolean {
 	return auth === `Bearer ${env.ANALYTICS_SECRET}`;
 }
 
+function sanitize(value: string, maxLen: number): string {
+	return value.slice(0, maxLen).replace(/[^\w\-\/.:@]/g, '');
+}
+
+function isBlogPostPath(path: string): boolean {
+	// Must be /blog/<slug> — not /blog, /blog/, /blog/category/*, /blog/tag/*
+	return /^\/blog\/[^/]+$/.test(path);
+}
+
+const BOT_PATTERN = /bot|crawl|spider|slurp|baiduspider|yandex|duckduck|facebookexternalhit|twitterbot|linkedinbot|embedly|quora|pinterest|redditbot|applebot|semrush|ahrefs|mj12bot|dotbot|petalbot|bytespider|gptbot|claude|chatgpt|anthropic|google-extended|ccbot|ia_archiver|archive\.org|lighthouse|pagespeed|headlesschrome|phantomjs/i;
+
+function isBot(request: Request): boolean {
+	const ua = request.headers.get('User-Agent') || '';
+	return BOT_PATTERN.test(ua);
+}
+
 // --- POST /api/analytics/event ---
 async function handleEvent(request: Request, env: Env): Promise<Response> {
 	if (request.method !== 'POST') {
-		return new Response('Method Not Allowed', { status: 405, headers: corsHeaders() });
+		return new Response('Method Not Allowed', { status: 405, headers: corsHeaders(request) });
+	}
+
+	// Silently discard bot/crawler events — return 204 but don't store anything
+	if (isBot(request)) {
+		return new Response(null, { status: 204, headers: corsHeaders(request) });
 	}
 
 	let body: EventBody;
 	try {
 		body = await request.json();
 	} catch {
-		return new Response('Bad Request', { status: 400, headers: corsHeaders() });
+		return new Response('Bad Request', { status: 400, headers: corsHeaders(request) });
 	}
 
-	const { path, source, sessionId } = body;
-	if (!path || !source || !sessionId) {
-		return new Response('Bad Request', { status: 400, headers: corsHeaders() });
+	const { path: rawPath, source: rawSource, sessionId, type } = body;
+	if (!rawPath || !rawSource || !sessionId) {
+		return new Response('Bad Request', { status: 400, headers: corsHeaders(request) });
 	}
 
-	const date = todayKey();
+	const path = sanitize(rawPath, MAX_PATH_LENGTH);
+	const source = sanitize(rawSource, MAX_SOURCE_LENGTH);
+	const eventType = type === 'heartbeat' ? 'heartbeat' : 'pageview';
 
 	const writes: Promise<unknown>[] = [
-		incrementCounter(env.ANALYTICS, `pv:${date}:${path}`),
-		incrementCounter(env.ANALYTICS, `src:${date}:${source}`),
-		// Store current path as the value so live count can be filtered per-page
+		// Always update the live session marker (heartbeats keep it alive)
 		env.ANALYTICS.put(`live:${sessionId}`, path, { expirationTtl: 60 }),
 	];
 
-	// Increment all-time read counter for blog posts
-	if (path.startsWith('/blog/') && path !== '/blog') {
-		writes.push(incrementCounter(env.ANALYTICS, `reads:${path}`));
+	// Only count page views and sources for actual pageviews, not heartbeats
+	if (eventType === 'pageview') {
+		const date = todayKey();
+		writes.push(
+			incrementCounter(env.ANALYTICS, `pv:${date}:${path}`),
+			incrementCounter(env.ANALYTICS, `src:${date}:${source}`),
+		);
+
+		// Increment unique read counter for blog posts (deduplicated per session, 24h window)
+		if (isBlogPostPath(path)) {
+			const readerKey = `reader:${path}:${sessionId}`;
+			const alreadyCounted = await env.ANALYTICS.get(readerKey);
+			if (!alreadyCounted) {
+				writes.push(
+					incrementCounter(env.ANALYTICS, `reads:${path}`),
+					env.ANALYTICS.put(readerKey, '1', { expirationTtl: 86400 }),
+				);
+			}
+		}
 	}
 
 	await Promise.all(writes);
 
-	return new Response(null, { status: 204, headers: corsHeaders() });
+	return new Response(null, { status: 204, headers: corsHeaders(request) });
 }
 
 // --- GET /api/analytics/live (PUBLIC) ---
-// ?path=/blog/some-post  → count only sessions on that path
-// no param               → count all live sessions
 async function handleLive(request: Request, env: Env): Promise<Response> {
 	const url = new URL(request.url);
 	const filterPath = url.searchParams.get('path');
@@ -105,10 +153,9 @@ async function handleLive(request: Request, env: Env): Promise<Response> {
 	const list = await env.ANALYTICS.list({ prefix: 'live:' });
 
 	if (!filterPath) {
-		return jsonResponse({ count: list.keys.length });
+		return jsonResponse(request, { count: list.keys.length });
 	}
 
-	// Read each session's current path and filter
 	let count = 0;
 	const reads = list.keys.map(async (key) => {
 		const val = await env.ANALYTICS.get(key.name);
@@ -116,44 +163,41 @@ async function handleLive(request: Request, env: Env): Promise<Response> {
 	});
 	await Promise.all(reads);
 
-	return jsonResponse({ count });
+	return jsonResponse(request, { count });
 }
 
-// --- GET /api/analytics/reads?path=/blog/some-post (PUBLIC) ---
-// Returns all-time read count for a single path
+// --- GET /api/analytics/reads?path= (PUBLIC) ---
 async function handleReads(request: Request, env: Env): Promise<Response> {
 	const url = new URL(request.url);
 	const path = url.searchParams.get('path');
 
 	if (!path) {
-		return new Response('Bad Request: path required', { status: 400, headers: corsHeaders() });
+		return new Response('Bad Request: path required', { status: 400, headers: corsHeaders(request) });
 	}
 
 	const raw = await env.ANALYTICS.get(`reads:${path}`);
 	const data: DailyCounter = raw ? JSON.parse(raw) : { count: 0 };
 
-	return jsonResponse({ path, count: data.count });
+	return jsonResponse(request, { path, count: data.count });
 }
 
-// --- POST /api/analytics/reads (PUBLIC) ---
-// Batch: accepts { paths: string[] }, returns { counts: Record<string, number> }
+// --- POST /api/analytics/reads (PUBLIC, batch) ---
 async function handleReadsBatch(request: Request, env: Env): Promise<Response> {
 	if (request.method !== 'POST') {
-		return new Response('Method Not Allowed', { status: 405, headers: corsHeaders() });
+		return new Response('Method Not Allowed', { status: 405, headers: corsHeaders(request) });
 	}
 
 	let body: { paths: string[] };
 	try {
 		body = await request.json();
 	} catch {
-		return new Response('Bad Request', { status: 400, headers: corsHeaders() });
+		return new Response('Bad Request', { status: 400, headers: corsHeaders(request) });
 	}
 
 	if (!Array.isArray(body.paths) || body.paths.length === 0) {
-		return new Response('Bad Request: paths array required', { status: 400, headers: corsHeaders() });
+		return new Response('Bad Request: paths array required', { status: 400, headers: corsHeaders(request) });
 	}
 
-	// Cap at 50 to prevent abuse
 	const paths = body.paths.slice(0, 50);
 	const counts: Record<string, number> = {};
 
@@ -165,13 +209,13 @@ async function handleReadsBatch(request: Request, env: Env): Promise<Response> {
 		})
 	);
 
-	return jsonResponse({ counts });
+	return jsonResponse(request, { counts });
 }
 
 // --- GET /api/analytics/stats (AUTH REQUIRED) ---
 async function handleStats(request: Request, env: Env): Promise<Response> {
 	if (!isAuthorized(request, env)) {
-		return new Response('Unauthorized', { status: 401, headers: corsHeaders() });
+		return new Response('Unauthorized', { status: 401, headers: corsHeaders(request) });
 	}
 
 	const url = new URL(request.url);
@@ -218,7 +262,7 @@ async function handleStats(request: Request, env: Env): Promise<Response> {
 		.sort((a, b) => b.views - a.views)
 		.slice(0, 20);
 
-	return jsonResponse({ dailyViews, sources: sourceMap, topPages, totalViews });
+	return jsonResponse(request, { dailyViews, sources: sourceMap, topPages, totalViews });
 }
 
 export default {
@@ -226,10 +270,9 @@ export default {
 		const url = new URL(request.url);
 
 		if (request.method === 'OPTIONS') {
-			return new Response(null, { status: 204, headers: corsHeaders() });
+			return new Response(null, { status: 204, headers: corsHeaders(request) });
 		}
 
-		// API routes
 		if (url.pathname === '/api/analytics/event') {
 			return handleEvent(request, env);
 		}
@@ -244,7 +287,6 @@ export default {
 			return handleStats(request, env);
 		}
 
-		// Fall through to static assets
 		return env.ASSETS.fetch(request);
 	},
 } satisfies ExportedHandler<Env>;
