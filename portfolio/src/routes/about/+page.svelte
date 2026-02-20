@@ -48,9 +48,11 @@
   <div class="prose prose-lg max-w-none">
     <div
       use:inview={{ threshold: 0.2 }}
-      oninview_change={(e) => { if (e.detail.inView) visibleSections['who'] = true; }}
+      oninview_change={(e) => {
+        if (e.detail.inView) visibleSections["who"] = true;
+      }}
     >
-      {#if visibleSections['who']}
+      {#if visibleSections["who"]}
         <h2 in:fly={{ y: 20, duration: 500 }}>Who I Am</h2>
         <p in:fly={{ y: 20, duration: 500, delay: 100 }}>
           I'm <strong>Umesh Malik</strong>, a Senior Frontend Engineer based in
@@ -63,15 +65,18 @@
 
     <div
       use:inview={{ threshold: 0.2 }}
-      oninview_change={(e) => { if (e.detail.inView) visibleSections['journey'] = true; }}
+      oninview_change={(e) => {
+        if (e.detail.inView) visibleSections["journey"] = true;
+      }}
     >
-      {#if visibleSections['journey']}
+      {#if visibleSections["journey"]}
         <h2 in:fly={{ y: 20, duration: 500 }}>My Journey</h2>
         <p in:fly={{ y: 20, duration: 500, delay: 100 }}>
-          My professional journey started in July 2021 when I joined BYJU'S (Think &
-          Learn Pvt. Ltd.) as an Associate Software Engineer. Within just 6 months,
-          I was promoted to Module Lead, where I led the development of critical
-          payment systems processing over $10 million in monthly transactions.
+          My professional journey started in July 2021 when I joined BYJU'S
+          (Think & Learn Pvt. Ltd.) as an Associate Software Engineer. Within
+          just 8 months, I was promoted to Module Lead, where I led the
+          development of critical payment systems processing over $10 million in
+          monthly transactions.
         </p>
         <p in:fly={{ y: 20, duration: 500, delay: 200 }}>
           In April 2023, I joined Tekion Corp as a Software Engineer, where I
@@ -80,19 +85,22 @@
           internationalized applications.
         </p>
         <p in:fly={{ y: 20, duration: 500, delay: 300 }}>
-          Currently, I serve as a Software Development Engineer 2 at Expedia Group,
-          where I'm a core member of the Workflow Orchestration Platform team. I
-          recently led a major migration from Vue.js to React, improving developer
-          velocity by 3x and establishing new standards for component architecture.
+          Currently, I serve as a Software Development Engineer 2 at Expedia
+          Group, where I'm a core member of the Workflow Orchestration Platform
+          team. I recently led a major migration from Vue.js to React, improving
+          developer velocity by 3x and establishing new standards for component
+          architecture.
         </p>
       {/if}
     </div>
 
     <div
       use:inview={{ threshold: 0.2 }}
-      oninview_change={(e) => { if (e.detail.inView) visibleSections['drives'] = true; }}
+      oninview_change={(e) => {
+        if (e.detail.inView) visibleSections["drives"] = true;
+      }}
     >
-      {#if visibleSections['drives']}
+      {#if visibleSections["drives"]}
         <h2 in:fly={{ y: 20, duration: 500 }}>What Drives Me</h2>
         <ul>
           <li in:fly={{ y: 20, duration: 500, delay: 100 }}>
@@ -113,40 +121,44 @@
 
     <div
       use:inview={{ threshold: 0.2 }}
-      oninview_change={(e) => { if (e.detail.inView) visibleSections['beyond'] = true; }}
+      oninview_change={(e) => {
+        if (e.detail.inView) visibleSections["beyond"] = true;
+      }}
     >
-      {#if visibleSections['beyond']}
+      {#if visibleSections["beyond"]}
         <h2 in:fly={{ y: 20, duration: 500 }}>Beyond Code</h2>
         <p in:fly={{ y: 20, duration: 500, delay: 100 }}>
           When I'm not coding, you'll find me exploring new software frameworks,
-          contributing to open-source projects, or experimenting with AI-assisted
-          development tools like Claude and Cursor AI.
+          contributing to open-source projects, or experimenting with
+          AI-assisted development tools like Claude and Cursor AI.
         </p>
       {/if}
     </div>
 
     <div
       use:inview={{ threshold: 0.2 }}
-      oninview_change={(e) => { if (e.detail.inView) visibleSections['currently'] = true; }}
+      oninview_change={(e) => {
+        if (e.detail.inView) visibleSections["currently"] = true;
+      }}
     >
-      {#if visibleSections['currently']}
+      {#if visibleSections["currently"]}
         <h2 in:fly={{ y: 20, duration: 500 }}>Currently</h2>
         <ul>
           <li in:fly={{ y: 20, duration: 500, delay: 100 }}>
-            <strong>Working on:</strong> Workflow Orchestration Platform at Expedia Group
-            — building visual editors and reusable software libraries
+            <strong>Working on:</strong> Workflow Orchestration Platform at Expedia
+            Group — building visual editors and reusable software libraries
           </li>
           <li in:fly={{ y: 20, duration: 500, delay: 200 }}>
             <strong>Learning:</strong> Svelte 5 runes, advanced TypeScript patterns,
             and system design at scale
           </li>
           <li in:fly={{ y: 20, duration: 500, delay: 300 }}>
-            <strong>Reading:</strong> "Designing Data-Intensive Applications" by Martin
-            Kleppmann
+            <strong>Reading:</strong> "Designing Data-Intensive Applications" by
+            Martin Kleppmann
           </li>
           <li in:fly={{ y: 20, duration: 500, delay: 400 }}>
-            <strong>Side project:</strong> This portfolio — built with SvelteKit, TailwindCSS
-            4, and MDsveX
+            <strong>Side project:</strong> This portfolio — built with SvelteKit,
+            TailwindCSS 4, and MDsveX
           </li>
           <li in:fly={{ y: 20, duration: 500, delay: 500 }}>
             <strong>Exploring:</strong> AI-assisted development workflows with Claude
@@ -158,9 +170,11 @@
 
     <div
       use:inview={{ threshold: 0.2 }}
-      oninview_change={(e) => { if (e.detail.inView) visibleSections['fun'] = true; }}
+      oninview_change={(e) => {
+        if (e.detail.inView) visibleSections["fun"] = true;
+      }}
     >
-      {#if visibleSections['fun']}
+      {#if visibleSections["fun"]}
         <h2 in:fly={{ y: 20, duration: 500 }}>Fun Facts</h2>
         <ul>
           <li in:fly={{ y: 20, duration: 500, delay: 100 }}>
@@ -168,19 +182,20 @@
             BYJU'S — one of the fastest promotions in the team's history
           </li>
           <li in:fly={{ y: 20, duration: 500, delay: 200 }}>
-            Consistently hit 95+ Lighthouse scores across production applications
+            Consistently hit 95+ Lighthouse scores across production
+            applications
           </li>
           <li in:fly={{ y: 20, duration: 500, delay: 300 }}>
             Worked across 3 industries in 4 years: fintech (BYJU'S), automotive
             (Tekion), and travel (Expedia)
           </li>
           <li in:fly={{ y: 20, duration: 500, delay: 400 }}>
-            Built payment systems that processed over $10 million monthly with zero
-            critical incidents over 12 months
+            Built payment systems that processed over $10 million monthly with
+            zero critical incidents over 12 months
           </li>
           <li in:fly={{ y: 20, duration: 500, delay: 500 }}>
-            This portfolio scores 98+ on Lighthouse and is fully optimized for AI
-            search engines with structured data, llms.txt, and RSS feeds
+            This portfolio scores 98+ on Lighthouse and is fully optimized for
+            AI search engines with structured data, llms.txt, and RSS feeds
           </li>
         </ul>
       {/if}
@@ -188,9 +203,11 @@
 
     <div
       use:inview={{ threshold: 0.2 }}
-      oninview_change={(e) => { if (e.detail.inView) visibleSections['connect'] = true; }}
+      oninview_change={(e) => {
+        if (e.detail.inView) visibleSections["connect"] = true;
+      }}
     >
-      {#if visibleSections['connect']}
+      {#if visibleSections["connect"]}
         <h2 in:fly={{ y: 20, duration: 500 }}>Let's Connect</h2>
         <p in:fly={{ y: 20, duration: 500, delay: 100 }}>
           I'm always interested in connecting with fellow engineers, discussing
@@ -199,7 +216,8 @@
           <a
             href="https://linkedin.com/in/umesh-malik"
             target="_blank"
-            rel="noopener noreferrer">LinkedIn<span class="sr-only"> (opens in new tab)</span></a
+            rel="noopener noreferrer"
+            >LinkedIn<span class="sr-only"> (opens in new tab)</span></a
           >.
         </p>
       {/if}
