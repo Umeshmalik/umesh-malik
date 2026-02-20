@@ -25,38 +25,53 @@ export function slugify(str: string): string {
 		.replace(/^-+|-+$/g, '');
 }
 
-export async function getAllPosts(): Promise<BlogPost[]> {
-	const modules = import.meta.glob('$lib/posts/*.md');
+// Eagerly import only metadata from all posts (tiny, no content/component)
+// This avoids sequential async imports and makes getAllPosts synchronous at runtime
+const postMetadataModules = import.meta.glob('$lib/posts/*.md', {
+	eager: true,
+	import: 'metadata'
+});
+
+// Lazy imports for full post modules (content + metadata) — only used for single post loading
+const postContentModules = import.meta.glob('$lib/posts/*.md');
+
+let _cachedPosts: BlogPost[] | null = null;
+
+export function getAllPosts(): BlogPost[] {
+	if (_cachedPosts) return _cachedPosts;
+
 	const posts: BlogPost[] = [];
 
-	for (const path in modules) {
-		const post = (await modules[path]()) as BlogPostModule;
+	for (const [path, metadata] of Object.entries(postMetadataModules)) {
+		const meta = metadata as BlogPost;
 		const slug = path.split('/').pop()?.replace('.md', '');
 
-		if (post.metadata?.published) {
+		if (meta?.published) {
 			posts.push({
-				...post.metadata,
-				image: resolveImage(post.metadata.image),
+				...meta,
+				image: resolveImage(meta.image),
 				slug: slug ?? ''
 			});
 		}
 	}
 
-	return posts.sort(
+	_cachedPosts = posts.sort(
 		(a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
 	);
+	return _cachedPosts;
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost> {
 	try {
-		const modules = import.meta.glob('$lib/posts/*.md');
-		const matchingPath = Object.keys(modules).find((path) => path.endsWith(`/${slug}.md`));
+		const matchingPath = Object.keys(postContentModules).find((path) =>
+			path.endsWith(`/${slug}.md`)
+		);
 
 		if (!matchingPath) {
 			throw error(404, 'Post not found');
 		}
 
-		const post = (await modules[matchingPath]()) as BlogPostModule;
+		const post = (await postContentModules[matchingPath]()) as BlogPostModule;
 
 		if (!post.metadata?.published) {
 			throw error(404, 'Post not found');
