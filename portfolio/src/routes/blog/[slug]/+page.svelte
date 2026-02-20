@@ -130,7 +130,9 @@
     </div>
   </header>
 
-  <TableOfContents />
+  {#key data.post.slug}
+    <TableOfContents />
+  {/key}
 
   <div class="prose prose-lg max-w-none mb-12">
     {#if PostContent}
