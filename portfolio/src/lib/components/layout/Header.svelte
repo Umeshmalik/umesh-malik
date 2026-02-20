@@ -15,13 +15,50 @@
     { href: "/resume", label: "Resume" },
   ];
 
+  let navContainer: HTMLDivElement;
+  let linkEls: HTMLAnchorElement[] = [];
+  let indicatorLeft = $state(0);
+  let indicatorWidth = $state(0);
+  let indicatorVisible = $state(false);
+  let mounted = $state(false);
+
+  function updateIndicator() {
+    if (!navContainer) return;
+    const activeIndex = navLinks.findIndex((l) => {
+      if (l.href === "/") return page.url.pathname === "/";
+      return page.url.pathname.startsWith(l.href);
+    });
+    if (activeIndex === -1) {
+      indicatorVisible = false;
+      return;
+    }
+    const el = linkEls[activeIndex];
+    if (!el) return;
+    const containerRect = navContainer.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    indicatorLeft = elRect.left - containerRect.left;
+    indicatorWidth = elRect.width;
+    indicatorVisible = true;
+  }
+
   onMount(() => {
     const onScroll = () => {
       scrolled = window.scrollY > 10;
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+    // Wait a frame for layout to settle
+    requestAnimationFrame(() => {
+      updateIndicator();
+      mounted = true;
+    });
     return () => window.removeEventListener("scroll", onScroll);
+  });
+
+  $effect(() => {
+    // Re-run when pathname changes
+    page.url.pathname;
+    updateIndicator();
   });
 </script>
 
@@ -94,18 +131,27 @@
     </a>
 
     <!-- Desktop Nav - Center -->
-    <div class="hidden items-center gap-8 md:flex">
-      {#each navLinks as link}
+    <div class="nav-container hidden items-center gap-8 md:flex" bind:this={navContainer}>
+      {#each navLinks as link, i}
         <a
+          bind:this={linkEls[i]}
           href={link.href}
-          class="nav-link label-mono transition-colors duration-200 {page.url
-            .pathname === link.href
-            ? 'nav-link-active text-brand-text-primary'
+          class="nav-link label-mono transition-colors duration-200 {page.url.pathname === link.href || (link.href !== '/' && page.url.pathname.startsWith(link.href))
+            ? 'text-brand-text-primary'
             : 'text-brand-text-muted hover:text-brand-text-primary'}"
         >
           {link.label}
         </a>
       {/each}
+      <!-- Sliding indicator -->
+      {#if indicatorVisible}
+        <span
+          class="nav-indicator"
+          class:animated={mounted}
+          style="left: {indicatorLeft}px; width: {indicatorWidth}px;"
+          aria-hidden="true"
+        ></span>
+      {/if}
     </div>
 
     <!-- CTA - Right -->
@@ -120,7 +166,8 @@
       <button
         class="text-brand-text-primary"
         onclick={() => (menuOpen = !menuOpen)}
-        aria-label="Toggle menu"
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
+        type="button"
       >
         <svg
           class="h-6 w-6"
@@ -176,30 +223,26 @@
 </header>
 
 <style>
-  /* Active nav link — gold dot indicator */
+  .nav-container {
+    position: relative;
+  }
+
   .nav-link {
     position: relative;
     padding-bottom: 4px;
   }
 
-  .nav-link::after {
-    content: '';
+  .nav-indicator {
     position: absolute;
     bottom: -2px;
-    left: 50%;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
+    height: 2px;
     background-color: var(--color-brand-accent);
-    transform: translateX(-50%) scale(0);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-radius: 1px;
+    pointer-events: none;
   }
 
-  .nav-link-active::after {
-    transform: translateX(-50%) scale(1);
-  }
-
-  .nav-link:hover::after {
-    transform: translateX(-50%) scale(1);
+  .nav-indicator.animated {
+    transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 </style>

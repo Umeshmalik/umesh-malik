@@ -5,6 +5,10 @@ main = "worker/index.ts"
 [assets]
 directory = "./build"
 
-[[kv_namespaces]]
-binding = "ANALYTICS"
-id = "5dee8f82729143c79f4502580de7eb0c"
+[[d1_databases]]
+binding = "DB"
+database_name = "analytics"
+database_id = "36747131-23c3-43fe-ba4c-bf8821c7f0b5"
+
+[triggers]
+crons = ["0 */6 * * *"]

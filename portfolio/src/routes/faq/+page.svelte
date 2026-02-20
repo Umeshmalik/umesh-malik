@@ -2,6 +2,8 @@
 	import SEO from '$lib/components/layout/SEO.svelte';
 	import { createBreadcrumbSchema } from '$lib/utils/schema';
 	import { siteConfig } from '$lib/config/site';
+	import { slide } from 'svelte/transition';
+	import ScrollToTop from '$lib/components/blog/ScrollToTop.svelte';
 
 	const faqs = [
 		{
@@ -56,6 +58,12 @@
 		}
 	];
 
+	let openIndex = $state<number | null>(null);
+
+	function toggle(index: number) {
+		openIndex = openIndex === index ? null : index;
+	}
+
 	const faqSchema = {
 		'@context': 'https://schema.org',
 		'@type': 'FAQPage',
@@ -102,14 +110,39 @@
 		Real questions from developers, recruiters, and people who've reached out
 	</p>
 
-	<div class="space-y-8">
-		{#each faqs as faq}
-			<div class="border-b border-brand-border pb-8">
-				<h2 class="mb-3 text-xl font-medium text-brand-text-primary">{faq.question}</h2>
-				<p class="body-medium text-brand-text-secondary">
-					{faq.answer}
-				</p>
+	<div class="space-y-0">
+		{#each faqs as faq, i}
+			<div class="border-b border-brand-border">
+				<button
+					type="button"
+					class="flex w-full items-center justify-between py-6 text-left transition-colors hover:text-brand-accent"
+					onclick={() => toggle(i)}
+					aria-expanded={openIndex === i}
+				>
+					<h2 class="pr-8 text-xl font-medium {openIndex === i ? 'text-brand-accent' : 'text-brand-text-primary'}">
+						{faq.question}
+					</h2>
+					<svg
+						class="h-5 w-5 shrink-0 text-brand-accent transition-transform duration-300 {openIndex === i ? 'rotate-180' : ''}"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+						aria-hidden="true"
+					>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+					</svg>
+				</button>
+				{#if openIndex === i}
+					<div transition:slide={{ duration: 300 }}>
+						<p class="body-medium pb-6 text-brand-text-secondary">
+							{faq.answer}
+						</p>
+					</div>
+				{/if}
 			</div>
 		{/each}
 	</div>
 </section>
+
+<ScrollToTop />

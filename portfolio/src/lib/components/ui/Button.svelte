@@ -4,6 +4,7 @@
     HTMLButtonAttributes,
     HTMLAnchorAttributes,
   } from "svelte/elements";
+  import { magnetic } from "$lib/utils/magnetic";
 
   interface BaseProps {
     variant?: "primary" | "secondary";
@@ -25,6 +26,8 @@
     ...rest
   }: Props = $props();
 
+  const isPrimary = $derived(variant === "primary");
+
   const baseStyles = "btn-brackets transition-colors duration-300";
 
   const variants = {
@@ -44,11 +47,11 @@
 </script>
 
 {#if href}
-  <a {href} class={classes} download={download || undefined} {...rest}>
+  <a {href} class={classes} download={download || undefined} {...rest} use:magnetic={{ strength: isPrimary ? 5 : 0 }}>
     {@render children()}
   </a>
 {:else}
-  <button type="button" class={classes} {...rest}>
+  <button type="button" class={classes} {...rest} use:magnetic={{ strength: isPrimary ? 5 : 0 }}>
     {@render children()}
   </button>
 {/if}

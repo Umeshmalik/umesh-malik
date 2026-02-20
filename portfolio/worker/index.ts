@@ -1,6 +1,6 @@
 interface Env {
 	ASSETS: Fetcher;
-	ANALYTICS: KVNamespace;
+	DB: D1Database;
 	ANALYTICS_SECRET: string;
 }
 
@@ -10,10 +10,6 @@ interface EventBody {
 	source: string;
 	sessionId: string;
 	type: 'pageview' | 'heartbeat';
-}
-
-interface DailyCounter {
-	count: number;
 }
 
 const ALLOWED_ORIGINS = [
@@ -28,16 +24,6 @@ const MAX_SOURCE_LENGTH = 50;
 
 function todayKey(): string {
 	return new Date().toISOString().slice(0, 10);
-}
-
-function dateKeys(days: number): string[] {
-	const keys: string[] = [];
-	const now = Date.now();
-	for (let i = 0; i < days; i++) {
-		const d = new Date(now - i * 86400000);
-		keys.push(d.toISOString().slice(0, 10));
-	}
-	return keys;
 }
 
 function corsHeaders(request: Request): HeadersInit {
@@ -57,14 +43,6 @@ function jsonResponse(request: Request, data: unknown, status = 200): Response {
 	});
 }
 
-async function incrementCounter(kv: KVNamespace, key: string): Promise<number> {
-	const raw = await kv.get(key);
-	const data: DailyCounter = raw ? JSON.parse(raw) : { count: 0 };
-	data.count += 1;
-	await kv.put(key, JSON.stringify(data));
-	return data.count;
-}
-
 function isAuthorized(request: Request, env: Env): boolean {
 	const auth = request.headers.get('Authorization');
 	if (!auth || !env.ANALYTICS_SECRET) return false;
@@ -76,7 +54,6 @@ function sanitize(value: string, maxLen: number): string {
 }
 
 function isBlogPostPath(path: string): boolean {
-	// Must be /blog/<slug> — not /blog, /blog/, /blog/category/*, /blog/tag/*
 	return /^\/blog\/[^/]+$/.test(path);
 }
 
@@ -93,7 +70,6 @@ async function handleEvent(request: Request, env: Env): Promise<Response> {
 		return new Response('Method Not Allowed', { status: 405, headers: corsHeaders(request) });
 	}
 
-	// Silently discard bot/crawler events — return 204 but don't store anything
 	if (isBot(request)) {
 		return new Response(null, { status: 204, headers: corsHeaders(request) });
 	}
@@ -113,34 +89,43 @@ async function handleEvent(request: Request, env: Env): Promise<Response> {
 	const path = sanitize(rawPath, MAX_PATH_LENGTH);
 	const source = sanitize(rawSource, MAX_SOURCE_LENGTH);
 	const eventType = type === 'heartbeat' ? 'heartbeat' : 'pageview';
+	const date = todayKey();
 
-	const writes: Promise<unknown>[] = [
-		// Always update the live session marker (heartbeats keep it alive)
-		env.ANALYTICS.put(`live:${sessionId}`, path, { expirationTtl: 60 }),
+	// Always update live session
+	const statements: D1PreparedStatement[] = [
+		env.DB.prepare(
+			'INSERT INTO live_sessions (session_id, path, last_seen) VALUES (?, ?, datetime(\'now\')) ON CONFLICT(session_id) DO UPDATE SET path = excluded.path, last_seen = datetime(\'now\')',
+		).bind(sessionId, path),
 	];
 
-	// Only count page views and sources for actual pageviews, not heartbeats
+	// Only count pageviews (not heartbeats)
 	if (eventType === 'pageview') {
-		const date = todayKey();
-		writes.push(
-			incrementCounter(env.ANALYTICS, `pv:${date}:${path}`),
-			incrementCounter(env.ANALYTICS, `src:${date}:${source}`),
+		statements.push(
+			env.DB.prepare(
+				'INSERT INTO events (date, path, source, session_id, type) VALUES (?, ?, ?, ?, ?)',
+			).bind(date, path, source, sessionId, eventType),
 		);
-
-		// Increment unique read counter for blog posts (deduplicated per session, 24h window)
-		if (isBlogPostPath(path)) {
-			const readerKey = `reader:${path}:${sessionId}`;
-			const alreadyCounted = await env.ANALYTICS.get(readerKey);
-			if (!alreadyCounted) {
-				writes.push(
-					incrementCounter(env.ANALYTICS, `reads:${path}`),
-					env.ANALYTICS.put(readerKey, '1', { expirationTtl: 86400 }),
-				);
-			}
-		}
 	}
 
-	await Promise.all(writes);
+	await env.DB.batch(statements);
+
+	// For blog posts, deduplicate reads per session per day
+	if (eventType === 'pageview' && isBlogPostPath(path)) {
+		const alreadyCounted = await env.DB.prepare(
+			'SELECT 1 FROM reader_dedup WHERE path = ? AND session_id = ? AND date = ?',
+		).bind(path, sessionId, date).first();
+
+		if (!alreadyCounted) {
+			await env.DB.batch([
+				env.DB.prepare(
+					'INSERT OR IGNORE INTO reader_dedup (path, session_id, date) VALUES (?, ?, ?)',
+				).bind(path, sessionId, date),
+				env.DB.prepare(
+					'INSERT INTO reads (path, count) VALUES (?, 1) ON CONFLICT(path) DO UPDATE SET count = count + 1',
+				).bind(path),
+			]);
+		}
+	}
 
 	return new Response(null, { status: 204, headers: corsHeaders(request) });
 }
@@ -150,20 +135,18 @@ async function handleLive(request: Request, env: Env): Promise<Response> {
 	const url = new URL(request.url);
 	const filterPath = url.searchParams.get('path');
 
-	const list = await env.ANALYTICS.list({ prefix: 'live:' });
-
-	if (!filterPath) {
-		return jsonResponse(request, { count: list.keys.length });
+	let result;
+	if (filterPath) {
+		result = await env.DB.prepare(
+			'SELECT COUNT(*) as count FROM live_sessions WHERE path = ? AND last_seen > datetime(\'now\', \'-60 seconds\')',
+		).bind(filterPath).first<{ count: number }>();
+	} else {
+		result = await env.DB.prepare(
+			'SELECT COUNT(*) as count FROM live_sessions WHERE last_seen > datetime(\'now\', \'-60 seconds\')',
+		).first<{ count: number }>();
 	}
 
-	let count = 0;
-	const reads = list.keys.map(async (key) => {
-		const val = await env.ANALYTICS.get(key.name);
-		if (val === filterPath) count++;
-	});
-	await Promise.all(reads);
-
-	return jsonResponse(request, { count });
+	return jsonResponse(request, { count: result?.count ?? 0 });
 }
 
 // --- GET /api/analytics/reads?path= (PUBLIC) ---
@@ -175,10 +158,11 @@ async function handleReads(request: Request, env: Env): Promise<Response> {
 		return new Response('Bad Request: path required', { status: 400, headers: corsHeaders(request) });
 	}
 
-	const raw = await env.ANALYTICS.get(`reads:${path}`);
-	const data: DailyCounter = raw ? JSON.parse(raw) : { count: 0 };
+	const result = await env.DB.prepare(
+		'SELECT count FROM reads WHERE path = ?',
+	).bind(path).first<{ count: number }>();
 
-	return jsonResponse(request, { path, count: data.count });
+	return jsonResponse(request, { path, count: result?.count ?? 0 });
 }
 
 // --- POST /api/analytics/reads (PUBLIC, batch) ---
@@ -199,15 +183,22 @@ async function handleReadsBatch(request: Request, env: Env): Promise<Response> {
 	}
 
 	const paths = body.paths.slice(0, 50);
-	const counts: Record<string, number> = {};
+	const placeholders = paths.map(() => '?').join(', ');
+	const results = await env.DB.prepare(
+		`SELECT path, count FROM reads WHERE path IN (${placeholders})`,
+	).bind(...paths).all<{ path: string; count: number }>();
 
-	await Promise.all(
-		paths.map(async (p) => {
-			const raw = await env.ANALYTICS.get(`reads:${p}`);
-			const data: DailyCounter = raw ? JSON.parse(raw) : { count: 0 };
-			counts[p] = data.count;
-		})
-	);
+	const counts: Record<string, number> = {};
+	// Initialize all paths with 0
+	for (const p of paths) {
+		counts[p] = 0;
+	}
+	// Fill in actual counts
+	if (results.results) {
+		for (const row of results.results) {
+			counts[row.path] = row.count;
+		}
+	}
 
 	return jsonResponse(request, { counts });
 }
@@ -220,49 +211,57 @@ async function handleStats(request: Request, env: Env): Promise<Response> {
 
 	const url = new URL(request.url);
 	const days = Math.min(parseInt(url.searchParams.get('days') || '7', 10), 90);
-	const dates = dateKeys(days);
 
-	const dailyViews: { date: string; views: number }[] = [];
-	const sourceMap: Record<string, number> = {};
-	const pageMap: Record<string, number> = {};
-	let totalViews = 0;
+	// Calculate the start date
+	const startDate = new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
 
-	for (const date of dates) {
-		const pvList = await env.ANALYTICS.list({ prefix: `pv:${date}:` });
-		let dayTotal = 0;
+	// 4 SQL queries in one batch call
+	const [dailyViewsResult, sourcesResult, topPagesResult, totalViewsResult] = await env.DB.batch([
+		// Daily views
+		env.DB.prepare(
+			'SELECT date, COUNT(*) as views FROM events WHERE date >= ? AND type = \'pageview\' GROUP BY date ORDER BY date ASC',
+		).bind(startDate),
+		// Sources
+		env.DB.prepare(
+			'SELECT source, COUNT(*) as count FROM events WHERE date >= ? AND type = \'pageview\' GROUP BY source ORDER BY count DESC',
+		).bind(startDate),
+		// Top pages
+		env.DB.prepare(
+			'SELECT path, COUNT(*) as views FROM events WHERE date >= ? AND type = \'pageview\' GROUP BY path ORDER BY views DESC LIMIT 20',
+		).bind(startDate),
+		// Total views
+		env.DB.prepare(
+			'SELECT COUNT(*) as total FROM events WHERE date >= ? AND type = \'pageview\'',
+		).bind(startDate),
+	]);
 
-		for (const key of pvList.keys) {
-			const raw = await env.ANALYTICS.get(key.name);
-			if (raw) {
-				const data: DailyCounter = JSON.parse(raw);
-				dayTotal += data.count;
-				const path = key.name.slice(`pv:${date}:`.length);
-				pageMap[path] = (pageMap[path] || 0) + data.count;
-			}
-		}
+	const dailyViews = (dailyViewsResult.results as { date: string; views: number }[]) || [];
 
-		dailyViews.push({ date, views: dayTotal });
-		totalViews += dayTotal;
-
-		const srcList = await env.ANALYTICS.list({ prefix: `src:${date}:` });
-		for (const key of srcList.keys) {
-			const raw = await env.ANALYTICS.get(key.name);
-			if (raw) {
-				const data: DailyCounter = JSON.parse(raw);
-				const source = key.name.slice(`src:${date}:`.length);
-				sourceMap[source] = (sourceMap[source] || 0) + data.count;
-			}
-		}
+	const sources: Record<string, number> = {};
+	for (const row of (sourcesResult.results as { source: string; count: number }[]) || []) {
+		sources[row.source] = row.count;
 	}
 
-	dailyViews.reverse();
+	const topPages = (topPagesResult.results as { path: string; views: number }[]) || [];
 
-	const topPages = Object.entries(pageMap)
-		.map(([path, views]) => ({ path, views }))
-		.sort((a, b) => b.views - a.views)
-		.slice(0, 20);
+	const totalRow = (totalViewsResult.results as { total: number }[])?.[0];
+	const totalViews = totalRow?.total ?? 0;
 
-	return jsonResponse(request, { dailyViews, sources: sourceMap, topPages, totalViews });
+	return jsonResponse(request, { dailyViews, sources, topPages, totalViews });
+}
+
+// --- Scheduled cleanup (cron trigger every 6 hours) ---
+async function handleScheduled(env: Env): Promise<void> {
+	await env.DB.batch([
+		// Remove stale live sessions older than 2 minutes
+		env.DB.prepare(
+			'DELETE FROM live_sessions WHERE last_seen < datetime(\'now\', \'-120 seconds\')',
+		),
+		// Remove old reader dedup rows older than 48 hours
+		env.DB.prepare(
+			'DELETE FROM reader_dedup WHERE created_at < datetime(\'now\', \'-48 hours\')',
+		),
+	]);
 }
 
 export default {
@@ -288,5 +287,9 @@ export default {
 		}
 
 		return env.ASSETS.fetch(request);
+	},
+
+	async scheduled(_event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise<void> {
+		await handleScheduled(env);
 	},
 } satisfies ExportedHandler<Env>;

@@ -13,7 +13,7 @@
 <article class="group">
   <a
     href="/blog/{post.slug}"
-    class="corner-brackets block overflow-hidden border border-brand-card-border bg-brand-card transition-colors hover:border-brand-accent"
+    class="corner-brackets block overflow-hidden border border-brand-card-border bg-brand-card transition-[color,border-color,transform,box-shadow] duration-300 hover:border-brand-accent hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(192,158,90,0.08)]"
   >
     <div class="aspect-video overflow-hidden">
       <img

@@ -9,17 +9,17 @@
 		<link rel="manifest" href="%sveltekit.assets%/manifest.json" />
 
 		<!-- Theme Color -->
-		<meta name="theme-color" content="#000000" />
-		<meta name="msapplication-TileColor" content="#000000" />
+		<meta name="theme-color" content="#060503" />
+		<meta name="msapplication-TileColor" content="#060503" />
 		<meta name="color-scheme" content="dark" />
 
 		<!-- Theme init (blocks render to prevent FOUC) -->
 		<script>
 			(function() {
 				var stored = localStorage.getItem('theme');
-				var theme = stored || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+				var theme = stored || 'dark';
 				document.documentElement.dataset.theme = theme;
-				var color = theme === 'light' ? '#ffffff' : '#000000';
+				var color = theme === 'light' ? '#FDFAF5' : '#060503';
 				var tc = document.querySelector('meta[name="theme-color"]');
 				if (tc) tc.setAttribute('content', color);
 				var cs = document.querySelector('meta[name="color-scheme"]');

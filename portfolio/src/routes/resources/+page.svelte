@@ -7,6 +7,8 @@
     codeSnippets,
     resourceCategories,
   } from "$lib/data/resources";
+  import { fly, fade } from "svelte/transition";
+  import CopyButton from "$lib/components/ui/CopyButton.svelte";
 
   const breadcrumbSchema = createBreadcrumbSchema([
     { name: "Home", url: siteConfig.url },
@@ -43,7 +45,9 @@
     </ol>
   </nav>
 
-  <h1 class="section-title mb-4 text-brand-text-primary">Resources & Snippets</h1>
+  <h1 class="section-title mb-4 text-brand-text-primary">
+    Resources & Snippets
+  </h1>
   <p class="body-large mb-12 text-brand-text-secondary">
     Tools, libraries, blogs, and code snippets I find useful. A living
     collection that grows as I discover new things.
@@ -68,33 +72,40 @@
 
   <!-- Resources Grid -->
   <h2 class="sr-only">Resources</h2>
-  <div class="mb-20 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    {#each filteredResources as resource}
-      <a
-        href={resource.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="corner-brackets block border border-brand-card-border bg-brand-card p-6 transition-colors hover:border-brand-accent"
-      >
-        <h3 class="mb-2 text-lg font-medium text-brand-text-primary">
-          {resource.name}
-          <span class="text-brand-text-muted">↗</span>
-        </h3>
-        <p class="body-medium mb-4 text-brand-text-secondary">
-          {resource.description}
-        </p>
-        <div class="flex flex-wrap gap-2">
-          {#each resource.tags as tag}
-            <span
-              class="label-mono rounded bg-brand-surface px-2 py-0.5 text-brand-text-muted"
-            >
-              {tag}
-            </span>
-          {/each}
-        </div>
-      </a>
-    {/each}
-  </div>
+  {#key activeCategory}
+    <div
+      class="mb-20 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+      in:fade={{ duration: 300 }}
+      out:fade={{ duration: 150 }}
+    >
+      {#each filteredResources as resource, i}
+        <a
+          href={resource.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="corner-brackets block border border-brand-card-border bg-brand-card p-6 transition-colors"
+          in:fly={{ y: 20, duration: 400, delay: Math.min(i * 50, 300) }}
+        >
+          <h3 class="mb-2 text-lg font-medium text-brand-text-primary">
+            {resource.name}
+            <span class="text-brand-text-muted">↗</span>
+          </h3>
+          <p class="body-medium mb-4 text-brand-text-secondary">
+            {resource.description}
+          </p>
+          <div class="flex flex-wrap gap-2">
+            {#each resource.tags as tag}
+              <span
+                class="label-mono rounded bg-brand-surface px-2 py-0.5 text-brand-text-muted"
+              >
+                {tag}
+              </span>
+            {/each}
+          </div>
+        </a>
+      {/each}
+    </div>
+  {/key}
 
   <!-- Code Snippets Section -->
   <div>
@@ -111,10 +122,17 @@
     <div class="space-y-10">
       {#each codeSnippets as snippet}
         <div class="border border-brand-card-border bg-brand-card p-6">
-          <h3 class="mb-1 text-lg font-medium text-brand-text-primary">{snippet.title}</h3>
-          <p class="body-medium mb-4 text-brand-text-secondary">
-            {snippet.description}
-          </p>
+          <div class="mb-4 flex items-start justify-between gap-4">
+            <div>
+              <h3 class="mb-1 text-lg font-medium text-brand-text-primary">
+                {snippet.title}
+              </h3>
+              <p class="body-medium text-brand-text-secondary">
+                {snippet.description}
+              </p>
+            </div>
+            <CopyButton text={snippet.code} />
+          </div>
           <pre
             class="overflow-x-auto rounded bg-[rgba(43,43,43,0.5)] p-4 text-sm leading-relaxed text-brand-text-secondary"><code
               >{snippet.code}</code

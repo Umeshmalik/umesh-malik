@@ -3,6 +3,8 @@
   import { fly } from "svelte/transition";
   import { projects } from "$lib/data/projects";
   import Badge from "$lib/components/ui/Badge.svelte";
+  import { tilt } from "$lib/utils/tilt";
+  import { clipReveal } from "$lib/utils/transitions";
 
   let hasBeenInView = $state(false);
 
@@ -20,7 +22,7 @@
   <div class="relative z-10 mx-auto max-w-[1160px]">
     {#if hasBeenInView}
       <div class="mb-20 flex items-end justify-between">
-        <h2 class="section-title text-brand-text-primary" in:fly={{ y: 30, duration: 600 }}>
+        <h2 class="section-title text-brand-text-primary" in:clipReveal={{ duration: 800 }}>
           Selected work
         </h2>
         <a
@@ -37,6 +39,7 @@
           <article
             class="corner-brackets grid items-start gap-8 border-t border-brand-border bg-brand-card p-8 md:grid-cols-3"
             in:fly={{ y: 30, duration: 600, delay: i * 150 }}
+            use:tilt
           >
             <div class="md:col-span-1">
               <p class="label-mono text-brand-text-muted">

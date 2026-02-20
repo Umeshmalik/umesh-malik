@@ -7,10 +7,15 @@
   import { siteConfig } from "$lib/config/site";
   import { onMount } from "svelte";
   import { browser, dev } from "$app/environment";
+  import { inview } from "svelte-inview";
+  import { fly } from "svelte/transition";
 
   let { data }: { data: PageData } = $props();
 
   let readCounts = $state<Record<string, number>>({});
+  let featuredVisible = $state(false);
+  let allVisible = $state(false);
+  let tagsVisible = $state(false);
 
   const blogListSchema = {
     "@context": "https://schema.org",
@@ -81,25 +86,40 @@
 
   <!-- Featured Posts -->
   {#if data.featuredPosts.length > 0}
-    <div class="mb-20">
+    <div
+      class="mb-20"
+      use:inview={{ threshold: 0.1 }}
+      oninview_change={(e) => { if (e.detail.inView) featuredVisible = true; }}
+    >
       <h2 class="mb-10 text-2xl font-medium text-brand-text-primary">Featured Articles</h2>
-      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {#each data.featuredPosts as post}
-          <BlogCard {post} featured={true} readCount={readCounts[`/blog/${post.slug}`]} />
-        {/each}
-      </div>
+      {#if featuredVisible}
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {#each data.featuredPosts as post, i}
+            <div in:fly={{ y: 30, duration: 500, delay: i * 100 }}>
+              <BlogCard {post} featured={true} readCount={readCounts[`/blog/${post.slug}`]} />
+            </div>
+          {/each}
+        </div>
+      {/if}
     </div>
   {/if}
 
   <!-- All Posts -->
   {#if data.posts.length > 0}
-    <div>
+    <div
+      use:inview={{ threshold: 0.05 }}
+      oninview_change={(e) => { if (e.detail.inView) allVisible = true; }}
+    >
       <h2 class="mb-10 text-2xl font-medium text-brand-text-primary">All Articles</h2>
-      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {#each data.posts as post}
-          <BlogCard {post} readCount={readCounts[`/blog/${post.slug}`]} />
-        {/each}
-      </div>
+      {#if allVisible}
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {#each data.posts as post, i}
+            <div in:fly={{ y: 30, duration: 500, delay: Math.min(i * 80, 400) }}>
+              <BlogCard {post} readCount={readCounts[`/blog/${post.slug}`]} />
+            </div>
+          {/each}
+        </div>
+      {/if}
     </div>
   {:else}
     <div class="py-20 text-center">
@@ -111,13 +131,21 @@
 
   <!-- Tags -->
   {#if data.tags.length > 0}
-    <div class="mt-20">
-      <h2 class="label-mono mb-5 text-brand-text-muted">Popular Tags</h2>
-      <div class="flex flex-wrap gap-2">
-        {#each data.tags as tag}
-          <Tag href="/blog/tag/{slugify(tag)}">{tag}</Tag>
-        {/each}
-      </div>
+    <div
+      class="mt-20"
+      use:inview={{ threshold: 0.2 }}
+      oninview_change={(e) => { if (e.detail.inView) tagsVisible = true; }}
+    >
+      {#if tagsVisible}
+        <h2 class="label-mono mb-5 text-brand-text-muted" in:fly={{ y: 20, duration: 500 }}>Popular Tags</h2>
+        <div class="flex flex-wrap gap-2">
+          {#each data.tags as tag, i}
+            <span in:fly={{ y: 15, duration: 400, delay: Math.min(i * 30, 300) }}>
+              <Tag href="/blog/tag/{slugify(tag)}">{tag}</Tag>
+            </span>
+          {/each}
+        </div>
+      {/if}
     </div>
   {/if}
 </section>

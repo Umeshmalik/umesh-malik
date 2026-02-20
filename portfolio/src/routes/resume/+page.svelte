@@ -1,15 +1,23 @@
 <script lang="ts">
   import SEO from "$lib/components/layout/SEO.svelte";
   import Badge from "$lib/components/ui/Badge.svelte";
+  import Button from "$lib/components/ui/Button.svelte";
   import { experience, education } from "$lib/data/resume";
   import { skillCategories } from "$lib/data/skills";
   import { createBreadcrumbSchema } from "$lib/utils/schema";
   import { siteConfig } from "$lib/config/site";
+  import { inview } from "svelte-inview";
+  import { fly } from "svelte/transition";
+  import ScrollToTop from "$lib/components/blog/ScrollToTop.svelte";
 
   const breadcrumbSchema = createBreadcrumbSchema([
     { name: "Home", url: siteConfig.url },
     { name: "Resume", url: `${siteConfig.url}/resume` },
   ]);
+
+  let expVisible = $state(false);
+  let eduVisible = $state(false);
+  let skillsVisible = $state(false);
 </script>
 
 <SEO
@@ -33,7 +41,7 @@
     </ol>
   </nav>
 
-  <div class="mb-12 flex items-start justify-between">
+  <div class="mb-12 flex items-start justify-between gap-4">
     <div>
       <h1 class="section-title mb-4 text-brand-text-primary">Umesh Malik</h1>
       <p class="body-large text-brand-text-secondary">
@@ -41,6 +49,9 @@
       </p>
       <p class="mt-1 text-sm text-brand-text-muted">Gurugram, Haryana, India</p>
     </div>
+    <Button variant="secondary" size="sm" onclick={() => window.print()}>
+      Print / Save PDF
+    </Button>
   </div>
 
   <!-- Contact -->
@@ -66,77 +77,96 @@
   </div>
 
   <!-- Experience -->
-  <section class="mb-16">
+  <section
+    class="mb-16"
+    use:inview={{ threshold: 0.1 }}
+    oninview_change={(e) => { if (e.detail.inView) expVisible = true; }}
+  >
     <h2
       class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-brand-text-primary"
     >
       Experience
     </h2>
-    <div class="space-y-10">
-      {#each experience as job}
-        <div class="border-l-2 border-brand-accent pl-6">
-          <h3 class="text-lg font-medium text-brand-text-primary">{job.role}</h3>
-          <p class="label-mono mt-1 text-brand-accent">{job.company}</p>
-          <p class="mt-2 text-sm text-brand-text-muted">{job.period}</p>
-          <p class="text-sm text-brand-text-muted">{job.location}</p>
-          <ul class="mt-4 space-y-2">
-            {#each job.highlights as highlight}
-              <li class="text-sm font-light text-brand-text-secondary">
-                <span class="mr-2 text-brand-accent">&bull;</span>{highlight}
-              </li>
-            {/each}
-          </ul>
-          <div class="mt-4 flex flex-wrap gap-2">
-            {#each job.tech as tech}
-              <Badge>{tech}</Badge>
-            {/each}
+    {#if expVisible}
+      <div class="space-y-10">
+        {#each experience as job, i}
+          <div class="border-l-2 border-brand-accent pl-6" in:fly={{ y: 30, duration: 500, delay: i * 120 }}>
+            <h3 class="text-lg font-medium text-brand-text-primary">{job.role}</h3>
+            <p class="label-mono mt-1 text-brand-accent">{job.company}</p>
+            <p class="mt-2 text-sm text-brand-text-muted">{job.period}</p>
+            <p class="text-sm text-brand-text-muted">{job.location}</p>
+            <ul class="mt-4 space-y-2">
+              {#each job.highlights as highlight}
+                <li class="text-sm font-light text-brand-text-secondary">
+                  <span class="mr-2 text-brand-accent">&bull;</span>{highlight}
+                </li>
+              {/each}
+            </ul>
+            <div class="mt-4 flex flex-wrap gap-2">
+              {#each job.tech as tech}
+                <Badge>{tech}</Badge>
+              {/each}
+            </div>
           </div>
-        </div>
-      {/each}
-    </div>
+        {/each}
+      </div>
+    {/if}
   </section>
 
   <!-- Education -->
-  <section class="mb-16">
+  <section
+    class="mb-16"
+    use:inview={{ threshold: 0.2 }}
+    oninview_change={(e) => { if (e.detail.inView) eduVisible = true; }}
+  >
     <h2
       class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-brand-text-primary"
     >
       Education
     </h2>
-    <div class="space-y-6">
-      {#each education as edu}
-        <div class="border-l-2 border-brand-accent pl-6">
-          <h3 class="font-medium text-brand-text-primary">{edu.degree}</h3>
-          <p class="label-mono mt-1 text-brand-accent">{edu.field}</p>
-          <p class="mt-2 text-sm text-brand-text-secondary">
-            {edu.institution}
-          </p>
-          <p class="mt-1 text-sm text-brand-text-muted">{edu.period}</p>
-        </div>
-      {/each}
-    </div>
+    {#if eduVisible}
+      <div class="space-y-6">
+        {#each education as edu, i}
+          <div class="border-l-2 border-brand-accent pl-6" in:fly={{ y: 30, duration: 500, delay: i * 120 }}>
+            <h3 class="font-medium text-brand-text-primary">{edu.degree}</h3>
+            <p class="label-mono mt-1 text-brand-accent">{edu.field}</p>
+            <p class="mt-2 text-sm text-brand-text-secondary">
+              {edu.institution}
+            </p>
+            <p class="mt-1 text-sm text-brand-text-muted">{edu.period}</p>
+          </div>
+        {/each}
+      </div>
+    {/if}
   </section>
 
   <!-- Skills -->
-  <section>
+  <section
+    use:inview={{ threshold: 0.2 }}
+    oninview_change={(e) => { if (e.detail.inView) skillsVisible = true; }}
+  >
     <h2
       class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-brand-text-primary"
     >
       Skills
     </h2>
-    <div class="space-y-6">
-      {#each skillCategories as category}
-        <div>
-          <h3 class="label-mono mb-3 text-brand-text-muted">
-            {category.name}
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {#each category.skills as skill}
-              <Badge>{skill}</Badge>
-            {/each}
+    {#if skillsVisible}
+      <div class="space-y-6">
+        {#each skillCategories as category, i}
+          <div in:fly={{ y: 20, duration: 500, delay: i * 100 }}>
+            <h3 class="label-mono mb-3 text-brand-text-muted">
+              {category.name}
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              {#each category.skills as skill}
+                <Badge>{skill}</Badge>
+              {/each}
+            </div>
           </div>
-        </div>
-      {/each}
-    </div>
+        {/each}
+      </div>
+    {/if}
   </section>
 </section>
+
+<ScrollToTop />

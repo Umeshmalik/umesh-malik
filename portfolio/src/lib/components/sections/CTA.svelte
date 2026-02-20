@@ -2,6 +2,7 @@
   import { inview } from "svelte-inview";
   import { fly } from "svelte/transition";
   import Button from "$lib/components/ui/Button.svelte";
+  import { clipReveal } from "$lib/utils/transitions";
 
   let hasBeenInView = $state(false);
 </script>
@@ -19,7 +20,7 @@
     {#if hasBeenInView}
       <h2
         class="section-title mb-8 text-brand-text-primary"
-        in:fly={{ y: 30, duration: 600 }}
+        in:clipReveal={{ duration: 800 }}
       >
         Let's build something <span class="text-brand-accent">great</span>
       </h2>

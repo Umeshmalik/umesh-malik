@@ -3,6 +3,7 @@
   import Hero from "$lib/components/sections/Hero.svelte";
   import TrustedBy from "$lib/components/sections/TrustedBy.svelte";
   import Expertise from "$lib/components/sections/Expertise.svelte";
+  import Stats from "$lib/components/sections/Stats.svelte";
   import Skills from "$lib/components/sections/Skills.svelte";
   import Projects from "$lib/components/sections/Projects.svelte";
   import Timeline from "$lib/components/sections/Timeline.svelte";
@@ -29,6 +30,7 @@
 <Hero />
 <TrustedBy />
 <Expertise />
+<Stats />
 <Projects />
 <Skills />
 <Timeline />

@@ -2,6 +2,7 @@
   import { inview } from "svelte-inview";
   import { fly } from "svelte/transition";
   import type { BlogPost } from "$lib/types/blog";
+  import { clipReveal } from "$lib/utils/transitions";
 
   interface Props {
     posts: BlogPost[];
@@ -24,7 +25,7 @@
         <div class="mb-20 flex items-end justify-between">
           <h2
             class="section-title text-brand-text-primary"
-            in:fly={{ y: 30, duration: 600 }}
+            in:clipReveal={{ duration: 800 }}
           >
             Latest articles
           </h2>

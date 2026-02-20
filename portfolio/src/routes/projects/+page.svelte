@@ -4,6 +4,7 @@
   import { projects } from "$lib/data/projects";
   import { createBreadcrumbSchema } from "$lib/utils/schema";
   import { siteConfig } from "$lib/config/site";
+  import { tilt } from "$lib/utils/tilt";
 
   const breadcrumbSchema = createBreadcrumbSchema([
     { name: "Home", url: siteConfig.url },
@@ -42,6 +43,7 @@
     {#each projects as project}
       <article
         class="corner-brackets grid gap-8 border-t border-brand-border bg-brand-card p-8 md:grid-cols-3"
+        use:tilt
       >
         <div class="md:col-span-1">
           <p class="label-mono text-brand-text-muted">

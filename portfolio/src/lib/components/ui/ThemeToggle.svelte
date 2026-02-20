@@ -19,7 +19,7 @@
     document.documentElement.dataset.theme = newTheme;
     localStorage.setItem("theme", newTheme);
 
-    const color = newTheme === "light" ? "#ffffff" : "#000000";
+    const color = newTheme === "light" ? "#FDFAF5" : "#060503";
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute("content", color);
@@ -42,6 +42,8 @@
         Math.max(y, window.innerHeight - y),
       );
 
+      document.documentElement.dataset.transition = "theme";
+
       const transition = document.startViewTransition(() => {
         applyTheme(newTheme);
       });
@@ -60,6 +62,10 @@
             pseudoElement: "::view-transition-new(root)",
           },
         );
+      });
+
+      transition.finished.then(() => {
+        delete document.documentElement.dataset.transition;
       });
     } else {
       applyTheme(newTheme);
@@ -145,18 +151,4 @@
     transition: transform 0.1s ease;
   }
 
-  /* View Transition overrides — disable default morph, use clip-path instead */
-  :global(::view-transition-old(root)),
-  :global(::view-transition-new(root)) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-
-  :global(::view-transition-old(root)) {
-    z-index: 1;
-  }
-
-  :global(::view-transition-new(root)) {
-    z-index: 9999;
-  }
 </style>

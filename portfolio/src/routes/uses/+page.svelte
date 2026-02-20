@@ -3,11 +3,15 @@
 	import { createBreadcrumbSchema } from '$lib/utils/schema';
 	import { siteConfig } from '$lib/config/site';
 	import { usesCategories } from '$lib/data/uses';
+	import { inview } from 'svelte-inview';
+	import { fly } from 'svelte/transition';
 
 	const breadcrumbSchema = createBreadcrumbSchema([
 		{ name: 'Home', url: siteConfig.url },
 		{ name: 'Uses', url: `${siteConfig.url}/uses` }
 	]);
+
+	let visibleSections = $state<Record<number, boolean>>({});
 </script>
 
 <SEO
@@ -38,39 +42,48 @@
 	</p>
 
 	<div class="space-y-16">
-		{#each usesCategories as category}
-			<div>
-				<h2
-					class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-brand-text-primary"
-				>
-					{category.name}
-				</h2>
-				<div class="grid gap-6 md:grid-cols-2">
-					{#each category.items as item}
-						<div
-							class="corner-brackets border border-brand-card-border bg-brand-card p-6"
-						>
-							<h3 class="mb-2 text-lg font-medium text-brand-text-primary">
-								{#if item.url}
-									<a
-										href={item.url}
-										target="_blank"
-										rel="noopener noreferrer"
-										class="transition-colors hover:text-brand-accent"
-									>
+		{#each usesCategories as category, catIndex}
+			<div
+				use:inview={{ threshold: 0.15 }}
+				oninview_change={(e) => {
+					if (e.detail.inView) visibleSections[catIndex] = true;
+				}}
+			>
+				{#if visibleSections[catIndex]}
+					<h2
+						class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-brand-text-primary"
+						in:fly={{ y: 30, duration: 600 }}
+					>
+						{category.name}
+					</h2>
+					<div class="grid gap-6 md:grid-cols-2">
+						{#each category.items as item, i}
+							<div
+								class="corner-brackets border border-brand-card-border bg-brand-card p-6"
+								in:fly={{ y: 30, duration: 600, delay: i * 100 }}
+							>
+								<h3 class="mb-2 text-lg font-medium text-brand-text-primary">
+									{#if item.url}
+										<a
+											href={item.url}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="transition-colors hover:text-brand-accent"
+										>
+											{item.name}
+											<span class="text-brand-text-muted">↗</span>
+										</a>
+									{:else}
 										{item.name}
-										<span class="text-brand-text-muted">↗</span>
-									</a>
-								{:else}
-									{item.name}
-								{/if}
-							</h3>
-							<p class="body-medium text-brand-text-secondary">
-								{item.description}
-							</p>
-						</div>
-					{/each}
-				</div>
+									{/if}
+								</h3>
+								<p class="body-medium text-brand-text-secondary">
+									{item.description}
+								</p>
+							</div>
+						{/each}
+					</div>
+				{/if}
 			</div>
 		{/each}
 	</div>

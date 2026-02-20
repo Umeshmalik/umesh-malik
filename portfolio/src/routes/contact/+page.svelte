@@ -6,6 +6,8 @@
   } from "$lib/utils/schema";
   import { contactChannels } from "$lib/data/contact";
   import { siteConfig } from "$lib/config/site";
+  import { inview } from "svelte-inview";
+  import { fly } from "svelte/transition";
 
   const breadcrumbSchema = createBreadcrumbSchema([
     { name: "Home", url: siteConfig.url },
@@ -13,6 +15,9 @@
   ]);
 
   const contactPageSchema = createContactPageSchema();
+
+  let cardsVisible = $state(false);
+  let infoVisible = $state(false);
 </script>
 
 <SEO
@@ -43,60 +48,74 @@
     conversation about software architecture — I'd like to hear from you.
   </p>
 
-  <div class="grid gap-6 md:grid-cols-2">
-    {#each contactChannels as channel}
-      <a
-        href={channel.href}
-        target={channel.label === "Email" ? undefined : "_blank"}
-        rel={channel.label === "Email" ? undefined : "noopener noreferrer"}
-        class="corner-brackets block border border-brand-card-border bg-brand-card p-8 transition-colors hover:border-brand-accent {channel.primary
-          ? 'border-brand-accent'
-          : ''}"
-      >
-        <div class="mb-1 flex items-center gap-3">
-          <h3 class="text-xl font-medium text-brand-text-primary">{channel.label}</h3>
-          {#if channel.primary}
-            <span
-              class="label-mono rounded bg-brand-accent/10 px-2 py-0.5 text-brand-accent"
-            >
-              Primary
-            </span>
-          {/if}
-        </div>
-        <p class="label-mono mb-3 text-brand-accent">{channel.value}</p>
+  <div
+    class="grid gap-6 md:grid-cols-2"
+    use:inview={{ threshold: 0.2 }}
+    oninview_change={(e) => { if (e.detail.inView) cardsVisible = true; }}
+  >
+    {#if cardsVisible}
+      {#each contactChannels as channel, i}
+        <a
+          href={channel.href}
+          target={channel.label === "Email" ? undefined : "_blank"}
+          rel={channel.label === "Email" ? undefined : "noopener noreferrer"}
+          class="contact-card corner-brackets block border border-brand-card-border bg-brand-card p-8 transition-[color,border-color,transform,box-shadow] duration-300 hover:border-brand-accent hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(192,158,90,0.08)] {channel.primary
+            ? 'border-brand-accent'
+            : ''}"
+          in:fly={{ y: 30, duration: 500, delay: i * 120 }}
+        >
+          <div class="mb-1 flex items-center gap-3">
+            <h3 class="text-xl font-medium text-brand-text-primary">{channel.label}</h3>
+            {#if channel.primary}
+              <span
+                class="label-mono rounded bg-brand-accent/10 px-2 py-0.5 text-brand-accent"
+              >
+                Primary
+              </span>
+            {/if}
+          </div>
+          <p class="label-mono mb-3 text-brand-accent">{channel.value}</p>
+          <p class="body-medium text-brand-text-secondary">
+            {channel.description}
+          </p>
+        </a>
+      {/each}
+    {/if}
+  </div>
+
+  <div
+    use:inview={{ threshold: 0.3 }}
+    oninview_change={(e) => { if (e.detail.inView) infoVisible = true; }}
+  >
+    {#if infoVisible}
+      <!-- Response Time -->
+      <div class="mt-16 border-b border-brand-border pb-8" in:fly={{ y: 20, duration: 500 }}>
+        <h2 class="mb-4 text-2xl font-medium text-brand-text-primary">Response Time</h2>
         <p class="body-medium text-brand-text-secondary">
-          {channel.description}
+          I check email daily on weekdays and aim to respond within 24-48 hours.
+          LinkedIn messages may take a bit longer. For time-sensitive matters, email
+          is the most reliable channel.
         </p>
-      </a>
-    {/each}
-  </div>
+      </div>
 
-  <!-- Response Time -->
-  <div class="mt-16 border-b border-brand-border pb-8">
-    <h2 class="mb-4 text-2xl font-medium text-brand-text-primary">Response Time</h2>
-    <p class="body-medium text-brand-text-secondary">
-      I check email daily on weekdays and aim to respond within 24-48 hours.
-      LinkedIn messages may take a bit longer. For time-sensitive matters, email
-      is the most reliable channel.
-    </p>
-  </div>
-
-  <!-- Currently -->
-  <div class="mt-8">
-    <h2 class="mb-4 text-2xl font-medium text-brand-text-primary">Currently</h2>
-    <div class="body-medium space-y-3 text-brand-text-secondary">
-      <p>
-        <span class="text-brand-text-primary">Open to:</span> Technical discussions, speaking
-        opportunities, open-source collaboration, mentoring conversations, freelance/contract
-        work
-      </p>
-      <p>
-        <span class="text-brand-text-primary">Not available for:</span> Full-time role changes
-      </p>
-      <p>
-        <span class="text-brand-text-primary">Location:</span> Based in Gurugram, India (IST /
-        UTC+5:30)
-      </p>
-    </div>
+      <!-- Currently -->
+      <div class="mt-8" in:fly={{ y: 20, duration: 500, delay: 150 }}>
+        <h2 class="mb-4 text-2xl font-medium text-brand-text-primary">Currently</h2>
+        <div class="body-medium space-y-3 text-brand-text-secondary">
+          <p>
+            <span class="text-brand-text-primary">Open to:</span> Technical discussions, speaking
+            opportunities, open-source collaboration, mentoring conversations, freelance/contract
+            work
+          </p>
+          <p>
+            <span class="text-brand-text-primary">Not available for:</span> Full-time role changes
+          </p>
+          <p>
+            <span class="text-brand-text-primary">Location:</span> Based in Gurugram, India (IST /
+            UTC+5:30)
+          </p>
+        </div>
+      </div>
+    {/if}
   </div>
 </section>
