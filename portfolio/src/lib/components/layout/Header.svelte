@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import { onMount } from "svelte";
+  import Button from "$lib/components/ui/Button.svelte";
 
   let menuOpen = $state(false);
   let scrolled = $state(false);
@@ -108,12 +109,7 @@
 
     <!-- CTA - Right -->
     <div class="hidden md:block">
-      <a
-        href="/contact"
-        class="btn-brackets bg-white text-black hover:bg-brand-accent hover:text-black"
-      >
-        Contact
-      </a>
+      <Button href="/contact" variant="primary">Contact</Button>
     </div>
 
     <!-- Mobile Toggle -->
@@ -162,13 +158,14 @@
           {link.label}
         </a>
       {/each}
-      <a
+      <Button
         href="/contact"
-        class="btn-brackets mt-6 block w-full bg-white text-center text-black"
+        variant="primary"
+        class="mt-6 w-full"
         onclick={() => (menuOpen = false)}
       >
         Contact
-      </a>
+      </Button>
     </div>
   {/if}
 </header>

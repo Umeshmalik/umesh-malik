@@ -8,6 +8,7 @@
   import ReadingProgress from "$lib/components/blog/ReadingProgress.svelte";
   import TableOfContents from "$lib/components/blog/TableOfContents.svelte";
   import ScrollToTop from "$lib/components/blog/ScrollToTop.svelte";
+  import Tag from "$lib/components/ui/Tag.svelte";
   import {
     createArticleSchema,
     createBreadcrumbSchema,
@@ -124,12 +125,7 @@
 
     <div class="flex flex-wrap gap-2">
       {#each data.post.tags as tag}
-        <a
-          href="/blog/tag/{slugify(tag)}"
-          class="border border-brand-border bg-brand-surface px-3 py-1 font-mono text-xs uppercase tracking-wider text-brand-text-secondary transition-colors hover:border-brand-accent hover:text-brand-accent"
-        >
-          #{tag}
-        </a>
+        <Tag href="/blog/tag/{slugify(tag)}">#{tag}</Tag>
       {/each}
     </div>
   </header>

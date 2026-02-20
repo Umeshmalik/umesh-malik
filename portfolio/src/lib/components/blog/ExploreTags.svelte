@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Tag from "$lib/components/ui/Tag.svelte";
+
   interface TagCount {
     name: string;
     slug: string;
@@ -17,13 +19,10 @@
     <h2 class="mb-6 text-2xl font-medium text-white">Explore Topics</h2>
     <div class="flex flex-wrap gap-2">
       {#each tags as tag}
-        <a
-          href="/blog/tag/{tag.slug}"
-          class="border border-brand-border bg-brand-surface px-3 py-1 font-mono text-xs uppercase tracking-wider text-brand-text-secondary transition-colors hover:border-brand-accent hover:text-brand-accent"
-        >
+        <Tag href="/blog/tag/{tag.slug}">
           #{tag.name}
           <span class="ml-1 text-brand-text-muted">({tag.count})</span>
-        </a>
+        </Tag>
       {/each}
     </div>
   </div>

@@ -49,12 +49,9 @@
       <h2 class="label-mono mb-5 text-brand-text-muted">Categories</h2>
       <div class="flex flex-wrap gap-3">
         {#each data.categories as category}
-          <a
-            href="/blog/category/{category.slug}"
-            class="border border-brand-border bg-brand-surface px-4 py-2 font-mono text-xs uppercase tracking-wider text-brand-text-secondary transition-colors hover:border-brand-accent hover:text-brand-accent"
-          >
+          <Tag href="/blog/category/{category.slug}">
             {category.name} ({category.count})
-          </a>
+          </Tag>
         {/each}
       </div>
     </div>
