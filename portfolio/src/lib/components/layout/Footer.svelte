@@ -102,7 +102,7 @@
                 rel="noopener noreferrer"
                 class="body-medium text-brand-text-secondary transition-colors hover:text-brand-accent"
               >
-                {link.label}
+                {link.label}<span class="sr-only"> (opens in new tab)</span>
               </a>
             </li>
           {/each}

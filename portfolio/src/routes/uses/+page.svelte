@@ -71,7 +71,7 @@
 											class="transition-colors hover:text-brand-accent"
 										>
 											{item.name}
-											<span class="text-brand-text-muted">↗</span>
+											<span class="text-brand-text-muted" aria-hidden="true">↗</span>
 										</a>
 									{:else}
 										{item.name}

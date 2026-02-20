@@ -199,7 +199,7 @@
           <a
             href="https://linkedin.com/in/umesh-malik"
             target="_blank"
-            rel="noopener noreferrer">LinkedIn</a
+            rel="noopener noreferrer">LinkedIn<span class="sr-only"> (opens in new tab)</span></a
           >.
         </p>
       {/if}

@@ -136,6 +136,7 @@
         <a
           bind:this={linkEls[i]}
           href={link.href}
+          aria-current={page.url.pathname === link.href || (link.href !== '/' && page.url.pathname.startsWith(link.href)) ? 'page' : undefined}
           class="nav-link label-mono transition-colors duration-200 {page.url.pathname === link.href || (link.href !== '/' && page.url.pathname.startsWith(link.href))
             ? 'text-brand-text-primary'
             : 'text-brand-text-muted hover:text-brand-text-primary'}"
@@ -167,6 +168,8 @@
         class="text-brand-text-primary"
         onclick={() => (menuOpen = !menuOpen)}
         aria-label={menuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={menuOpen}
+        aria-controls="mobile-menu"
         type="button"
       >
         <svg
@@ -197,10 +200,11 @@
 
   <!-- Mobile Menu -->
   {#if menuOpen}
-    <div class="border-t border-brand-border bg-brand-black px-6 py-6 md:hidden">
+    <div id="mobile-menu" class="border-t border-brand-border bg-brand-black px-6 py-6 md:hidden" role="navigation" aria-label="Mobile navigation">
       {#each navLinks as link}
         <a
           href={link.href}
+          aria-current={page.url.pathname === link.href || (link.href !== '/' && page.url.pathname.startsWith(link.href)) ? 'page' : undefined}
           class="label-mono block py-3 transition-colors {page.url.pathname ===
           link.href
             ? 'text-brand-text-primary'

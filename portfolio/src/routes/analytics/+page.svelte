@@ -230,12 +230,14 @@
       <div
         class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-8"
       >
-        <h2 class="label-mono mb-6 text-brand-text-muted">Enter Secret</h2>
+        <label for="analytics-secret" class="label-mono mb-6 block text-brand-text-muted">Enter Secret</label>
         <input
+          id="analytics-secret"
           type="password"
           bind:value={secret}
           onkeydown={handleKeydown}
           placeholder="Analytics secret"
+          autocomplete="current-password"
           class="mb-4 w-full rounded border border-brand-border bg-brand-black px-4 py-3 font-mono text-sm text-brand-text-primary placeholder-brand-text-muted focus:border-brand-accent focus:outline-none"
         />
         {#if error}

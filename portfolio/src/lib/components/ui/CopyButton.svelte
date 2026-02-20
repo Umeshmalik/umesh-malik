@@ -23,6 +23,7 @@
   }
 </script>
 
+<span class="sr-only" aria-live="polite">{copied ? "Code copied to clipboard" : ""}</span>
 <Button
   variant="secondary"
   size="sm"

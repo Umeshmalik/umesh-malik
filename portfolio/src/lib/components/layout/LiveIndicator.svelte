@@ -77,7 +77,9 @@
 {#if visible}
   <div
     class="live-indicator fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-brand-card-border bg-brand-card/90 px-4 py-2 shadow-lg backdrop-blur-sm"
+    role="status"
     aria-live="polite"
+    aria-label="Live visitor count"
   >
     <span
       class="inline-block h-2 w-2 animate-pulse rounded-full bg-green-500"

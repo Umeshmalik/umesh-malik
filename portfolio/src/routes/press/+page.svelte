@@ -177,7 +177,7 @@
                 rel="noopener noreferrer"
               >
                 {profile.title}
-                <span class="text-brand-text-muted">↗</span>
+                <span class="text-brand-text-muted" aria-hidden="true">↗</span>
               </a>
             </h3>
             <p class="label-mono mb-2 text-brand-accent">{profile.outlet}</p>
@@ -245,7 +245,7 @@
                   rel="noopener noreferrer"
                 >
                   {project.title}
-                  <span class="text-brand-text-muted">↗</span>
+                  <span class="text-brand-text-muted" aria-hidden="true">↗</span>
                 </a>
               </h3>
               <span class="label-mono text-brand-text-muted">{project.year}</span>

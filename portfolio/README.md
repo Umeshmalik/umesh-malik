@@ -1,32 +1,78 @@
 # umesh-malik.com — SvelteKit Portfolio
 
-Personal portfolio and blog for [umesh-malik.com](https://umesh-malik.com), built with SvelteKit 2, Svelte 5, and TailwindCSS 4. Deployed to Cloudflare Pages.
+Personal portfolio and blog for [umesh-malik.com](https://umesh-malik.com), built with SvelteKit 2, Svelte 5, and TailwindCSS 4. Deployed to Cloudflare Pages with a Cloudflare Worker + D1 (SQLite) for analytics.
+
+## Architecture
+
+```
+┌───────────────────────────────────────────────────┐
+│               Cloudflare Pages                    │
+│                                                   │
+│  ┌───────────────┐     ┌───────────────────────┐  │
+│  │ Static Files  │     │  Cloudflare Worker    │  │
+│  │ (build/)      │◄────│  (worker/index.ts)    │  │
+│  │               │     │                       │  │
+│  │ SvelteKit SSG │     │  /api/analytics/event │  │
+│  │ pages         │     │  /api/analytics/live  │  │
+│  │               │     │  /api/analytics/reads │  │
+│  │               │     │  /api/analytics/stats │  │
+│  └───────────────┘     └─────────┬─────────────┘  │
+│                                  │                │
+│                       ┌──────────▼───────────┐    │
+│                       │  Cloudflare D1       │    │
+│                       │  (SQLite database)   │    │
+│                       └──────────────────────┘    │
+└───────────────────────────────────────────────────┘
+```
+
+- **Frontend**: 100% Static Site Generation (SSG) via `@sveltejs/adapter-static`. All pages are prerendered at build time into `build/`.
+- **Worker**: A Cloudflare Worker (`worker/index.ts`) is the entry point for all requests. It serves static files via `env.ASSETS.fetch()` and intercepts `/api/analytics/*` routes.
+- **Database**: Cloudflare D1 (SQLite) stores all analytics data. Schema is in `worker/schema.sql`.
 
 ## Tech Stack
 
-- **Framework:** SvelteKit 2 + Svelte 5 (runes)
-- **Styling:** TailwindCSS 4 with `@tailwindcss/typography`
+- **Framework:** SvelteKit 2 + Svelte 5 (runes: `$state`, `$derived`, `$props`, `$effect`)
+- **Styling:** TailwindCSS 4 with `@tailwindcss/vite` and `@tailwindcss/typography`
 - **Blog:** MDsveX (Markdown in Svelte) with Shiki syntax highlighting
 - **SEO:** JSON-LD structured data, dynamic sitemaps, RSS/JSON feeds, `llms.txt`
-- **Deployment:** Cloudflare Pages via `@sveltejs/adapter-cloudflare`
+- **Fonts:** Self-hosted Inter Variable + JetBrains Mono Variable
+- **Deployment:** Cloudflare Pages + Workers
+- **Database:** Cloudflare D1 (SQLite)
 - **Language:** TypeScript (strict mode)
+
+## Prerequisites
+
+- Node.js >= 20
+- pnpm >= 9
+- [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/) (`npx wrangler` or `pnpm add -g wrangler`)
+- A Cloudflare account (for production deployment)
+
+## Getting Started
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start SvelteKit dev server (pages only, no analytics API)
+pnpm dev
+```
 
 ## Pages
 
 | Route | Description |
 |---|---|
-| `/` | Home — hero, expertise, projects, skills, timeline |
+| `/` | Home — hero, expertise, stats, projects, skills, timeline |
 | `/about` | About page |
 | `/projects` | Project showcase with live demo links |
-| `/resume` | Resume / CV |
+| `/resume` | Resume / CV with print button |
 | `/blog` | Blog with category and tag filtering |
 | `/blog/[slug]` | Individual blog posts |
-| `/contact` | Contact form |
-| `/faq` | Frequently asked questions |
+| `/contact` | Contact channels |
+| `/faq` | FAQ accordion |
 | `/uses` | Tools and equipment |
-| `/resources` | Developer resources |
-| `/ai-summary` | AI-optimized summary |
-| `/press` | Press mentions |
+| `/resources` | Developer resources with code snippets |
+| `/press` | Writing & appearances |
+| `/analytics` | Private analytics dashboard (bearer token protected) |
 
 ### Generated Feeds & SEO
 
@@ -36,209 +82,293 @@ Personal portfolio and blog for [umesh-malik.com](https://umesh-malik.com), buil
 
 The [Retro Portfolio (umesh.OS)](https://umesh-malik.com/projects/retro-portfolio) is a Windows 95-themed interactive desktop built with Astro 5 + React 19 + Three.js. It lives in the sibling `frontend/` directory and is integrated as a static microfrontend at `/projects/retro-portfolio`.
 
-The `build:full` command handles the entire pipeline — building the Astro sub-app, copying its output into `static/projects/retro-portfolio/`, and then building the SvelteKit app.
-
-To add another microfrontend in the future, add an entry to the `MICROFRONTENDS` array in `scripts/build-microfrontends.sh`.
-
-## Prerequisites
-
-- **Node.js** >= 20
-- **pnpm** >= 9
-
-## Getting Started
-
-```sh
-# Install dependencies (run from this directory)
-pnpm install
-
-# Also install the retro portfolio sub-app dependencies
-cd ../frontend && pnpm install && cd ../portfolio
+```bash
+# Build everything (Astro sub-app + SvelteKit) in one command
+pnpm build:full
 ```
 
-## Development
+---
 
-```sh
-# Start dev server (SvelteKit only)
+## Analytics System
+
+The site includes a custom privacy-friendly analytics system. No cookies, no third-party scripts — just session-based tracking via `navigator.sendBeacon`.
+
+### How It Works
+
+```
+Browser  →  Analytics.svelte (beacon)    →  Worker POST /api/analytics/event  →  D1
+Browser  →  LiveIndicator.svelte (poll)  →  Worker GET  /api/analytics/live   →  D1
+Browser  →  BlogStats.svelte             →  Worker GET  /api/analytics/reads  →  D1
+Browser  →  BlogCard (listing)           →  Worker POST /api/analytics/reads  →  D1
+Browser  →  /analytics dashboard         →  Worker GET  /api/analytics/stats  →  D1
+```
+
+1. **Client-side** (`Analytics.svelte`): On each page visit, sends a `pageview` event via `navigator.sendBeacon`. Revisiting the same page in the same session sends `heartbeat` instead (avoids inflating counts). A heartbeat fires every 30s to keep the live session alive.
+
+2. **Worker** (`worker/index.ts`): Inserts events into D1. For blog posts, deduplicates reads per session per day — refreshing a blog post 10 times counts as 1 read.
+
+3. **Live indicator** (`LiveIndicator.svelte`): Polls `/api/analytics/live` every 10s. Shows "X online" with a scramble text animation.
+
+4. **Cron cleanup**: Every 6 hours, the worker deletes stale live sessions (>2 min old) and old dedup rows (>48h old).
+
+### API Endpoints
+
+| Endpoint | Method | Auth | Description |
+|----------|--------|------|-------------|
+| `/api/analytics/event` | POST | Public | Record a pageview or heartbeat |
+| `/api/analytics/live` | GET | Public | Global live visitor count (last 60s) |
+| `/api/analytics/live?path=/blog/foo` | GET | Public | Live readers on a specific page |
+| `/api/analytics/reads?path=/blog/foo` | GET | Public | All-time read count for a blog post |
+| `/api/analytics/reads` | POST | Public | Batch read counts: `{ "paths": [...] }` |
+| `/api/analytics/stats?days=7` | GET | Bearer | Dashboard stats (daily views, sources, top pages) |
+
+### D1 Database Schema
+
+4 tables (defined in `worker/schema.sql`):
+
+| Table | Purpose |
+|-------|---------|
+| `events` | Every pageview/heartbeat with date, path, source, session_id |
+| `reads` | Aggregated blog post read counts (path → count) |
+| `reader_dedup` | Prevents counting same session twice per blog post per day |
+| `live_sessions` | Tracks active sessions for live visitor count |
+
+### Analytics Key Files
+
+| File | Role |
+|------|------|
+| `worker/index.ts` | Cloudflare Worker — all API endpoints + cron cleanup |
+| `worker/schema.sql` | D1 database schema (4 tables + indexes) |
+| `wrangler.toml` | Worker entry point, D1 binding, cron trigger |
+| `src/lib/components/layout/Analytics.svelte` | Client-side beacon (pageview + 30s heartbeat) |
+| `src/lib/components/layout/LiveIndicator.svelte` | Floating "X online" pill |
+| `src/lib/components/blog/BlogStats.svelte` | Per-post "X reading now / Y reads" |
+| `src/lib/components/blog/BlogCard.svelte` | Blog card with optional read count |
+| `src/routes/analytics/+page.svelte` | Private analytics dashboard UI |
+| `vite.config.ts` | Dev proxy (`/api/analytics/*` → `localhost:8787`) |
+
+---
+
+## Local Development
+
+### Option 1: SvelteKit only (no analytics)
+
+```bash
 pnpm dev
 ```
 
-The retro portfolio sub-app at `/projects/retro-portfolio` won't be available in dev mode since it's served as static files. To test the full setup locally, use the full build + preview flow below.
+Runs at `http://localhost:5173`. All pages work. Analytics API calls fail silently — `Analytics.svelte` skips in dev mode (`if (dev) return`), LiveIndicator stays hidden, BlogStats stays hidden. This is fine for working on pages.
 
-## Build & Preview
+### Option 2: Full stack with Worker + D1 (analytics working)
 
-```sh
-# Build everything (Astro sub-app + SvelteKit) in one command
+Run two terminals side by side:
+
+```bash
+# Terminal 1 — Build the static site first
+pnpm build
+
+# Terminal 1 — Create local D1 database and apply schema (first time only)
+npx wrangler d1 execute analytics --local --file=worker/schema.sql
+
+# Terminal 1 — Start the worker (serves static files + API on port 8787)
+npx wrangler dev
+```
+
+```bash
+# Terminal 2 — SvelteKit dev server with HMR (port 5173)
+# Vite proxies /api/analytics/* to localhost:8787
+pnpm dev
+```
+
+This gives you:
+
+- Hot module reload from SvelteKit on `:5173`
+- Working analytics API from the Worker on `:8787`
+- Local D1 SQLite database (stored in `.wrangler/state/`)
+
+To test the protected stats endpoint:
+
+```bash
+# Set a local secret (first time only)
+echo "test-secret" | npx wrangler secret put ANALYTICS_SECRET --local
+
+# Query stats
+curl http://localhost:8787/api/analytics/stats?days=7 \
+  -H "Authorization: Bearer test-secret"
+```
+
+**Note**: After changing SvelteKit code, re-run `pnpm build` for the worker to serve updated pages. The worker reads from `build/`, not from Vite's dev server. Use the Vite dev server (Terminal 2) for normal development with HMR.
+
+---
+
+## Production Setup
+
+### Why APIs Return 500
+
+If all `/api/analytics/*` endpoints return 500 in production, the most likely causes are:
+
+1. **D1 database does not exist** — the `database_id` in `wrangler.toml` doesn't match an actual D1 database in your Cloudflare account
+2. **Schema not applied** — the D1 database exists but the tables haven't been created
+3. **D1 binding not configured in Cloudflare Pages** — if deploying via Git integration, the D1 binding must be added in the Cloudflare dashboard
+
+### Fix: Create D1 Database and Apply Schema
+
+#### Step 1: Create the D1 database
+
+```bash
+npx wrangler d1 create analytics
+```
+
+This outputs something like:
+
+```
+Created D1 database 'analytics'
+database_id = "abc123-..."
+```
+
+Update `wrangler.toml` with the new database ID:
+
+```toml
+[[d1_databases]]
+binding = "DB"
+database_name = "analytics"
+database_id = "<YOUR_NEW_DATABASE_ID>"
+```
+
+#### Step 2: Apply the schema
+
+```bash
+npx wrangler d1 execute analytics --remote --file=worker/schema.sql
+```
+
+This creates the 4 tables and indexes in the production D1 database.
+
+#### Step 3: Verify tables exist
+
+```bash
+npx wrangler d1 execute analytics --remote \
+  --command="SELECT name FROM sqlite_master WHERE type='table'"
+```
+
+You should see: `events`, `reads`, `reader_dedup`, `live_sessions`.
+
+#### Step 4: Set the analytics secret
+
+```bash
+npx wrangler secret put ANALYTICS_SECRET
+# Enter a strong random string when prompted
+```
+
+This protects the `/api/analytics/stats` endpoint. Other endpoints don't require it.
+
+#### Step 5: Deploy
+
+```bash
+pnpm build && npx wrangler deploy
+```
+
+### If Using Cloudflare Pages Git Integration
+
+If your site deploys automatically via Git push (Cloudflare Pages connected to GitHub), you need to configure the D1 binding in the Cloudflare dashboard:
+
+1. Go to **Cloudflare Dashboard** → **Workers & Pages** → your project → **Settings** → **Functions**
+2. Under **D1 database bindings**, add:
+   - Variable name: `DB`
+   - D1 database: select your `analytics` database
+3. Under **Environment variables**, add:
+   - `ANALYTICS_SECRET` = your secret value
+4. Redeploy (push a commit or trigger a manual deploy)
+
+### Verify Production D1
+
+```bash
+# List all D1 databases
+npx wrangler d1 list
+
+# Check if tables exist
+npx wrangler d1 execute analytics --remote \
+  --command="SELECT name FROM sqlite_master WHERE type='table'"
+
+# Check event count
+npx wrangler d1 execute analytics --remote \
+  --command="SELECT COUNT(*) as total FROM events"
+
+# Check live sessions
+npx wrangler d1 execute analytics --remote \
+  --command="SELECT COUNT(*) as active FROM live_sessions WHERE last_seen > datetime('now', '-60 seconds')"
+```
+
+---
+
+## Build & Deploy
+
+```bash
+# Type check
+pnpm check
+
+# Build SvelteKit only
+pnpm build
+
+# Build everything including microfrontends
 pnpm build:full
 
-# Preview the production build locally
+# Preview locally
 pnpm preview
-```
 
-This will:
-
-1. Build the Astro retro portfolio with `base: /projects/retro-portfolio`
-2. Copy the output to `static/projects/retro-portfolio/`
-3. Remove conflicting files (robots.txt, sitemaps, `_headers`, `_redirects`)
-4. Build the SvelteKit app with the Cloudflare adapter
-
-## Deploy to Cloudflare Pages
-
-```sh
-pnpm build:full
-```
-
-That single command produces the complete deployment artifact. Connect your GitHub repo to Cloudflare Pages with:
-
-| Setting | Value |
-|---|---|
-| Build command | `cd portfolio && pnpm build:full` |
-| Build output directory | `portfolio/.svelte-kit/cloudflare` |
-| Root directory | `/` (repo root) |
-| Node.js version | `20` |
-
-Cloudflare Pages will automatically deploy on every push. The `_headers` and `_redirects` files at the project root are picked up by the Cloudflare adapter and included in the output.
-
-### Manual deploy with Wrangler
-
-```sh
-# One command: build + deploy
-pnpm build:full && npx wrangler pages deploy .svelte-kit/cloudflare --project-name=umesh-malik
-```
-
-## Project Structure
-
-```
-portfolio/
-├── src/
-│   ├── routes/              # Pages and API endpoints
-│   ├── lib/
-│   │   ├── components/      # Svelte components (layout, sections, ui, blog)
-│   │   ├── config/          # Site configuration (site.ts)
-│   │   ├── data/            # Structured data (projects, skills, resume)
-│   │   ├── posts/           # Blog posts (Markdown)
-│   │   ├── utils/           # Utilities (blog, schema, XML)
-│   │   └── types/           # TypeScript definitions
-│   ├── hooks.server.ts      # Security headers middleware
-│   └── app.css              # Global styles
-├── static/                  # Static assets (fonts, images, logos)
-├── scripts/
-│   └── build-microfrontends.sh  # Microfrontend build pipeline
-├── _headers                 # Cloudflare Pages cache/security headers
-├── _redirects               # Cloudflare Pages redirect rules
-├── svelte.config.js         # SvelteKit + mdsvex + Cloudflare adapter
-├── vite.config.ts           # Vite + TailwindCSS
-└── package.json
+# Deploy to Cloudflare (worker + static files)
+pnpm build && npx wrangler deploy
 ```
 
 ## Scripts
 
 | Command | Description |
 |---|---|
-| `pnpm dev` | Start development server |
-| `pnpm build` | Build SvelteKit only |
-| `pnpm build:full` | Build microfrontends + SvelteKit (production) |
-| `pnpm preview` | Preview production build locally |
-| `pnpm check` | Run TypeScript and Svelte type checks |
+| `pnpm dev` | Start SvelteKit dev server (no analytics) |
+| `pnpm build` | Build SvelteKit static site + inline CSS |
+| `pnpm build:full` | Build microfrontends + SvelteKit |
+| `pnpm preview` | Preview the built site |
+| `pnpm check` | TypeScript + Svelte type checking |
+| `npx wrangler dev` | Run worker locally with local D1 |
+| `npx wrangler deploy` | Deploy worker + static site to production |
 
-## Analytics
-
-The site includes a built-in analytics system powered by a Cloudflare Worker + KV Store. It tracks:
-
-- **Live user count** — visible to all visitors via a floating pill at the bottom-right
-- **Traffic sources** — direct, google, linkedin, twitter, github, referral, etc.
-- **Daily page views** — aggregated per day
-- **Blog-specific metrics** — live readers per post + all-time read counts shown on blog cards and post headers
-- **Private dashboard** at `/analytics` — password-protected, shows charts and tables
-
-### Architecture
+## Project Structure
 
 ```
-Browser  →  Analytics.svelte (beacon)    →  Worker POST /api/analytics/event  →  KV
-Browser  →  LiveIndicator.svelte         →  Worker GET  /api/analytics/live   →  KV
-Browser  →  BlogStats.svelte             →  Worker GET  /api/analytics/live?path= & /reads  →  KV
-Browser  →  BlogCard (listing)           →  Worker POST /api/analytics/reads (batch)  →  KV
-Browser  →  /analytics dashboard         →  Worker GET  /api/analytics/stats  →  KV
+portfolio/
+├── src/
+│   ├── app.css                # Global styles + theme tokens (dark/light)
+│   ├── app.html               # HTML shell
+│   ├── routes/                # SvelteKit pages
+│   │   ├── +page.svelte       # Homepage
+│   │   ├── +layout.svelte     # Root layout (Header, Footer, Analytics, LiveIndicator)
+│   │   ├── about/
+│   │   ├── analytics/         # Private dashboard
+│   │   ├── blog/
+│   │   ├── contact/
+│   │   ├── faq/
+│   │   ├── press/
+│   │   ├── projects/
+│   │   ├── resources/
+│   │   ├── resume/
+│   │   └── uses/
+│   └── lib/
+│       ├── components/
+│       │   ├── layout/        # Header, Footer, SEO, Analytics, LiveIndicator
+│       │   ├── sections/      # Homepage sections (Hero, Stats, Projects, etc.)
+│       │   ├── blog/          # BlogCard, BlogStats, ScrollToTop, etc.
+│       │   └── ui/            # Button, Badge, Tag, CopyButton, ThemeToggle
+│       ├── data/              # Static data (resume, skills, contacts, projects)
+│       ├── posts/             # Blog posts (.md files)
+│       ├── config/            # Site config (site.ts)
+│       ├── types/             # TypeScript types
+│       └── utils/             # Utilities (magnetic, tilt, transitions, schema)
+├── worker/
+│   ├── index.ts               # Cloudflare Worker (serves static + analytics API)
+│   └── schema.sql             # D1 database schema
+├── static/                    # Static assets (images, fonts, manifest)
+├── scripts/                   # Build scripts (microfrontends, SEO, syndication)
+├── wrangler.toml              # Cloudflare Worker + D1 config + cron trigger
+├── svelte.config.js           # SvelteKit + MDsveX config
+├── vite.config.ts             # Vite + TailwindCSS + analytics proxy
+└── package.json
 ```
-
-### API Endpoints
-
-| Endpoint | Method | Auth | Description |
-|----------|--------|------|-------------|
-| `/api/analytics/event` | POST | Public | Records a page view (path, source, sessionId) |
-| `/api/analytics/live` | GET | Public | Returns global live user count |
-| `/api/analytics/live?path=/blog/foo` | GET | Public | Returns live readers on a specific page |
-| `/api/analytics/reads?path=/blog/foo` | GET | Public | Returns all-time read count for a blog post |
-| `/api/analytics/reads` | POST | Public | Batch read counts — body: `{ paths: ["/blog/a", "/blog/b"] }` |
-| `/api/analytics/stats?days=7` | GET | Bearer token | Aggregated dashboard stats (daily views, sources, top pages) |
-
-### Analytics Setup
-
-#### Step 1: Create the KV Namespace
-
-```bash
-npx wrangler kv namespace create ANALYTICS
-```
-
-This outputs a namespace ID. Paste it into `wrangler.toml`:
-
-```toml
-[[kv_namespaces]]
-binding = "ANALYTICS"
-id = "<paste-your-id-here>"
-```
-
-#### Step 2: Set the Dashboard Secret
-
-The `/analytics` dashboard is protected by a bearer token. Set it as a Cloudflare secret:
-
-```bash
-npx wrangler secret put ANALYTICS_SECRET
-# Enter your chosen password when prompted
-```
-
-When you visit `/analytics` in the browser, you'll be prompted to enter this password.
-
-#### Step 3: Local Development (Full Stack with Analytics)
-
-To test analytics locally, run **two terminals side by side**:
-
-```bash
-# Terminal 1 — Cloudflare Worker + KV (runs on port 8787)
-npx wrangler dev
-
-# Terminal 2 — SvelteKit dev server with hot reload (runs on port 5173)
-pnpm dev
-```
-
-Vite is configured to proxy `/api/analytics/*` requests to `localhost:8787` (see `vite.config.ts`), so you get:
-
-- Hot module reload from SvelteKit on `:5173`
-- Working analytics API from Wrangler on `:8787`
-
-> **Note:** If you only run `pnpm dev` without Wrangler, analytics API calls fail silently — the LiveIndicator stays hidden, BlogStats stays hidden, and the dashboard shows an error. The rest of the site works normally.
-
-#### Step 4: Deploy
-
-```bash
-# Build the static site
-pnpm build
-
-# Deploy Worker + static assets to Cloudflare
-npx wrangler deploy
-```
-
-In production, the Worker handles all requests — `/api/analytics/*` routes are processed directly, everything else falls through to static assets via `env.ASSETS.fetch(request)`.
-
-### Analytics Key Files
-
-| File | Role |
-|------|------|
-| `worker/index.ts` | Cloudflare Worker — all API endpoints |
-| `worker/tsconfig.json` | Worker-specific TypeScript config |
-| `src/lib/components/layout/Analytics.svelte` | Client-side beacon — sends page view events + 30s heartbeat |
-| `src/lib/components/layout/LiveIndicator.svelte` | Floating "X online" pill shown on all pages |
-| `src/lib/components/blog/BlogStats.svelte` | Per-post "X reading now / Y total reads" in blog headers |
-| `src/lib/components/blog/BlogCard.svelte` | Blog card with optional read count display |
-| `src/routes/analytics/+page.svelte` | Password-protected dashboard UI |
-| `wrangler.toml` | Worker entry point + KV namespace binding |
-| `vite.config.ts` | Dev proxy config (`/api/analytics/*` → `localhost:8787`) |

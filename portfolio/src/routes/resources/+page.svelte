@@ -88,7 +88,7 @@
         >
           <h3 class="mb-2 text-lg font-medium text-brand-text-primary">
             {resource.name}
-            <span class="text-brand-text-muted">↗</span>
+            <span class="text-brand-text-muted" aria-hidden="true">↗</span>
           </h3>
           <p class="body-medium mb-4 text-brand-text-secondary">
             {resource.description}
