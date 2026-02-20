@@ -10,12 +10,10 @@ on:
 
 jobs:
   seo-ping:
-    name: Detect changes & notify search engines
+    name: Submit all sitemap URLs to search engines
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - uses: actions/setup-node@v4
         with:
@@ -29,10 +27,19 @@ jobs:
         run: sleep 90
 
       - name: Submit to search engines (IndexNow + WebSub)
-        run: node portfolio/scripts/indexnow-submit.mjs
+        run: node portfolio/scripts/indexnow-submit.mjs --sitemap
 
       - name: Submit to Google Indexing API
         env:
           SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
         if: env.SERVICE_ACCOUNT != ''
-        run: node portfolio/scripts/google-indexing.mjs
+        run: node portfolio/scripts/google-indexing.mjs --sitemap
+
+      - name: Batch submit all pages via GSC Indexing API
+        env:
+          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+        if: env.SERVICE_ACCOUNT != ''
+        run: |
+          cd gsc-batch-indexer
+          npm install --no-save dotenv
+          node index.js

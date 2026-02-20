@@ -1,0 +1,29 @@
+{
+  "name": "gsc-batch-indexer-dual-domain",
+  "version": "1.0.0",
+  "description": "Batch submit URLs to Google Search Console for multiple domains",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "index": "node index.js"
+  },
+  "keywords": [
+    "google",
+    "search-console",
+    "indexing",
+    "seo",
+    "batch"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.6.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.54.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
