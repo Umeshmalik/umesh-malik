@@ -39,6 +39,21 @@
       : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   );
 
+  const defaultOgImage = `${siteConfig.url}${siteConfig.ogImage}`;
+
+  // Social platforms (LinkedIn, Facebook, X) don't support SVG — fall back to default JPEG
+  const ogImage = $derived(
+    /\.(jpe?g|png|webp)$/i.test(image) ? image : defaultOgImage,
+  );
+
+  function getImageMimeType(url: string): string {
+    if (url.endsWith(".png")) return "image/png";
+    if (url.endsWith(".webp")) return "image/webp";
+    return "image/jpeg";
+  }
+
+  const ogImageType = $derived(getImageMimeType(ogImage));
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [personSchema, websiteSchema, organizationSchema],
@@ -95,7 +110,10 @@
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={image} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:url" content={ogImage} />
+  <meta property="og:image:secure_url" content={ogImage} />
+  <meta property="og:image:type" content={ogImageType} />
   <meta property="og:image:alt" content={imageAlt} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -117,7 +135,7 @@
   <meta name="twitter:url" content={canonicalUrl} />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={image} />
+  <meta name="twitter:image" content={ogImage} />
   <meta name="twitter:image:alt" content={imageAlt} />
   <meta name="twitter:creator" content="@lumeshmalik" />
   <meta name="twitter:site" content="@lumeshmalik" />
