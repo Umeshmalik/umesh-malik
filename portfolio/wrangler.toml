@@ -1,6 +1,10 @@
 name = "umesh-malik"
 compatibility_date = "2024-01-01"
+main = "worker/index.ts"
 
-# Static-only deployment — no worker script, just serves build/ as static assets
 [assets]
 directory = "./build"
+
+[[kv_namespaces]]
+binding = "ANALYTICS"
+id = "5dee8f82729143c79f4502580de7eb0c"

@@ -22,6 +22,7 @@
 		"sync:dry": "node scripts/blog-sync.mjs --dry-run"
 	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20260227.0",
 		"@sveltejs/adapter-static": "^3.0.0",
 		"@sveltejs/kit": "^2.50.2",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",

@@ -80,6 +80,7 @@ const config = {
 			strict: false
 		}),
 		prerender: {
+			entries: ['*', '/analytics'],
 			handleHttpError({ path, message }) {
 				// Static microfrontend files exist in static/ but aren't SvelteKit routes
 				if (path.startsWith('/projects/retro-portfolio')) return;
