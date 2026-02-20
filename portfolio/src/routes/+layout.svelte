@@ -3,6 +3,7 @@
   import Header from "$lib/components/layout/Header.svelte";
   import Footer from "$lib/components/layout/Footer.svelte";
   import Analytics from "$lib/components/layout/Analytics.svelte";
+  import LiveIndicator from "$lib/components/layout/LiveIndicator.svelte";
   import type { Snippet } from "svelte";
 
   interface Props {
@@ -26,3 +27,4 @@
 </main>
 <Footer />
 <Analytics />
+<LiveIndicator />

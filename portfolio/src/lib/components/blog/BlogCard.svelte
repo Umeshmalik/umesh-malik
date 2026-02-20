@@ -4,9 +4,10 @@
   interface Props {
     post: BlogPost;
     featured?: boolean;
+    readCount?: number;
   }
 
-  let { post, featured = false }: Props = $props();
+  let { post, featured = false, readCount }: Props = $props();
 </script>
 
 <article class="group">
@@ -53,7 +54,14 @@
       </p>
 
       <div class="flex items-center justify-between pt-2">
-        <span class="label-mono text-brand-text-muted">{post.readingTime}</span>
+        <div class="flex items-center gap-3">
+          <span class="label-mono text-brand-text-muted">{post.readingTime}</span>
+          {#if readCount !== undefined && readCount > 0}
+            <span class="label-mono text-brand-text-muted">
+              &bull; {readCount.toLocaleString()} reads
+            </span>
+          {/if}
+        </div>
         <span class="label-mono text-brand-accent group-hover:underline">
           Read more &rarr;
         </span>

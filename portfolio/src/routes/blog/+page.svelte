@@ -5,8 +5,12 @@
   import Tag from "$lib/components/ui/Tag.svelte";
   import { slugify } from "$lib/utils/blog";
   import { siteConfig } from "$lib/config/site";
+  import { onMount } from "svelte";
+  import { browser } from "$app/environment";
 
   let { data }: { data: PageData } = $props();
+
+  let readCounts = $state<Record<string, number>>({});
 
   const blogListSchema = {
     "@context": "https://schema.org",
@@ -21,6 +25,24 @@
       url: siteConfig.url,
     },
   };
+
+  onMount(() => {
+    if (!browser) return;
+    const allPosts = [...data.featuredPosts, ...data.posts];
+    const paths = allPosts.map((p) => `/blog/${p.slug}`);
+    if (paths.length === 0) return;
+
+    fetch("/api/analytics/reads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ paths }),
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (json?.counts) readCounts = json.counts;
+      })
+      .catch(() => {});
+  });
 </script>
 
 <SEO
@@ -63,7 +85,7 @@
       <h2 class="mb-10 text-2xl font-medium text-white">Featured Articles</h2>
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {#each data.featuredPosts as post}
-          <BlogCard {post} featured={true} />
+          <BlogCard {post} featured={true} readCount={readCounts[`/blog/${post.slug}`]} />
         {/each}
       </div>
     </div>
@@ -75,7 +97,7 @@
       <h2 class="mb-10 text-2xl font-medium text-white">All Articles</h2>
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {#each data.posts as post}
-          <BlogCard {post} />
+          <BlogCard {post} readCount={readCounts[`/blog/${post.slug}`]} />
         {/each}
       </div>
     </div>

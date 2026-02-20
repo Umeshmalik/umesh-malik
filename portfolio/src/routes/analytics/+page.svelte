@@ -30,11 +30,68 @@
   let secret = $state("");
   let authenticated = $state(false);
   let loading = $state(false);
+  let initializing = $state(false);
   let error = $state("");
 
   let liveCount = $state(0);
   let stats = $state<StatsData | null>(null);
   let days = $state(7);
+
+  // --- Text scramble effect ---
+  const GLYPHS =
+    "!@#$%^&*()_+-={}[]|;:<>?/0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const SCRAMBLE_DURATION = 800;
+  const SCRAMBLE_FPS = 30;
+
+  let scrambledLines = $state<string[]>([]);
+  let scrambleRafId: number | null = null;
+
+  function randomChar(): string {
+    return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+  }
+
+  function startScramble(targets: string[]): void {
+    const start = performance.now();
+    const frameInterval = 1000 / SCRAMBLE_FPS;
+    let lastFrame = 0;
+
+    scrambledLines = targets.map((t) =>
+      Array.from({ length: t.length }, randomChar).join(""),
+    );
+
+    function tick(now: number): void {
+      if (now - lastFrame < frameInterval) {
+        scrambleRafId = requestAnimationFrame(tick);
+        return;
+      }
+      lastFrame = now;
+
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / SCRAMBLE_DURATION, 1);
+
+      scrambledLines = targets.map((target) => {
+        const resolved = Math.floor(progress * target.length);
+        return (
+          target.slice(0, resolved) +
+          Array.from({ length: target.length - resolved }, randomChar).join("")
+        );
+      });
+
+      if (progress < 1) {
+        scrambleRafId = requestAnimationFrame(tick);
+      }
+    }
+
+    scrambleRafId = requestAnimationFrame(tick);
+  }
+
+  function stopScramble(): void {
+    if (scrambleRafId !== null) {
+      cancelAnimationFrame(scrambleRafId);
+      scrambleRafId = null;
+    }
+    scrambledLines = [];
+  }
 
   function getHeaders(): HeadersInit {
     return { Authorization: `Bearer ${secret}` };
@@ -77,7 +134,15 @@
     if (!secret.trim()) return;
     sessionStorage.setItem("analytics_secret", secret);
     authenticated = true;
+    initializing = true;
+    startScramble([
+      "Authenticating...",
+      "Decrypting analytics data...",
+      "Loading dashboard...",
+    ]);
     await Promise.all([fetchStats(), fetchLive()]);
+    stopScramble();
+    initializing = false;
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -103,8 +168,16 @@
     if (saved) {
       secret = saved;
       authenticated = true;
-      fetchStats();
-      fetchLive();
+      initializing = true;
+      startScramble([
+        "Verifying session...",
+        "Decrypting analytics data...",
+        "Loading dashboard...",
+      ]);
+      Promise.all([fetchStats(), fetchLive()]).then(() => {
+        stopScramble();
+        initializing = false;
+      });
     }
   });
 
@@ -137,9 +210,7 @@
 <section class="mx-auto max-w-[1160px] px-6 pt-32 pb-20 lg:px-12">
   <!-- Breadcrumb Navigation -->
   <nav aria-label="Breadcrumb" class="mb-8">
-    <ol
-      class="flex flex-wrap items-center gap-1 text-sm text-brand-text-muted"
-    >
+    <ol class="flex flex-wrap items-center gap-1 text-sm text-brand-text-muted">
       <li>
         <a href="/" class="transition-colors hover:text-brand-accent">Home</a>
       </li>
@@ -153,7 +224,9 @@
   {#if !authenticated}
     <!-- Login form -->
     <div class="mx-auto max-w-md">
-      <div class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-8">
+      <div
+        class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-8"
+      >
         <h2 class="label-mono mb-6 text-brand-text-muted">Enter Secret</h2>
         <input
           type="password"
@@ -179,7 +252,9 @@
     <div class="space-y-8">
       <!-- Top bar: Live count + day selector -->
       <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="corner-brackets flex items-center gap-3 rounded-lg border border-brand-card-border bg-brand-card px-6 py-4">
+        <div
+          class="corner-brackets flex items-center gap-3 rounded-lg border border-brand-card-border bg-brand-card px-6 py-4"
+        >
           <span
             class="inline-block h-2.5 w-2.5 rounded-full bg-green-500"
             aria-hidden="true"
@@ -208,21 +283,39 @@
         </div>
       </div>
 
-      {#if loading && !stats}
+      {#if initializing}
+        <!-- Text scramble loading animation -->
+        <div class="flex flex-col items-center justify-center gap-4 py-20">
+          {#each scrambledLines as line}
+            <span class="font-mono text-sm tracking-widest text-brand-accent"
+              >{line}</span
+            >
+          {/each}
+          <div class="mt-4 h-px w-48 overflow-hidden bg-brand-border">
+            <div class="h-full w-1/3 animate-pulse bg-brand-accent"></div>
+          </div>
+        </div>
+      {:else if loading && !stats}
         <div class="flex justify-center py-20">
           <span class="label-mono text-brand-text-muted">Loading...</span>
         </div>
       {:else if stats}
         <!-- Total views -->
-        <div class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-6">
-          <span class="label-mono text-brand-text-muted">Total Views ({days}d)</span>
+        <div
+          class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-6"
+        >
+          <span class="label-mono text-brand-text-muted"
+            >Total Views ({days}d)</span
+          >
           <p class="mt-2 font-mono text-4xl font-semibold text-white">
             {stats.totalViews.toLocaleString()}
           </p>
         </div>
 
         <!-- Daily views chart -->
-        <div class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-6">
+        <div
+          class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-6"
+        >
           <h2 class="label-mono mb-6 text-brand-text-muted">Daily Views</h2>
           <div class="flex items-end gap-1" style="height: 200px;">
             {#each stats.dailyViews as day}
@@ -254,7 +347,9 @@
         <!-- Traffic sources & Top pages side by side -->
         <div class="grid gap-8 md:grid-cols-2">
           <!-- Traffic sources -->
-          <div class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-6">
+          <div
+            class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-6"
+          >
             <h2 class="label-mono mb-6 text-brand-text-muted">
               Traffic Sources
             </h2>
@@ -293,7 +388,9 @@
           </div>
 
           <!-- Top pages -->
-          <div class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-6">
+          <div
+            class="corner-brackets rounded-lg border border-brand-card-border bg-brand-card p-6"
+          >
             <h2 class="label-mono mb-6 text-brand-text-muted">Top Pages</h2>
             {#if stats.topPages.length === 0}
               <p class="body-medium text-brand-text-secondary">No data yet.</p>
@@ -301,7 +398,11 @@
               <div class="space-y-2">
                 {#each stats.topPages as pg, i}
                   <div
-                    class="flex items-center justify-between rounded px-3 py-2 font-mono text-sm {i % 2 === 0 ? 'bg-white/[0.02]' : ''}"
+                    class="flex items-center justify-between rounded px-3 py-2 font-mono text-sm {i %
+                      2 ===
+                    0
+                      ? 'bg-white/2'
+                      : ''}"
                   >
                     <span class="truncate text-white" title={pg.path}
                       >{pg.path}</span

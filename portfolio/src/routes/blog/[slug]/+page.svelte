@@ -6,6 +6,7 @@
   import PostNavigation from "$lib/components/blog/PostNavigation.svelte";
   import ExploreTags from "$lib/components/blog/ExploreTags.svelte";
   import ReadingProgress from "$lib/components/blog/ReadingProgress.svelte";
+  import BlogStats from "$lib/components/blog/BlogStats.svelte";
   import TableOfContents from "$lib/components/blog/TableOfContents.svelte";
   import ScrollToTop from "$lib/components/blog/ScrollToTop.svelte";
   import Tag from "$lib/components/ui/Tag.svelte";
@@ -127,6 +128,10 @@
       {#each data.post.tags as tag}
         <Tag href="/blog/tag/{slugify(tag)}">#{tag}</Tag>
       {/each}
+    </div>
+
+    <div class="mt-6">
+      <BlogStats path="/blog/{data.post.slug}" />
     </div>
   </header>
 

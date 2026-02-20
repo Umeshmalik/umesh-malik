@@ -37,6 +37,13 @@ function corsHeaders(): HeadersInit {
 	};
 }
 
+function jsonResponse(data: unknown, status = 200): Response {
+	return new Response(JSON.stringify(data), {
+		status,
+		headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+	});
+}
+
 async function incrementCounter(kv: KVNamespace, key: string): Promise<number> {
 	const raw = await kv.get(key);
 	const data: DailyCounter = raw ? JSON.parse(raw) : { count: 0 };
@@ -51,6 +58,7 @@ function isAuthorized(request: Request, env: Env): boolean {
 	return auth === `Bearer ${env.ANALYTICS_SECRET}`;
 }
 
+// --- POST /api/analytics/event ---
 async function handleEvent(request: Request, env: Env): Promise<Response> {
 	if (request.method !== 'POST') {
 		return new Response('Method Not Allowed', { status: 405, headers: corsHeaders() });
@@ -70,28 +78,97 @@ async function handleEvent(request: Request, env: Env): Promise<Response> {
 
 	const date = todayKey();
 
-	await Promise.all([
+	const writes: Promise<unknown>[] = [
 		incrementCounter(env.ANALYTICS, `pv:${date}:${path}`),
 		incrementCounter(env.ANALYTICS, `src:${date}:${source}`),
-		env.ANALYTICS.put(`live:${sessionId}`, '1', { expirationTtl: 60 }),
-	]);
+		// Store current path as the value so live count can be filtered per-page
+		env.ANALYTICS.put(`live:${sessionId}`, path, { expirationTtl: 60 }),
+	];
+
+	// Increment all-time read counter for blog posts
+	if (path.startsWith('/blog/') && path !== '/blog') {
+		writes.push(incrementCounter(env.ANALYTICS, `reads:${path}`));
+	}
+
+	await Promise.all(writes);
 
 	return new Response(null, { status: 204, headers: corsHeaders() });
 }
 
+// --- GET /api/analytics/live (PUBLIC) ---
+// ?path=/blog/some-post  → count only sessions on that path
+// no param               → count all live sessions
 async function handleLive(request: Request, env: Env): Promise<Response> {
-	if (!isAuthorized(request, env)) {
-		return new Response('Unauthorized', { status: 401, headers: corsHeaders() });
-	}
+	const url = new URL(request.url);
+	const filterPath = url.searchParams.get('path');
 
 	const list = await env.ANALYTICS.list({ prefix: 'live:' });
-	const count = list.keys.length;
 
-	return new Response(JSON.stringify({ count }), {
-		headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+	if (!filterPath) {
+		return jsonResponse({ count: list.keys.length });
+	}
+
+	// Read each session's current path and filter
+	let count = 0;
+	const reads = list.keys.map(async (key) => {
+		const val = await env.ANALYTICS.get(key.name);
+		if (val === filterPath) count++;
 	});
+	await Promise.all(reads);
+
+	return jsonResponse({ count });
 }
 
+// --- GET /api/analytics/reads?path=/blog/some-post (PUBLIC) ---
+// Returns all-time read count for a single path
+async function handleReads(request: Request, env: Env): Promise<Response> {
+	const url = new URL(request.url);
+	const path = url.searchParams.get('path');
+
+	if (!path) {
+		return new Response('Bad Request: path required', { status: 400, headers: corsHeaders() });
+	}
+
+	const raw = await env.ANALYTICS.get(`reads:${path}`);
+	const data: DailyCounter = raw ? JSON.parse(raw) : { count: 0 };
+
+	return jsonResponse({ path, count: data.count });
+}
+
+// --- POST /api/analytics/reads (PUBLIC) ---
+// Batch: accepts { paths: string[] }, returns { counts: Record<string, number> }
+async function handleReadsBatch(request: Request, env: Env): Promise<Response> {
+	if (request.method !== 'POST') {
+		return new Response('Method Not Allowed', { status: 405, headers: corsHeaders() });
+	}
+
+	let body: { paths: string[] };
+	try {
+		body = await request.json();
+	} catch {
+		return new Response('Bad Request', { status: 400, headers: corsHeaders() });
+	}
+
+	if (!Array.isArray(body.paths) || body.paths.length === 0) {
+		return new Response('Bad Request: paths array required', { status: 400, headers: corsHeaders() });
+	}
+
+	// Cap at 50 to prevent abuse
+	const paths = body.paths.slice(0, 50);
+	const counts: Record<string, number> = {};
+
+	await Promise.all(
+		paths.map(async (p) => {
+			const raw = await env.ANALYTICS.get(`reads:${p}`);
+			const data: DailyCounter = raw ? JSON.parse(raw) : { count: 0 };
+			counts[p] = data.count;
+		})
+	);
+
+	return jsonResponse({ counts });
+}
+
+// --- GET /api/analytics/stats (AUTH REQUIRED) ---
 async function handleStats(request: Request, env: Env): Promise<Response> {
 	if (!isAuthorized(request, env)) {
 		return new Response('Unauthorized', { status: 401, headers: corsHeaders() });
@@ -107,7 +184,6 @@ async function handleStats(request: Request, env: Env): Promise<Response> {
 	let totalViews = 0;
 
 	for (const date of dates) {
-		// Fetch page views for this date
 		const pvList = await env.ANALYTICS.list({ prefix: `pv:${date}:` });
 		let dayTotal = 0;
 
@@ -116,7 +192,6 @@ async function handleStats(request: Request, env: Env): Promise<Response> {
 			if (raw) {
 				const data: DailyCounter = JSON.parse(raw);
 				dayTotal += data.count;
-				// Extract page path from key: "pv:YYYY-MM-DD:/path"
 				const path = key.name.slice(`pv:${date}:`.length);
 				pageMap[path] = (pageMap[path] || 0) + data.count;
 			}
@@ -125,7 +200,6 @@ async function handleStats(request: Request, env: Env): Promise<Response> {
 		dailyViews.push({ date, views: dayTotal });
 		totalViews += dayTotal;
 
-		// Fetch sources for this date
 		const srcList = await env.ANALYTICS.list({ prefix: `src:${date}:` });
 		for (const key of srcList.keys) {
 			const raw = await env.ANALYTICS.get(key.name);
@@ -137,26 +211,20 @@ async function handleStats(request: Request, env: Env): Promise<Response> {
 		}
 	}
 
-	// Sort daily views chronologically (oldest first)
 	dailyViews.reverse();
 
-	// Sort top pages by views descending
 	const topPages = Object.entries(pageMap)
 		.map(([path, views]) => ({ path, views }))
 		.sort((a, b) => b.views - a.views)
 		.slice(0, 20);
 
-	return new Response(
-		JSON.stringify({ dailyViews, sources: sourceMap, topPages, totalViews }),
-		{ headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
-	);
+	return jsonResponse({ dailyViews, sources: sourceMap, topPages, totalViews });
 }
 
 export default {
 	async fetch(request: Request, env: Env): Promise<Response> {
 		const url = new URL(request.url);
 
-		// Handle CORS preflight
 		if (request.method === 'OPTIONS') {
 			return new Response(null, { status: 204, headers: corsHeaders() });
 		}
@@ -167,6 +235,10 @@ export default {
 		}
 		if (url.pathname === '/api/analytics/live') {
 			return handleLive(request, env);
+		}
+		if (url.pathname === '/api/analytics/reads') {
+			if (request.method === 'POST') return handleReadsBatch(request, env);
+			return handleReads(request, env);
 		}
 		if (url.pathname === '/api/analytics/stats') {
 			return handleStats(request, env);
