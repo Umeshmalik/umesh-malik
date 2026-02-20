@@ -27,11 +27,11 @@
 				<a href="/" class="transition-colors hover:text-brand-accent">Home</a>
 			</li>
 			<li class="mx-1">/</li>
-			<li class="text-white" aria-current="page">Uses</li>
+			<li class="text-brand-text-primary" aria-current="page">Uses</li>
 		</ol>
 	</nav>
 
-	<h1 class="section-title mb-4 text-white">My Setup & Tools</h1>
+	<h1 class="section-title mb-4 text-brand-text-primary">My Setup & Tools</h1>
 	<p class="body-large mb-16 text-brand-text-secondary">
 		The hardware, software, and workflows I rely on every day. Updated periodically as things
 		change.
@@ -41,7 +41,7 @@
 		{#each usesCategories as category}
 			<div>
 				<h2
-					class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-white"
+					class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-brand-text-primary"
 				>
 					{category.name}
 				</h2>
@@ -50,7 +50,7 @@
 						<div
 							class="corner-brackets border border-brand-card-border bg-brand-card p-6"
 						>
-							<h3 class="mb-2 text-lg font-medium text-white">
+							<h3 class="mb-2 text-lg font-medium text-brand-text-primary">
 								{#if item.url}
 									<a
 										href={item.url}

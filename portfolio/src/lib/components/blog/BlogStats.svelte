@@ -129,7 +129,7 @@
         aria-hidden="true"
       ></span>
       <span class="font-mono text-sm">
-        <span class="text-white">{readingDisplay}</span> reading now
+        <span class="text-brand-text-primary">{readingDisplay}</span> reading now
       </span>
     </span>
 
@@ -137,7 +137,7 @@
 
     <!-- Total reads -->
     <span class="font-mono text-sm">
-      <span class="text-white">{readsDisplay}</span> total reads
+      <span class="text-brand-text-primary">{readsDisplay}</span> total reads
     </span>
   </div>
 {/if}

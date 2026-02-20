@@ -20,11 +20,11 @@
   ];
 </script>
 
-<footer class="border-t border-brand-border bg-black">
+<footer class="border-t border-brand-border bg-brand-black">
   <div class="mx-auto max-w-[1440px] px-6 py-20 lg:px-12">
     <div class="grid gap-12 md:grid-cols-3">
       <div>
-        <h2 class="mb-4 flex items-center gap-2 text-lg font-medium text-white">
+        <h2 class="mb-4 flex items-center gap-2 text-lg font-medium text-brand-text-primary">
           <svg
             width="24"
             height="24"
@@ -63,7 +63,7 @@
               font-family="Inter, system-ui, sans-serif"
               font-weight="600"
               font-size="17"
-              fill="white">U</text
+              fill="currentColor">U</text
             >
             <circle cx="24" cy="22" r="2" fill="#C09E5A" />
           </svg>

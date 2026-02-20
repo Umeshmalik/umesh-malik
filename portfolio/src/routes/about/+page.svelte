@@ -34,11 +34,11 @@
         <a href="/" class="transition-colors hover:text-brand-accent">Home</a>
       </li>
       <li class="mx-1">/</li>
-      <li class="text-white" aria-current="page">About</li>
+      <li class="text-brand-text-primary" aria-current="page">About</li>
     </ol>
   </nav>
 
-  <h1 class="section-title mb-10 text-white">About Umesh Malik</h1>
+  <h1 class="section-title mb-10 text-brand-text-primary">About Umesh Malik</h1>
 
   <div class="prose prose-lg max-w-none">
     <h2>Who I Am</h2>

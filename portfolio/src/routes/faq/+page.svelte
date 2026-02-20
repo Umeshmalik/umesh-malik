@@ -93,11 +93,11 @@
 				<a href="/" class="transition-colors hover:text-brand-accent">Home</a>
 			</li>
 			<li class="mx-1">/</li>
-			<li class="text-white" aria-current="page">FAQ</li>
+			<li class="text-brand-text-primary" aria-current="page">FAQ</li>
 		</ol>
 	</nav>
 
-	<h1 class="section-title mb-4 text-white">Frequently Asked Questions</h1>
+	<h1 class="section-title mb-4 text-brand-text-primary">Frequently Asked Questions</h1>
 	<p class="body-large mb-16 text-brand-text-secondary">
 		Real questions from developers, recruiters, and people who've reached out
 	</p>
@@ -105,7 +105,7 @@
 	<div class="space-y-8">
 		{#each faqs as faq}
 			<div class="border-b border-brand-border pb-8">
-				<h2 class="mb-3 text-xl font-medium text-white">{faq.question}</h2>
+				<h2 class="mb-3 text-xl font-medium text-brand-text-primary">{faq.question}</h2>
 				<p class="body-medium text-brand-text-secondary">
 					{faq.answer}
 				</p>

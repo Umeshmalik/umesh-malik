@@ -218,11 +218,11 @@
         <a href="/" class="transition-colors hover:text-brand-accent">Home</a>
       </li>
       <li class="mx-1">/</li>
-      <li class="text-white" aria-current="page">Analytics</li>
+      <li class="text-brand-text-primary" aria-current="page">Analytics</li>
     </ol>
   </nav>
 
-  <h1 class="section-title mb-10 text-white">Analytics</h1>
+  <h1 class="section-title mb-10 text-brand-text-primary">Analytics</h1>
 
   {#if !authenticated}
     <!-- Login form -->
@@ -236,7 +236,7 @@
           bind:value={secret}
           onkeydown={handleKeydown}
           placeholder="Analytics secret"
-          class="mb-4 w-full rounded border border-brand-border bg-black px-4 py-3 font-mono text-sm text-white placeholder-brand-text-muted focus:border-brand-accent focus:outline-none"
+          class="mb-4 w-full rounded border border-brand-border bg-brand-black px-4 py-3 font-mono text-sm text-brand-text-primary placeholder-brand-text-muted focus:border-brand-accent focus:outline-none"
         />
         {#if error}
           <p class="mb-4 text-sm text-red-400">{error}</p>
@@ -244,7 +244,7 @@
         <button
           type="button"
           onclick={handleLogin}
-          class="btn-brackets w-full rounded border border-brand-accent px-6 py-3 font-mono text-sm text-brand-accent transition-colors hover:bg-brand-accent hover:text-black"
+          class="btn-brackets w-full rounded border border-brand-accent px-6 py-3 font-mono text-sm text-brand-accent transition-colors hover:bg-brand-accent hover:text-brand-black"
         >
           Authenticate
         </button>
@@ -263,7 +263,7 @@
             aria-hidden="true"
           ></span>
           <span class="label-mono text-brand-text-muted">Live Users</span>
-          <span class="font-mono text-2xl font-semibold text-white"
+          <span class="font-mono text-2xl font-semibold text-brand-text-primary"
             >{liveCount}</span
           >
         </div>
@@ -277,7 +277,7 @@
               onclick={() => (days = d)}
               class="rounded border px-3 py-1.5 font-mono text-xs transition-colors {days ===
               d
-                ? 'border-brand-accent bg-brand-accent text-black'
+                ? 'border-brand-accent bg-brand-accent text-brand-black'
                 : 'border-brand-border text-brand-text-secondary hover:border-brand-accent hover:text-brand-accent'}"
             >
               {d}d
@@ -310,7 +310,7 @@
           <span class="label-mono text-brand-text-muted"
             >Total Views ({days}d)</span
           >
-          <p class="mt-2 font-mono text-4xl font-semibold text-white">
+          <p class="mt-2 font-mono text-4xl font-semibold text-brand-text-primary">
             {stats.totalViews.toLocaleString()}
           </p>
         </div>
@@ -338,7 +338,7 @@
                 </span>
                 <!-- Tooltip -->
                 <span
-                  class="pointer-events-none absolute -top-8 rounded bg-black px-2 py-1 font-mono text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  class="pointer-events-none absolute -top-8 rounded bg-brand-black px-2 py-1 font-mono text-xs text-brand-text-primary opacity-0 transition-opacity group-hover:opacity-100"
                 >
                   {day.views}
                 </span>
@@ -369,7 +369,7 @@
                     <div
                       class="mb-1 flex items-center justify-between font-mono text-sm"
                     >
-                      <span class="capitalize text-white">{source}</span>
+                      <span class="capitalize text-brand-text-primary">{source}</span>
                       <span class="text-brand-text-secondary"
                         >{count}
                         <span class="text-brand-text-muted">({pct}%)</span
@@ -407,7 +407,7 @@
                       ? 'bg-white/2'
                       : ''}"
                   >
-                    <span class="truncate text-white" title={pg.path}
+                    <span class="truncate text-brand-text-primary" title={pg.path}
                       >{pg.path}</span
                     >
                     <span class="ml-4 shrink-0 text-brand-text-secondary"

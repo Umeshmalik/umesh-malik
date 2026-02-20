@@ -13,7 +13,7 @@
 <section class="mx-auto flex min-h-[80vh] max-w-[1160px] flex-col items-center justify-center px-6 pt-32 pb-20 text-center lg:px-12">
   <p class="label-mono mb-6 text-brand-accent">Error {page.status}</p>
 
-  <h1 class="mb-4 text-[clamp(80px,15vw,180px)] font-light leading-none tracking-tighter text-white">
+  <h1 class="mb-4 text-[clamp(80px,15vw,180px)] font-light leading-none tracking-tighter text-brand-text-primary">
     {page.status}
   </h1>
 
@@ -35,7 +35,7 @@
 
   <!-- Corner bracket card with navigation -->
   <div class="corner-brackets w-full max-w-md border border-brand-card-border bg-brand-card p-8">
-    <h2 class="mb-6 text-lg font-medium text-white">Quick Navigation</h2>
+    <h2 class="mb-6 text-lg font-medium text-brand-text-primary">Quick Navigation</h2>
     <nav aria-label="Site navigation">
       <ul class="space-y-3">
         {#each links as link}

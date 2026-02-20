@@ -29,13 +29,13 @@
         <a href="/" class="transition-colors hover:text-brand-accent">Home</a>
       </li>
       <li class="mx-1">/</li>
-      <li class="text-white" aria-current="page">Resume</li>
+      <li class="text-brand-text-primary" aria-current="page">Resume</li>
     </ol>
   </nav>
 
   <div class="mb-12 flex items-start justify-between">
     <div>
-      <h1 class="section-title mb-4 text-white">Umesh Malik</h1>
+      <h1 class="section-title mb-4 text-brand-text-primary">Umesh Malik</h1>
       <p class="body-large text-brand-text-secondary">
         Senior Frontend Engineer
       </p>
@@ -68,14 +68,14 @@
   <!-- Experience -->
   <section class="mb-16">
     <h2
-      class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-white"
+      class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-brand-text-primary"
     >
       Experience
     </h2>
     <div class="space-y-10">
       {#each experience as job}
         <div class="border-l-2 border-brand-accent pl-6">
-          <h3 class="text-lg font-medium text-white">{job.role}</h3>
+          <h3 class="text-lg font-medium text-brand-text-primary">{job.role}</h3>
           <p class="label-mono mt-1 text-brand-accent">{job.company}</p>
           <p class="mt-2 text-sm text-brand-text-muted">{job.period}</p>
           <p class="text-sm text-brand-text-muted">{job.location}</p>
@@ -99,14 +99,14 @@
   <!-- Education -->
   <section class="mb-16">
     <h2
-      class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-white"
+      class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-brand-text-primary"
     >
       Education
     </h2>
     <div class="space-y-6">
       {#each education as edu}
         <div class="border-l-2 border-brand-accent pl-6">
-          <h3 class="font-medium text-white">{edu.degree}</h3>
+          <h3 class="font-medium text-brand-text-primary">{edu.degree}</h3>
           <p class="label-mono mt-1 text-brand-accent">{edu.field}</p>
           <p class="mt-2 text-sm text-brand-text-secondary">
             {edu.institution}
@@ -120,7 +120,7 @@
   <!-- Skills -->
   <section>
     <h2
-      class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-white"
+      class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-brand-text-primary"
     >
       Skills
     </h2>

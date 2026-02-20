@@ -16,7 +16,7 @@
 
 {#if tags.length > 0}
   <div class="mt-12">
-    <h2 class="mb-6 text-2xl font-medium text-white">Explore Topics</h2>
+    <h2 class="mb-6 text-2xl font-medium text-brand-text-primary">Explore Topics</h2>
     <div class="flex flex-wrap gap-2">
       {#each tags as tag}
         <Tag href="/blog/tag/{tag.slug}">

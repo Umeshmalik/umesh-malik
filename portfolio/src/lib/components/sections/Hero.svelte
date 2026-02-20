@@ -22,7 +22,7 @@
       Senior Frontend Engineer
     </p>
     <h1
-      class="hero-headline mb-10 text-white hero-item"
+      class="hero-headline mb-10 text-brand-text-primary hero-item"
     >
       I build scalable<br class="hidden md:block" />
       software <span class="text-brand-accent">systems</span>.
@@ -32,7 +32,7 @@
     >
       From $10M payment systems to enterprise workflow platforms — I build
       software systems that handle real-world scale at
-      <span class="text-white">Expedia Group</span>.
+      <span class="text-brand-text-primary">Expedia Group</span>.
     </p>
     <div
       class="flex flex-wrap gap-4 hero-item"

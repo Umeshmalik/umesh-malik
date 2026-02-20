@@ -18,7 +18,7 @@
   <div class="relative z-10 mx-auto max-w-[1160px] text-center">
     {#if hasBeenInView}
       <h2
-        class="section-title mb-8 text-white"
+        class="section-title mb-8 text-brand-text-primary"
         in:fly={{ y: 30, duration: 600 }}
       >
         Let's build something <span class="text-brand-accent">great</span>

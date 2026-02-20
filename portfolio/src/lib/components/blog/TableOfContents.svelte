@@ -97,7 +97,7 @@
                 {heading.level === 3 ? 'pl-7' : 'pl-4'}
                 {activeId === heading.id
                 ? 'border-brand-accent text-brand-accent'
-                : 'border-transparent text-brand-text-secondary hover:border-brand-text-muted hover:text-white'}"
+                : 'border-transparent text-brand-text-secondary hover:border-brand-text-muted hover:text-brand-text-primary'}"
             >
               {heading.text}
             </a>

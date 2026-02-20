@@ -63,7 +63,7 @@
         >
       </li>
       <li class="mx-1">/</li>
-      <li class="text-white" aria-current="page">{data.category}</li>
+      <li class="text-brand-text-primary" aria-current="page">{data.category}</li>
     </ol>
   </nav>
 
@@ -73,7 +73,7 @@
       class="label-mono mb-4 inline-block text-brand-text-muted transition-colors hover:text-brand-accent"
       >&larr; Back to Blog</a
     >
-    <h1 class="section-title text-white">{data.category}</h1>
+    <h1 class="section-title text-brand-text-primary">{data.category}</h1>
     <p class="body-large mt-4 text-brand-text-secondary">
       {data.posts.length} article{data.posts.length !== 1 ? "s" : ""}
     </p>

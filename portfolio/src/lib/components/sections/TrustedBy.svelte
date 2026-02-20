@@ -14,7 +14,7 @@
     <div class="flex flex-wrap items-center justify-center gap-12 md:gap-20">
       {#each companies as company}
         <div class="corner-brackets px-6 py-4 text-center">
-          <p class="text-lg font-medium text-white md:text-xl">
+          <p class="text-lg font-medium text-brand-text-primary md:text-xl">
             {company.name}
           </p>
           <p class="label-mono mt-2 text-brand-text-muted">{company.period}</p>

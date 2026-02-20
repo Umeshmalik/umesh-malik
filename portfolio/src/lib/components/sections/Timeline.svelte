@@ -15,7 +15,7 @@
   <div class="mx-auto max-w-[1160px]">
     {#if hasBeenInView}
       <h2
-        class="section-title mb-20 text-white"
+        class="section-title mb-20 text-brand-text-primary"
         in:fly={{ y: 30, duration: 600 }}
       >
         Experience
@@ -36,7 +36,7 @@
               </p>
             </div>
             <div class="md:col-span-3">
-              <h3 class="text-lg font-medium text-white">{job.role}</h3>
+              <h3 class="text-lg font-medium text-brand-text-primary">{job.role}</h3>
               <p class="label-mono mt-1 text-brand-accent">{job.company}</p>
               <p class="body-medium mt-3 text-brand-text-secondary">
                 {job.description}

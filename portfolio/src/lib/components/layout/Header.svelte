@@ -2,6 +2,7 @@
   import { page } from "$app/state";
   import { onMount } from "svelte";
   import Button from "$lib/components/ui/Button.svelte";
+  import ThemeToggle from "$lib/components/ui/ThemeToggle.svelte";
 
   let menuOpen = $state(false);
   let scrolled = $state(false);
@@ -26,7 +27,7 @@
 
 <header
   class="fixed top-0 right-0 left-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300 {scrolled
-    ? 'border-b border-brand-border bg-black/80 backdrop-blur-md'
+    ? 'border-b border-brand-border bg-brand-black/80 backdrop-blur-md'
     : 'bg-transparent'}"
 >
   <nav
@@ -35,7 +36,7 @@
     <!-- Logo -->
     <a
       href="/"
-      class="flex items-center gap-3 text-white"
+      class="flex items-center gap-3 text-brand-text-primary"
       aria-label="Umesh Malik - Home"
     >
       <svg
@@ -83,7 +84,7 @@
           font-family="Inter, system-ui, sans-serif"
           font-weight="600"
           font-size="17"
-          fill="white">U</text
+          fill="currentColor">U</text
         >
         <circle cx="24" cy="22" r="2" fill="#C09E5A" />
       </svg>
@@ -97,10 +98,10 @@
       {#each navLinks as link}
         <a
           href={link.href}
-          class="label-mono transition-colors duration-200 {page.url
+          class="nav-link label-mono transition-colors duration-200 {page.url
             .pathname === link.href
-            ? 'text-white'
-            : 'text-brand-text-muted hover:text-white'}"
+            ? 'nav-link-active text-brand-text-primary'
+            : 'text-brand-text-muted hover:text-brand-text-primary'}"
         >
           {link.label}
         </a>
@@ -108,50 +109,54 @@
     </div>
 
     <!-- CTA - Right -->
-    <div class="hidden md:block">
+    <div class="hidden items-center gap-2 md:flex">
+      <ThemeToggle />
       <Button href="/contact" variant="primary">Contact</Button>
     </div>
 
     <!-- Mobile Toggle -->
-    <button
-      class="text-white md:hidden"
-      onclick={() => (menuOpen = !menuOpen)}
-      aria-label="Toggle menu"
-    >
-      <svg
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+    <div class="flex items-center gap-1 md:hidden">
+      <ThemeToggle />
+      <button
+        class="text-brand-text-primary"
+        onclick={() => (menuOpen = !menuOpen)}
+        aria-label="Toggle menu"
       >
-        {#if menuOpen}
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        {:else}
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        {/if}
-      </svg>
-    </button>
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          {#if menuOpen}
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          {:else}
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          {/if}
+        </svg>
+      </button>
+    </div>
   </nav>
 
   <!-- Mobile Menu -->
   {#if menuOpen}
-    <div class="border-t border-brand-border bg-black px-6 py-6 md:hidden">
+    <div class="border-t border-brand-border bg-brand-black px-6 py-6 md:hidden">
       {#each navLinks as link}
         <a
           href={link.href}
           class="label-mono block py-3 transition-colors {page.url.pathname ===
           link.href
-            ? 'text-white'
+            ? 'text-brand-text-primary'
             : 'text-brand-text-muted'}"
           onclick={() => (menuOpen = false)}
         >
@@ -169,3 +174,32 @@
     </div>
   {/if}
 </header>
+
+<style>
+  /* Active nav link — gold dot indicator */
+  .nav-link {
+    position: relative;
+    padding-bottom: 4px;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--color-brand-accent);
+    transform: translateX(-50%) scale(0);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .nav-link-active::after {
+    transform: translateX(-50%) scale(1);
+  }
+
+  .nav-link:hover::after {
+    transform: translateX(-50%) scale(1);
+  }
+</style>

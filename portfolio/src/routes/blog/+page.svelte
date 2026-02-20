@@ -6,7 +6,7 @@
   import { slugify } from "$lib/utils/blog";
   import { siteConfig } from "$lib/config/site";
   import { onMount } from "svelte";
-  import { browser } from "$app/environment";
+  import { browser, dev } from "$app/environment";
 
   let { data }: { data: PageData } = $props();
 
@@ -27,7 +27,7 @@
   };
 
   onMount(() => {
-    if (!browser) return;
+    if (!browser || dev) return;
     const allPosts = [...data.featuredPosts, ...data.posts];
     const paths = allPosts.map((p) => `/blog/${p.slug}`);
     if (paths.length === 0) return;
@@ -57,7 +57,7 @@
 
 <section class="mx-auto max-w-[1160px] px-6 pt-32 pb-20 lg:px-12">
   <div class="mb-20 max-w-3xl">
-    <h1 class="section-title mb-8 text-white">Blog</h1>
+    <h1 class="section-title mb-8 text-brand-text-primary">Blog</h1>
     <p class="body-large text-brand-text-secondary">
       Deep dives into JavaScript, TypeScript, React, SvelteKit, and modern
       software development. Practical tutorials, architecture patterns, and
@@ -82,7 +82,7 @@
   <!-- Featured Posts -->
   {#if data.featuredPosts.length > 0}
     <div class="mb-20">
-      <h2 class="mb-10 text-2xl font-medium text-white">Featured Articles</h2>
+      <h2 class="mb-10 text-2xl font-medium text-brand-text-primary">Featured Articles</h2>
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {#each data.featuredPosts as post}
           <BlogCard {post} featured={true} readCount={readCounts[`/blog/${post.slug}`]} />
@@ -94,7 +94,7 @@
   <!-- All Posts -->
   {#if data.posts.length > 0}
     <div>
-      <h2 class="mb-10 text-2xl font-medium text-white">All Articles</h2>
+      <h2 class="mb-10 text-2xl font-medium text-brand-text-primary">All Articles</h2>
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {#each data.posts as post}
           <BlogCard {post} readCount={readCounts[`/blog/${post.slug}`]} />

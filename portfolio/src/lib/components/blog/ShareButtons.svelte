@@ -17,7 +17,7 @@
 </script>
 
 <div class="flex items-center gap-4 border-y border-brand-border py-6">
-  <span class="font-medium text-white">Share this article:</span>
+  <span class="font-medium text-brand-text-primary">Share this article:</span>
   <div class="flex gap-3">
     <Button
       href={xUrl}

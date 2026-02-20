@@ -39,7 +39,7 @@
   <div class="relative z-10 mx-auto max-w-[1160px]">
     {#if hasBeenInView}
       <h2
-        class="section-title mb-20 text-white"
+        class="section-title mb-20 text-brand-text-primary"
         in:fly={{ y: 30, duration: 600 }}
       >
         What I do best
@@ -51,7 +51,7 @@
             class="border-t border-brand-accent pt-8"
             in:fly={{ y: 30, duration: 600, delay: i * 150 }}
           >
-            <h3 class="mb-4 text-xl font-medium text-white">{item.title}</h3>
+            <h3 class="mb-4 text-xl font-medium text-brand-text-primary">{item.title}</h3>
             <p class="body-medium mb-6 text-brand-text-secondary">
               {item.description}
             </p>

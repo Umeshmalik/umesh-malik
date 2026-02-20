@@ -33,11 +33,11 @@
         <a href="/" class="transition-colors hover:text-brand-accent">Home</a>
       </li>
       <li class="mx-1">/</li>
-      <li class="text-white" aria-current="page">Contact</li>
+      <li class="text-brand-text-primary" aria-current="page">Contact</li>
     </ol>
   </nav>
 
-  <h1 class="section-title mb-4 text-white">Get in Touch</h1>
+  <h1 class="section-title mb-4 text-brand-text-primary">Get in Touch</h1>
   <p class="body-large mb-16 text-brand-text-secondary">
     Whether it's a professional inquiry, open-source collaboration, or just a
     conversation about software architecture — I'd like to hear from you.
@@ -54,7 +54,7 @@
           : ''}"
       >
         <div class="mb-1 flex items-center gap-3">
-          <h3 class="text-xl font-medium text-white">{channel.label}</h3>
+          <h3 class="text-xl font-medium text-brand-text-primary">{channel.label}</h3>
           {#if channel.primary}
             <span
               class="label-mono rounded bg-brand-accent/10 px-2 py-0.5 text-brand-accent"
@@ -73,7 +73,7 @@
 
   <!-- Response Time -->
   <div class="mt-16 border-b border-brand-border pb-8">
-    <h2 class="mb-4 text-2xl font-medium text-white">Response Time</h2>
+    <h2 class="mb-4 text-2xl font-medium text-brand-text-primary">Response Time</h2>
     <p class="body-medium text-brand-text-secondary">
       I check email daily on weekdays and aim to respond within 24-48 hours.
       LinkedIn messages may take a bit longer. For time-sensitive matters, email
@@ -83,18 +83,18 @@
 
   <!-- Currently -->
   <div class="mt-8">
-    <h2 class="mb-4 text-2xl font-medium text-white">Currently</h2>
+    <h2 class="mb-4 text-2xl font-medium text-brand-text-primary">Currently</h2>
     <div class="body-medium space-y-3 text-brand-text-secondary">
       <p>
-        <span class="text-white">Open to:</span> Technical discussions, speaking
+        <span class="text-brand-text-primary">Open to:</span> Technical discussions, speaking
         opportunities, open-source collaboration, mentoring conversations, freelance/contract
         work
       </p>
       <p>
-        <span class="text-white">Not available for:</span> Full-time role changes
+        <span class="text-brand-text-primary">Not available for:</span> Full-time role changes
       </p>
       <p>
-        <span class="text-white">Location:</span> Based in Gurugram, India (IST /
+        <span class="text-brand-text-primary">Location:</span> Based in Gurugram, India (IST /
         UTC+5:30)
       </p>
     </div>

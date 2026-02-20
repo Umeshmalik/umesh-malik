@@ -28,8 +28,8 @@
   const baseStyles = "btn-brackets transition-colors duration-300";
 
   const variants = {
-    primary: "bg-white text-black hover:bg-brand-accent hover:text-black",
-    secondary: "bg-transparent text-white hover:text-brand-accent",
+    primary: "bg-brand-text-primary text-brand-black hover:bg-brand-accent hover:text-brand-black",
+    secondary: "bg-transparent text-brand-text-primary hover:text-brand-accent",
   };
 
   const sizes = {

@@ -26,7 +26,7 @@
         <a href="/" class="transition-colors hover:text-brand-accent">Home</a>
       </li>
       <li class="mx-1">/</li>
-      <li class="text-white" aria-current="page">AI Summary</li>
+      <li class="text-brand-text-primary" aria-current="page">AI Summary</li>
     </ol>
   </nav>
 

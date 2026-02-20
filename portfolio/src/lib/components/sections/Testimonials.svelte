@@ -16,7 +16,7 @@
   <div class="relative z-10 mx-auto max-w-[1160px]">
     {#if hasBeenInView}
       <h2
-        class="section-title mb-20 text-white"
+        class="section-title mb-20 text-brand-text-primary"
         in:fly={{ y: 30, duration: 600 }}
       >
         What people say
@@ -34,7 +34,7 @@
               &ldquo;{testimonial.quote}&rdquo;
             </p>
             <footer>
-              <p class="font-medium text-white">{testimonial.author}</p>
+              <p class="font-medium text-brand-text-primary">{testimonial.author}</p>
               <p class="label-mono mt-1 text-brand-text-muted">
                 {testimonial.role}
               </p>

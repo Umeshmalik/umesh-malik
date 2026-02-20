@@ -76,7 +76,7 @@
 
 {#if visible}
   <div
-    class="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-brand-card-border bg-brand-card/90 px-4 py-2 shadow-lg backdrop-blur-sm"
+    class="live-indicator fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-brand-card-border bg-brand-card/90 px-4 py-2 shadow-lg backdrop-blur-sm"
     aria-live="polite"
   >
     <span
@@ -88,3 +88,20 @@
     </span>
   </div>
 {/if}
+
+<style>
+  .live-indicator {
+    animation: slide-up 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>

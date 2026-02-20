@@ -13,6 +13,20 @@
 		<meta name="msapplication-TileColor" content="#000000" />
 		<meta name="color-scheme" content="dark" />
 
+		<!-- Theme init (blocks render to prevent FOUC) -->
+		<script>
+			(function() {
+				var stored = localStorage.getItem('theme');
+				var theme = stored || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+				document.documentElement.dataset.theme = theme;
+				var color = theme === 'light' ? '#ffffff' : '#000000';
+				var tc = document.querySelector('meta[name="theme-color"]');
+				if (tc) tc.setAttribute('content', color);
+				var cs = document.querySelector('meta[name="color-scheme"]');
+				if (cs) cs.setAttribute('content', theme);
+			})();
+		</script>
+
 		<!-- RSS Feed Discovery -->
 		<link rel="alternate" type="application/rss+xml" title="Umesh Malik's Blog" href="/blog-feed.xml" />
 		<link rel="alternate" type="application/rss+xml" title="Umesh Malik" href="/rss.xml" />

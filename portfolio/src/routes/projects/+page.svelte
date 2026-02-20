@@ -28,11 +28,11 @@
         <a href="/" class="transition-colors hover:text-brand-accent">Home</a>
       </li>
       <li class="mx-1">/</li>
-      <li class="text-white" aria-current="page">Projects</li>
+      <li class="text-brand-text-primary" aria-current="page">Projects</li>
     </ol>
   </nav>
 
-  <h1 class="section-title mb-8 text-white">Projects</h1>
+  <h1 class="section-title mb-8 text-brand-text-primary">Projects</h1>
   <p class="body-large mb-20 max-w-2xl text-brand-text-secondary">
     A selection of projects I've built across fintech, automotive, and travel
     domains.
@@ -47,7 +47,7 @@
           <p class="label-mono text-brand-text-muted">
             {project.company}
           </p>
-          <h2 class="mt-3 text-2xl font-medium text-white">{project.title}</h2>
+          <h2 class="mt-3 text-2xl font-medium text-brand-text-primary">{project.title}</h2>
           {#if project.featured}
             <span
               class="label-mono mt-3 inline-block border border-brand-accent px-2 py-1 text-brand-accent"

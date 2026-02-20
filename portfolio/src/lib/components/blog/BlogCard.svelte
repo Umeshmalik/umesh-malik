@@ -42,7 +42,7 @@
       </div>
 
       <h3
-        class="font-medium text-white transition-colors group-hover:text-brand-accent {featured
+        class="font-medium text-brand-text-primary transition-colors group-hover:text-brand-accent {featured
           ? 'text-2xl'
           : 'text-xl'}"
       >

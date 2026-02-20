@@ -23,7 +23,7 @@
       {#if hasBeenInView}
         <div class="mb-20 flex items-end justify-between">
           <h2
-            class="section-title text-white"
+            class="section-title text-brand-text-primary"
             in:fly={{ y: 30, duration: 600 }}
           >
             Latest articles
@@ -73,7 +73,7 @@
                     </time>
                   </div>
                   <h3
-                    class="mb-3 text-xl font-medium text-white transition-colors group-hover:text-brand-accent"
+                    class="mb-3 text-xl font-medium text-brand-text-primary transition-colors group-hover:text-brand-accent"
                   >
                     {post.title}
                   </h3>

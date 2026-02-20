@@ -15,7 +15,7 @@
   <div class="mx-auto max-w-[1160px]">
     {#if hasBeenInView}
       <h2
-        class="section-title mb-20 text-white"
+        class="section-title mb-20 text-brand-text-primary"
         in:fly={{ y: 30, duration: 600 }}
       >
         Technical skills

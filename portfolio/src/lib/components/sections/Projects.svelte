@@ -20,7 +20,7 @@
   <div class="relative z-10 mx-auto max-w-[1160px]">
     {#if hasBeenInView}
       <div class="mb-20 flex items-end justify-between">
-        <h2 class="section-title text-white" in:fly={{ y: 30, duration: 600 }}>
+        <h2 class="section-title text-brand-text-primary" in:fly={{ y: 30, duration: 600 }}>
           Selected work
         </h2>
         <a
@@ -42,7 +42,7 @@
               <p class="label-mono text-brand-text-muted">
                 {project.company}
               </p>
-              <h3 class="mt-3 text-2xl font-medium text-white">
+              <h3 class="mt-3 text-2xl font-medium text-brand-text-primary">
                 {project.title}
               </h3>
             </div>

@@ -39,11 +39,11 @@
         <a href="/" class="transition-colors hover:text-brand-accent">Home</a>
       </li>
       <li class="mx-1">/</li>
-      <li class="text-white" aria-current="page">Resources</li>
+      <li class="text-brand-text-primary" aria-current="page">Resources</li>
     </ol>
   </nav>
 
-  <h1 class="section-title mb-4 text-white">Resources & Snippets</h1>
+  <h1 class="section-title mb-4 text-brand-text-primary">Resources & Snippets</h1>
   <p class="body-large mb-12 text-brand-text-secondary">
     Tools, libraries, blogs, and code snippets I find useful. A living
     collection that grows as I discover new things.
@@ -76,7 +76,7 @@
         rel="noopener noreferrer"
         class="corner-brackets block border border-brand-card-border bg-brand-card p-6 transition-colors hover:border-brand-accent"
       >
-        <h3 class="mb-2 text-lg font-medium text-white">
+        <h3 class="mb-2 text-lg font-medium text-brand-text-primary">
           {resource.name}
           <span class="text-brand-text-muted">↗</span>
         </h3>
@@ -99,7 +99,7 @@
   <!-- Code Snippets Section -->
   <div>
     <h2
-      class="mb-4 border-t border-brand-accent pt-4 text-2xl font-medium text-white"
+      class="mb-4 border-t border-brand-accent pt-4 text-2xl font-medium text-brand-text-primary"
     >
       Code Snippets
     </h2>
@@ -111,7 +111,7 @@
     <div class="space-y-10">
       {#each codeSnippets as snippet}
         <div class="border border-brand-card-border bg-brand-card p-6">
-          <h3 class="mb-1 text-lg font-medium text-white">{snippet.title}</h3>
+          <h3 class="mb-1 text-lg font-medium text-brand-text-primary">{snippet.title}</h3>
           <p class="body-medium mb-4 text-brand-text-secondary">
             {snippet.description}
           </p>

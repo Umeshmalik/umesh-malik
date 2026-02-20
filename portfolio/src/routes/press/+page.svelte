@@ -108,16 +108,16 @@
         <a href="/" class="transition-colors hover:text-brand-accent">Home</a>
       </li>
       <li class="mx-1">/</li>
-      <li class="text-white" aria-current="page">Writing & Appearances</li>
+      <li class="text-brand-text-primary" aria-current="page">Writing & Appearances</li>
     </ol>
   </nav>
 
-  <h1 class="section-title mb-10 text-white">Writing & Appearances</h1>
+  <h1 class="section-title mb-10 text-brand-text-primary">Writing & Appearances</h1>
 
   <!-- Blog Highlights -->
   <div class="mb-16">
     <h2
-      class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-white"
+      class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-brand-text-primary"
     >
       Blog Highlights
     </h2>
@@ -125,7 +125,7 @@
       {#each blogHighlights as post}
         <article class="border-b border-brand-border pb-6">
           <div class="mb-1 flex items-center gap-3">
-            <h3 class="text-xl font-medium text-white">
+            <h3 class="text-xl font-medium text-brand-text-primary">
               <a
                 href={post.url}
                 class="transition-colors hover:text-brand-accent"
@@ -146,14 +146,14 @@
   <!-- Professional Profiles -->
   <div class="mb-16">
     <h2
-      class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-white"
+      class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-brand-text-primary"
     >
       Professional Profiles
     </h2>
     <div class="space-y-6">
       {#each profiles as profile}
         <article class="border-b border-brand-border pb-6">
-          <h3 class="mb-2 text-xl font-medium text-white">
+          <h3 class="mb-2 text-xl font-medium text-brand-text-primary">
             <a
               href={profile.url}
               class="transition-colors hover:text-brand-accent"
@@ -176,7 +176,7 @@
   <!-- Speaking & Community -->
   <div class="mb-16">
     <h2
-      class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-white"
+      class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-brand-text-primary"
     >
       Speaking & Community
     </h2>
@@ -184,7 +184,7 @@
       {#each community as item}
         <article class="border-b border-brand-border pb-6">
           <div class="mb-1 flex items-center gap-3">
-            <h3 class="text-xl font-medium text-white">{item.title}</h3>
+            <h3 class="text-xl font-medium text-brand-text-primary">{item.title}</h3>
             <span class="label-mono text-brand-text-muted">{item.year}</span>
           </div>
           <p class="label-mono mb-2 text-brand-accent">
@@ -201,7 +201,7 @@
   <!-- Open Source -->
   <div class="mb-16">
     <h2
-      class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-white"
+      class="mb-8 border-t border-brand-accent pt-4 text-2xl font-medium text-brand-text-primary"
     >
       Open Source
     </h2>
@@ -209,7 +209,7 @@
       {#each openSource as project}
         <article class="border-b border-brand-border pb-6">
           <div class="mb-1 flex items-center gap-3">
-            <h3 class="text-xl font-medium text-white">
+            <h3 class="text-xl font-medium text-brand-text-primary">
               <a
                 href={project.url}
                 class="transition-colors hover:text-brand-accent"
@@ -233,12 +233,12 @@
   <div
     class="corner-brackets border border-brand-card-border bg-brand-card p-8"
   >
-    <h2 class="mb-4 text-xl font-medium text-white">Media Inquiries</h2>
+    <h2 class="mb-4 text-xl font-medium text-brand-text-primary">Media Inquiries</h2>
     <p class="body-medium mb-4 text-brand-text-secondary">
       For interviews, speaking engagements, or media requests, please get in
       touch:
     </p>
-    <p class="font-medium text-white">
+    <p class="font-medium text-brand-text-primary">
       <a href="/contact" class="text-brand-accent hover:underline"
         >Contact page</a
       >
