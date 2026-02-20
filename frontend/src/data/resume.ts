@@ -31,7 +31,7 @@ export const personalInfo = {
   name: 'Umesh Malik',
   title: 'Senior Frontend Engineer | Full-Stack Developer',
   location: 'Gurugram, Haryana, India',
-  email: 'umesh.malik.works@gmail.com',
+  email: 'ask@umesh-malik.com',
   linkedin: 'https://linkedin.com/in/umesh-malik',
   github: 'https://github.com/Umeshmalik',
   website: 'https://umesh-malik.com',

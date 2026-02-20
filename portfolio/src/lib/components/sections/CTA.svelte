@@ -34,11 +34,7 @@
         class="flex flex-wrap justify-center gap-4"
         in:fly={{ y: 30, duration: 600, delay: 300 }}
       >
-        <Button
-          variant="primary"
-          size="lg"
-          href="mailto:umesh.malik.works@gmail.com"
-        >
+        <Button variant="primary" size="lg" href="mailto:ask@umesh-malik.com">
           Get in Touch
         </Button>
         <Button

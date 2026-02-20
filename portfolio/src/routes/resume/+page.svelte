@@ -46,9 +46,8 @@
   <!-- Contact -->
   <div class="mb-12 flex flex-wrap gap-4 text-sm text-brand-text-secondary">
     <a
-      href="mailto:umesh.malik.works@gmail.com"
-      class="transition-colors hover:text-brand-accent"
-      >umesh.malik.works@gmail.com</a
+      href="mailto:ask@umesh-malik.com"
+      class="transition-colors hover:text-brand-accent">ask@umesh-malik.com</a
     >
     <span class="text-brand-border">|</span>
     <a

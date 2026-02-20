@@ -244,10 +244,10 @@
       >
       or email
       <a
-        href="mailto:umesh.malik.works@gmail.com"
+        href="mailto:ask@umesh-malik.com"
         class="text-brand-accent hover:underline"
       >
-        umesh.malik.works@gmail.com
+        ask@umesh-malik.com
       </a>
     </p>
   </div>

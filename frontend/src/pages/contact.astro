@@ -6,12 +6,12 @@ import ContactContent from "../components/pages/ContactContent";
 import { personalInfo } from "../data/resume";
 
 const rawBase = import.meta.env.BASE_URL;
-const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const basePath = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
 ---
 
 <Desktop
   title="Contact Umesh Malik — Senior Frontend Engineer | Hire Me for React & TypeScript Projects"
-  description="Get in touch with Umesh Malik, Senior Frontend Engineer at Expedia Group. Reach out via email (umesh.malik.works@gmail.com), LinkedIn (umesh-malik), or GitHub (Umeshmalik) for collaboration, freelance projects, consulting, or job opportunities. Open to connecting with engineers and recruiters."
+  description="Get in touch with Umesh Malik, Senior Frontend Engineer at Expedia Group. Reach out via email (ask@umesh-malik.com), LinkedIn (umesh-malik), or GitHub (Umeshmalik) for collaboration, freelance projects, consulting, or job opportunities. Open to connecting with engineers and recruiters."
   keywords="contact Umesh Malik, hire Umesh Malik, Umesh Malik email, Umesh Malik LinkedIn, frontend engineer for hire, React developer contact, Umesh Malik GitHub, hire React developer India, freelance frontend engineer, Umesh Malik phone"
   currentPage="contact"
 >
@@ -30,15 +30,35 @@ const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 
   <article slot="seo-content">
     <h1>Contact Umesh Malik — Senior Frontend Engineer</h1>
-    <p>Umesh Malik is a Senior Frontend Engineer at Expedia Group, available for professional connections, collaboration, consulting, and career opportunities. Here's how to reach him:</p>
+    <p>
+      Umesh Malik is a Senior Frontend Engineer at Expedia Group, available for
+      professional connections, collaboration, consulting, and career
+      opportunities. Here's how to reach him:
+    </p>
 
     <section>
       <h2>Contact Methods</h2>
       <ul>
-        <li><strong>Email:</strong> <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a> — Best for direct inquiries, job opportunities, and project proposals.</li>
-        <li><strong>LinkedIn:</strong> <a href={personalInfo.linkedin} rel="noopener">linkedin.com/in/umesh-malik</a> — Connect professionally and view endorsements.</li>
-        <li><strong>GitHub:</strong> <a href={personalInfo.github} rel="noopener">github.com/Umeshmalik</a> — View open source contributions and code samples.</li>
-        <li><strong>Portfolio:</strong> <a href={personalInfo.website}>umesh-malik.com</a> — This website.</li>
+        <li>
+          <strong>Email:</strong>
+          <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a> — Best
+          for direct inquiries, job opportunities, and project proposals.
+        </li>
+        <li>
+          <strong>LinkedIn:</strong>
+          <a href={personalInfo.linkedin} rel="noopener"
+            >linkedin.com/in/umesh-malik</a
+          > — Connect professionally and view endorsements.
+        </li>
+        <li>
+          <strong>GitHub:</strong>
+          <a href={personalInfo.github} rel="noopener">github.com/Umeshmalik</a> —
+          View open source contributions and code samples.
+        </li>
+        <li>
+          <strong>Portfolio:</strong>
+          <a href={personalInfo.website}>umesh-malik.com</a> — This website.
+        </li>
       </ul>
     </section>
 
@@ -56,7 +76,10 @@ const basePath = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 
     <section>
       <h2>Location</h2>
-      <p>Umesh Malik is based in {personalInfo.location} and is open to remote and hybrid work arrangements.</p>
+      <p>
+        Umesh Malik is based in {personalInfo.location} and is open to remote and
+        hybrid work arrangements.
+      </p>
     </section>
   </article>
 </Desktop>

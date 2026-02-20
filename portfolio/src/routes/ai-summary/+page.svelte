@@ -135,7 +135,7 @@
 
   <h2>Contact Information</h2>
   <ul>
-    <li><strong>Email:</strong> umesh.malik.works@gmail.com</li>
+    <li><strong>Email:</strong> ask@umesh-malik.com</li>
     <li><strong>Location:</strong> Gurugram, Haryana, India</li>
     <li><strong>LinkedIn:</strong> linkedin.com/in/umesh-malik</li>
     <li><strong>GitHub:</strong> github.com/Umeshmalik</li>
