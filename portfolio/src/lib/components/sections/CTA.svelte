@@ -37,7 +37,7 @@
         <Button
           variant="primary"
           size="lg"
-          href="mailto:lucky.umeshmalik@gmail.com"
+          href="mailto:umesh.malik.works@gmail.com"
         >
           Get in Touch
         </Button>

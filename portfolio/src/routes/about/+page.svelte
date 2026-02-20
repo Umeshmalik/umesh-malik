@@ -143,7 +143,7 @@
     <p>
       I'm always interested in connecting with fellow engineers, discussing
       software architecture, or exploring new opportunities. Reach out via
-      <a href="mailto:lucky.umeshmalik@gmail.com">email</a> or connect with me
+      <a href="mailto:umesh.malik.works@gmail.com">email</a> or connect with me
       on
       <a
         href="https://linkedin.com/in/umesh-malik"

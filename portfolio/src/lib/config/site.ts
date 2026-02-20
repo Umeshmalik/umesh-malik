@@ -12,7 +12,7 @@ export const siteConfig = {
 	locale: 'en_US',
 	author: {
 		name: 'Umesh Malik',
-		email: 'lucky.umeshmalik@gmail.com',
+		email: 'umesh.malik.works@gmail.com',
 		jobTitle: 'Senior Frontend Engineer',
 		company: 'Expedia Group',
 		x: '@lumeshmalik',

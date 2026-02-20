@@ -46,9 +46,9 @@
   <!-- Contact -->
   <div class="mb-12 flex flex-wrap gap-4 text-sm text-brand-text-secondary">
     <a
-      href="mailto:lucky.umeshmalik@gmail.com"
+      href="mailto:umesh.malik.works@gmail.com"
       class="transition-colors hover:text-brand-accent"
-      >lucky.umeshmalik@gmail.com</a
+      >umesh.malik.works@gmail.com</a
     >
     <span class="text-brand-border">|</span>
     <a
@@ -109,7 +109,9 @@
         <div class="border-l-2 border-brand-accent pl-6">
           <h3 class="font-medium text-white">{edu.degree}</h3>
           <p class="label-mono mt-1 text-brand-accent">{edu.field}</p>
-          <p class="mt-2 text-sm text-brand-text-secondary">{edu.institution}</p>
+          <p class="mt-2 text-sm text-brand-text-secondary">
+            {edu.institution}
+          </p>
           <p class="mt-1 text-sm text-brand-text-muted">{edu.period}</p>
         </div>
       {/each}

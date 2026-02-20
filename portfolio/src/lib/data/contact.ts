@@ -9,8 +9,8 @@ export interface ContactChannel {
 export const contactChannels: ContactChannel[] = [
 	{
 		label: 'Email',
-		value: 'lucky.umeshmalik@gmail.com',
-		href: 'mailto:lucky.umeshmalik@gmail.com',
+		value: 'umesh.malik.works@gmail.com',
+		href: 'mailto:umesh.malik.works@gmail.com',
 		description: 'Best way to reach me. I typically respond within 24-48 hours on weekdays.',
 		primary: true
 	},

@@ -108,7 +108,7 @@
           {/each}
           <li>
             <a
-              href="mailto:lucky.umeshmalik@gmail.com"
+              href="mailto:umesh.malik.works@gmail.com"
               class="body-medium text-brand-text-secondary transition-colors hover:text-brand-accent"
             >
               Email
