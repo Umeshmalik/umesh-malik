@@ -66,7 +66,7 @@
       </Button>
       <button
         type="button"
-        class="btn-brackets px-4 py-2 text-[11px] text-brand-text-secondary transition-colors hover:text-brand-accent"
+        class="btn-brackets cursor-pointer px-4 py-2 text-[11px] text-brand-text-secondary transition-colors hover:text-brand-accent"
         onclick={() => (showPreview = !showPreview)}
         aria-expanded={showPreview}
         aria-controls="linkedin-preview"
@@ -82,10 +82,12 @@
       class="mt-4 rounded-lg border border-brand-card-border bg-brand-card p-5"
     >
       <div class="mb-3 flex items-center justify-between">
-        <span class="label-mono text-brand-text-muted">LinkedIn Post Preview</span>
+        <span class="label-mono text-brand-text-muted"
+          >LinkedIn Post Preview</span
+        >
         <button
           type="button"
-          class="label-mono transition-colors {copied
+          class="label-mono cursor-pointer transition-colors {copied
             ? 'text-green-400'
             : 'text-brand-accent hover:underline'}"
           onclick={copyLinkedinPost}
@@ -93,7 +95,8 @@
           {copied ? "Copied!" : "Copy Text"}
         </button>
       </div>
-      <pre class="whitespace-pre-wrap break-words text-sm leading-relaxed text-brand-text-secondary font-sans">{linkedinPostText}</pre>
+      <pre
+        class="whitespace-pre-wrap wrap-break-word text-sm leading-relaxed text-brand-text-secondary font-sans">{linkedinPostText}</pre>
     </div>
   {/if}
 </div>
