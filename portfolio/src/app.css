@@ -65,6 +65,13 @@
 	color: #1a1a1a;
 }
 
+/* Invert dark-themed blog SVGs for light mode.
+   invert(0.88) turns #000 bg → ~#E0E0E0, #FFF text → ~#1E1E1E.
+   hue-rotate(180deg) compensates inversion to preserve original hues. */
+[data-theme="light"] img[src$=".svg"][src*="/blog/"] {
+	filter: invert(0.88) hue-rotate(180deg);
+}
+
 html {
 	scroll-behavior: smooth;
 	scroll-padding-top: 96px;

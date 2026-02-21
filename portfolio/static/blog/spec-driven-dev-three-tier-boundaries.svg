@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="'Inter', 'SF Pro', system-ui, sans-serif">
+  <title>The Three-Tier Boundary System: Always Do, Ask First, and Never Do guardrails for AI agent configuration</title>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000000"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#4ADE80" stop-opacity="0.03"/>
+    </linearGradient>
+    <linearGradient id="amberGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#FBBF24" stop-opacity="0.03"/>
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4444" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#FF4444" stop-opacity="0.03"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="600" y="45" fill="#C09E5A" font-size="14" font-weight="600" text-anchor="middle" letter-spacing="3">THE THREE-TIER BOUNDARY SYSTEM</text>
+  <text x="600" y="67" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">The guardrail framework that prevents AI agents from making catastrophic mistakes</text>
+
+  <!-- TIER 1: ALWAYS (Green) -->
+  <rect x="60" y="95" width="1080" height="148" rx="12" fill="url(#greenGrad)" stroke="#4ADE80" stroke-opacity="0.35" stroke-width="1.5"/>
+
+  <!-- Green header bar -->
+  <rect x="60" y="95" width="1080" height="40" rx="12" fill="#4ADE80" fill-opacity="0.08"/>
+  <rect x="60" y="123" width="1080" height="12" fill="#0A0A0A"/>
+
+  <!-- Green icon -->
+  <circle cx="100" cy="115" r="14" fill="#4ADE80" fill-opacity="0.15" stroke="#4ADE80" stroke-width="1.5"/>
+  <path d="M93,115 L98,120 L108,110" fill="none" stroke="#4ADE80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="125" y="120" fill="#4ADE80" font-size="15" font-weight="700" letter-spacing="1.5">ALWAYS DO</text>
+  <text x="1100" y="120" fill="#4ADE80" font-size="11" font-weight="500" text-anchor="end" opacity="0.7">Proceed without asking</text>
+
+  <!-- Green items -->
+  <g transform="translate(90, 150)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#4ADE80" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#4ADE80" font-size="12" font-weight="600">Run tests before commits</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Automated verification on</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">every code change</text>
+  </g>
+  <g transform="translate(350, 150)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#4ADE80" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#4ADE80" font-size="12" font-weight="600">Follow naming conventions</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Consistent code style across</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">the entire codebase</text>
+  </g>
+  <g transform="translate(610, 150)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#4ADE80" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#4ADE80" font-size="12" font-weight="600">Validate all user input</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Zod schemas on every</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">external data boundary</text>
+  </g>
+  <g transform="translate(870, 150)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#4ADE80" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#4ADE80" font-size="12" font-weight="600">Return proper status codes</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Correct HTTP responses</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">for every endpoint</text>
+  </g>
+
+  <!-- TIER 2: ASK FIRST (Amber) -->
+  <rect x="60" y="262" width="1080" height="148" rx="12" fill="url(#amberGrad)" stroke="#FBBF24" stroke-opacity="0.35" stroke-width="1.5"/>
+
+  <!-- Amber header bar -->
+  <rect x="60" y="262" width="1080" height="40" rx="12" fill="#FBBF24" fill-opacity="0.08"/>
+  <rect x="60" y="290" width="1080" height="12" fill="#0A0A0A"/>
+
+  <!-- Amber icon -->
+  <circle cx="100" cy="282" r="14" fill="#FBBF24" fill-opacity="0.15" stroke="#FBBF24" stroke-width="1.5"/>
+  <text x="100" y="288" fill="#FBBF24" font-size="18" font-weight="700" text-anchor="middle">?</text>
+
+  <text x="125" y="287" fill="#FBBF24" font-size="15" font-weight="700" letter-spacing="1.5">ASK FIRST</text>
+  <text x="1100" y="287" fill="#FBBF24" font-size="11" font-weight="500" text-anchor="end" opacity="0.7">Require human approval</text>
+
+  <!-- Amber items -->
+  <g transform="translate(90, 317)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#FBBF24" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#FBBF24" font-size="12" font-weight="600">Database schema changes</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Migrations that alter tables</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">or relationships</text>
+  </g>
+  <g transform="translate(350, 317)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#FBBF24" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#FBBF24" font-size="12" font-weight="600">Adding new dependencies</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Any new npm/pip package</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">requires review</text>
+  </g>
+  <g transform="translate(610, 317)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#FBBF24" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#FBBF24" font-size="12" font-weight="600">Auth flow modifications</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Changes to login, signup,</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">or token handling</text>
+  </g>
+  <g transform="translate(870, 317)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#FBBF24" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#FBBF24" font-size="12" font-weight="600">CI/CD configuration</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Pipeline changes need</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">explicit sign-off</text>
+  </g>
+
+  <!-- TIER 3: NEVER (Red) -->
+  <rect x="60" y="429" width="1080" height="148" rx="12" fill="url(#redGrad)" stroke="#FF4444" stroke-opacity="0.35" stroke-width="1.5"/>
+
+  <!-- Red header bar -->
+  <rect x="60" y="429" width="1080" height="40" rx="12" fill="#FF4444" fill-opacity="0.08"/>
+  <rect x="60" y="457" width="1080" height="12" fill="#0A0A0A"/>
+
+  <!-- Red icon -->
+  <circle cx="100" cy="449" r="14" fill="#FF4444" fill-opacity="0.15" stroke="#FF4444" stroke-width="1.5"/>
+  <line x1="93" y1="442" x2="107" y2="456" stroke="#FF4444" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="107" y1="442" x2="93" y2="456" stroke="#FF4444" stroke-width="2.5" stroke-linecap="round"/>
+
+  <text x="125" y="454" fill="#FF4444" font-size="15" font-weight="700" letter-spacing="1.5">NEVER DO</text>
+  <text x="1100" y="454" fill="#FF4444" font-size="11" font-weight="500" text-anchor="end" opacity="0.7">Hard stop — no exceptions</text>
+
+  <!-- Red items -->
+  <g transform="translate(90, 484)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#FF4444" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#FF4444" font-size="12" font-weight="600">Commit secrets or keys</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">#1 most helpful constraint</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">across 2,500+ repos</text>
+  </g>
+  <g transform="translate(350, 484)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#FF4444" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#FF4444" font-size="12" font-weight="600">Store plain text passwords</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Always bcrypt with 12+</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">rounds, no exceptions</text>
+  </g>
+  <g transform="translate(610, 484)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#FF4444" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#FF4444" font-size="12" font-weight="600">Log sensitive user data</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Passwords, tokens, PII</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">never in logs or output</text>
+  </g>
+  <g transform="translate(870, 484)">
+    <rect width="240" height="75" rx="8" fill="#111" stroke="#FF4444" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="20" y="28" fill="#FF4444" font-size="12" font-weight="600">Skip input validation</text>
+    <text x="20" y="48" fill="rgba(255,255,255,0.55)" font-size="10">Every external boundary</text>
+    <text x="20" y="63" fill="rgba(255,255,255,0.55)" font-size="10">must be validated</text>
+  </g>
+
+  <!-- Connecting arrows between tiers -->
+  <g opacity="0.2">
+    <line x1="600" y1="243" x2="600" y2="262" stroke="#ffffff" stroke-width="1.5"/>
+    <polygon points="595,258 600,267 605,258" fill="#ffffff"/>
+    <line x1="600" y1="410" x2="600" y2="429" stroke="#ffffff" stroke-width="1.5"/>
+    <polygon points="595,425 600,434 605,425" fill="#ffffff"/>
+  </g>
+
+  <!-- Bottom label -->
+  <text x="600" y="607" fill="rgba(255,255,255,0.55)" font-size="10" text-anchor="middle" letter-spacing="1">BASED ON GITHUB'S ANALYSIS OF 2,500+ AGENT CONFIGURATION FILES</text>
+</svg>

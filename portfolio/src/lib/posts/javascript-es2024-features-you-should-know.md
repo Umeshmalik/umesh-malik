@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "JavaScript"
 tags: ["JavaScript", "ES2024", "ECMAScript", "Frontend"]
 keywords: "ES2024 features, JavaScript 2024, Array grouping, Promise.withResolvers, RegExp v flag, modern JavaScript, ECMAScript 2024"
-image: "/blog/default-cover.jpg"
-imageAlt: "JavaScript ES2024 new features overview"
+image: "/blog/javascript-es2024-cover.svg"
+imageAlt: "JavaScript ES2024 features overview showing Object.groupBy, Promise.withResolvers, Unicode strings, and RegExp v flag"
 featured: true
 published: true
 readingTime: "10 min read"

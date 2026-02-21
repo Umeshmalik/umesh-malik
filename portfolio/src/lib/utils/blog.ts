@@ -11,10 +11,9 @@ const availableBlogImages = new Set(
 	)
 );
 
-/** Resolve image path — validates existence on disk, falls back to default, returns absolute URL */
+/** Resolve image path — validates existence on disk, falls back to default */
 function resolveImage(image: string | undefined): string {
-	const path = image && availableBlogImages.has(image) ? image : DEFAULT_COVER_IMAGE;
-	return `${siteConfig.url}${path}`;
+	return image && availableBlogImages.has(image) ? image : DEFAULT_COVER_IMAGE;
 }
 
 /** Create a URL-safe slug from a string */

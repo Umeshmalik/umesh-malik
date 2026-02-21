@@ -41,9 +41,16 @@
 
   const defaultOgImage = `${siteConfig.url}${siteConfig.ogImage}`;
 
+  /** Ensure image URL is absolute for meta tags */
+  const absoluteImage = $derived(
+    image.startsWith("http") ? image : `${siteConfig.url}${image}`,
+  );
+
   // Social platforms (LinkedIn, Facebook, X) don't support SVG — fall back to default JPEG
   const ogImage = $derived(
-    /\.(jpe?g|png|webp)$/i.test(image) ? image : defaultOgImage,
+    /\.(jpe?g|png|webp)$/i.test(absoluteImage)
+      ? absoluteImage
+      : defaultOgImage,
   );
 
   function getImageMimeType(url: string): string {

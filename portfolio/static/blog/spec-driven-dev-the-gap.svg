@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="'Inter', 'SF Pro', system-ui, sans-serif">
+  <title>The Gap: Vague prompts versus structured specs — comparing outcomes of unstructured AI prompts with spec-driven development</title>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000000"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+    <linearGradient id="redGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4444" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#FF4444" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="goldGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C09E5A" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#C09E5A" stop-opacity="0.02"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.04" stroke="#ffffff" stroke-width="0.5">
+    <line x1="0" y1="0" x2="0" y2="630"/><line x1="60" y1="0" x2="60" y2="630"/>
+    <line x1="120" y1="0" x2="120" y2="630"/><line x1="180" y1="0" x2="180" y2="630"/>
+    <line x1="240" y1="0" x2="240" y2="630"/><line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="360" y1="0" x2="360" y2="630"/><line x1="420" y1="0" x2="420" y2="630"/>
+    <line x1="480" y1="0" x2="480" y2="630"/><line x1="540" y1="0" x2="540" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/><line x1="660" y1="0" x2="660" y2="630"/>
+    <line x1="720" y1="0" x2="720" y2="630"/><line x1="780" y1="0" x2="780" y2="630"/>
+    <line x1="840" y1="0" x2="840" y2="630"/><line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="960" y1="0" x2="960" y2="630"/><line x1="1020" y1="0" x2="1020" y2="630"/>
+    <line x1="1080" y1="0" x2="1080" y2="630"/><line x1="1140" y1="0" x2="1140" y2="630"/>
+    <line x1="0" y1="63" x2="1200" y2="63"/><line x1="0" y1="126" x2="1200" y2="126"/>
+    <line x1="0" y1="189" x2="1200" y2="189"/><line x1="0" y1="252" x2="1200" y2="252"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/><line x1="0" y1="378" x2="1200" y2="378"/>
+    <line x1="0" y1="441" x2="1200" y2="441"/><line x1="0" y1="504" x2="1200" y2="504"/>
+    <line x1="0" y1="567" x2="1200" y2="567"/>
+  </g>
+
+  <!-- Divider -->
+  <line x1="600" y1="80" x2="600" y2="550" stroke="#2B2B2B" stroke-width="2" stroke-dasharray="8,6"/>
+
+  <!-- LEFT SIDE: Vague Prompt (Red/Bad) -->
+  <rect x="60" y="80" width="480" height="470" rx="12" fill="url(#redGlow)" stroke="#FF4444" stroke-opacity="0.3" stroke-width="1"/>
+
+  <!-- Left header -->
+  <text x="300" y="60" fill="#FF6666" font-size="13" font-weight="600" text-anchor="middle" letter-spacing="3" opacity="0.9">THE VAGUE PROMPT</text>
+
+  <!-- Terminal window -->
+  <rect x="90" y="110" width="420" height="280" rx="8" fill="#111111" stroke="#2B2B2B" stroke-width="1"/>
+  <circle cx="110" cy="130" r="5" fill="#FF5F57"/><circle cx="128" cy="130" r="5" fill="#FEBC2E"/><circle cx="146" cy="130" r="5" fill="#28C840"/>
+
+  <!-- Vague prompt text -->
+  <text x="110" y="165" fill="#FF8888" font-size="11" font-family="'JetBrains Mono', monospace" opacity="0.7">&gt; Build me an auth system</text>
+  <text x="110" y="188" fill="#FF8888" font-size="11" font-family="'JetBrains Mono', monospace" opacity="0.7">&gt; with JWT and OAuth and 2FA</text>
+  <text x="110" y="211" fill="#FF8888" font-size="11" font-family="'JetBrains Mono', monospace" opacity="0.7">&gt; and rate limiting and CSRF</text>
+  <text x="110" y="234" fill="#FF8888" font-size="11" font-family="'JetBrains Mono', monospace" opacity="0.7">&gt; and session management and</text>
+  <text x="110" y="257" fill="#FF8888" font-size="11" font-family="'JetBrains Mono', monospace" opacity="0.7">&gt; password reset and lockout</text>
+  <text x="110" y="280" fill="#FF8888" font-size="11" font-family="'JetBrains Mono', monospace" opacity="0.7">&gt; and remember-me tokens...</text>
+  <text x="110" y="316" fill="rgba(255,255,255,0.55)" font-size="11" font-family="'JetBrains Mono', monospace">// 500 more words of requirements</text>
+  <text x="110" y="339" fill="rgba(255,255,255,0.55)" font-size="11" font-family="'JetBrains Mono', monospace">// all in a single prompt</text>
+  <text x="110" y="362" fill="#FF4444" font-size="11" font-family="'JetBrains Mono', monospace">// context window: OVERLOADED</text>
+
+  <!-- Left result indicators -->
+  <g transform="translate(90, 410)">
+    <rect width="420" height="32" rx="6" fill="#1A0000" stroke="#FF4444" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="21" fill="#FF6666" font-size="12" font-weight="500">Half-implemented features</text>
+    <text x="390" y="21" fill="#FF4444" font-size="14" font-weight="700" text-anchor="end">67%</text>
+  </g>
+  <g transform="translate(90, 450)">
+    <rect width="420" height="32" rx="6" fill="#1A0000" stroke="#FF4444" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="21" fill="#FF6666" font-size="12" font-weight="500">Security vulnerabilities</text>
+    <text x="390" y="21" fill="#FF4444" font-size="14" font-weight="700" text-anchor="end">12 found</text>
+  </g>
+  <g transform="translate(90, 490)">
+    <rect width="420" height="32" rx="6" fill="#1A0000" stroke="#FF4444" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="21" fill="#FF6666" font-size="12" font-weight="500">Estimated breach cost</text>
+    <text x="390" y="21" fill="#FF4444" font-size="14" font-weight="700" text-anchor="end">$300,000</text>
+  </g>
+
+  <!-- RIGHT SIDE: Structured Spec (Gold/Good) -->
+  <rect x="660" y="80" width="480" height="470" rx="12" fill="url(#goldGlow)" stroke="#C09E5A" stroke-opacity="0.3" stroke-width="1"/>
+
+  <!-- Right header -->
+  <text x="900" y="60" fill="#C09E5A" font-size="13" font-weight="600" text-anchor="middle" letter-spacing="3">THE STRUCTURED SPEC</text>
+
+  <!-- Spec document -->
+  <rect x="690" y="110" width="420" height="280" rx="8" fill="#111111" stroke="#2B2B2B" stroke-width="1"/>
+  <circle cx="710" cy="130" r="5" fill="#FF5F57"/><circle cx="728" cy="130" r="5" fill="#FEBC2E"/><circle cx="746" cy="130" r="5" fill="#28C840"/>
+  <text x="850" y="132" fill="rgba(255,255,255,0.55)" font-size="10" font-family="'JetBrains Mono', monospace">SPEC.md</text>
+
+  <!-- Spec content -->
+  <text x="710" y="162" fill="#C09E5A" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="600">## Commands</text>
+  <text x="710" y="182" fill="#999" font-size="10.5" font-family="'JetBrains Mono', monospace">pytest -v --cov=src</text>
+  <text x="710" y="206" fill="#C09E5A" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="600">## Boundaries</text>
+  <text x="710" y="226" fill="#4ADE80" font-size="10.5" font-family="'JetBrains Mono', monospace">Always: run tests, validate input</text>
+  <text x="710" y="246" fill="#FBBF24" font-size="10.5" font-family="'JetBrains Mono', monospace">Ask: schema changes, new deps</text>
+  <text x="710" y="266" fill="#FF6666" font-size="10.5" font-family="'JetBrains Mono', monospace">Never: commit secrets, skip auth</text>
+  <text x="710" y="294" fill="#C09E5A" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="600">## Known Pitfalls</text>
+  <text x="710" y="314" fill="#999" font-size="10.5" font-family="'JetBrains Mono', monospace">bcrypt blocks event loop...</text>
+  <text x="710" y="338" fill="#C09E5A" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="600">## Success Criteria</text>
+  <text x="710" y="358" fill="#999" font-size="10.5" font-family="'JetBrains Mono', monospace">All conformance tests pass</text>
+  <text x="710" y="378" fill="#4ADE80" font-size="11" font-family="'JetBrains Mono', monospace">// Modular. Focused. Bounded.</text>
+
+  <!-- Right result indicators -->
+  <g transform="translate(690, 410)">
+    <rect width="420" height="32" rx="6" fill="#0A1A00" stroke="#4ADE80" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="21" fill="#4ADE80" font-size="12" font-weight="500">Spec requirements met</text>
+    <text x="390" y="21" fill="#4ADE80" font-size="14" font-weight="700" text-anchor="end">100%</text>
+  </g>
+  <g transform="translate(690, 450)">
+    <rect width="420" height="32" rx="6" fill="#0A1A00" stroke="#4ADE80" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="21" fill="#4ADE80" font-size="12" font-weight="500">Security vulnerabilities</text>
+    <text x="390" y="21" fill="#4ADE80" font-size="14" font-weight="700" text-anchor="end">0 found</text>
+  </g>
+  <g transform="translate(690, 490)">
+    <rect width="420" height="32" rx="6" fill="#0A1A00" stroke="#4ADE80" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="15" y="21" fill="#4ADE80" font-size="12" font-weight="500">Estimated annual savings</text>
+    <text x="390" y="21" fill="#C09E5A" font-size="14" font-weight="700" text-anchor="end">$300,000+</text>
+  </g>
+
+  <!-- VS badge in center -->
+  <circle cx="600" cy="315" r="28" fill="#111" stroke="#2B2B2B" stroke-width="2"/>
+  <text x="600" y="322" fill="#C09E5A" font-size="16" font-weight="700" text-anchor="middle" filter="url(#glow)">VS</text>
+</svg>

@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "TypeScript"
 tags: ["TypeScript", "JavaScript", "Frontend", "Type Safety"]
 keywords: "TypeScript utility types, TypeScript Partial, TypeScript Pick, TypeScript Omit, TypeScript Record, type-safe code, TypeScript best practices"
-image: "/blog/default-cover.jpg"
-imageAlt: "TypeScript utility types illustration"
+image: "/blog/typescript-utility-cover.svg"
+imageAlt: "TypeScript utility types overview showing Partial, Required, Pick, Omit, and Record with code examples"
 featured: true
 published: true
 readingTime: "10 min read"

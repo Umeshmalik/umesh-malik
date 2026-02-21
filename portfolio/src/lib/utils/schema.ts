@@ -154,7 +154,11 @@ export function createArticleSchema(post: {
 		description: post.description,
 		image: {
 			'@type': 'ImageObject',
-			url: post.image || `${baseUrl}${S.ogImage}`,
+			url: post.image
+				? post.image.startsWith('http')
+					? post.image
+					: `${baseUrl}${post.image}`
+				: `${baseUrl}${S.ogImage}`,
 			caption: post.imageAlt || post.title
 		},
 		datePublished: post.publishDate,

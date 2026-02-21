@@ -148,6 +148,8 @@
   <ShareButtons
     title={data.post.title}
     url="{siteConfig.url}/blog/{data.post.slug}"
+    description={data.post.description}
+    tags={data.post.tags}
   />
 
   <!-- Author Bio -->

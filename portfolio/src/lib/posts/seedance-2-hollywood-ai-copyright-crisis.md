@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "AI & Entertainment"
 tags: ["AI", "Hollywood", "Copyright", "ByteDance", "Deepfakes", "AI Ethics"]
 keywords: "Seedance 2.0, ByteDance AI video generator, Hollywood AI crisis, Disney cease and desist ByteDance, Paramount Seedance, SAG-AFTRA AI response, Tom Cruise Brad Pitt AI fight, AI generated deepfakes, MPA Seedance statement, AI copyright infringement, Seedance vs Sora, text to video AI, AI threatens Hollywood, celebrity deepfakes 2026"
-image: "/blog/default-cover.jpg"
-imageAlt: "AI-generated cinematic scene representing the collision between artificial intelligence and Hollywood's entertainment industry"
+image: "/blog/seedance-cover.svg"
+imageAlt: "The Seedance 2.0 crisis: Hollywood confrontation with AI-generated video showing film reel colliding with AI"
 featured: true
 published: true
 readingTime: "15 min read"
@@ -196,6 +196,8 @@ Paramount's word choice is the most revealing detail in this entire saga. When A
 That's not just a legal problem. That's a civilizational one.
 
 ## The Competitive Landscape
+
+![AI video generator comparison: Seedance 2.0 versus Sora 2, Veo 3.1, and Kling 3.0 across resolution, watermark, safeguards, and licensing](/blog/seedance-competitive-landscape.svg)
 
 Seedance 2.0 didn't emerge in a vacuum. Here's where the major AI video generators stand:
 

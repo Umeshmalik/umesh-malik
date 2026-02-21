@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "Testing"
 tags: ["Testing", "React", "TypeScript", "Frontend", "Vitest"]
 keywords: "frontend testing 2025, React testing, component testing, E2E testing, testing strategy, Vitest, Playwright, testing pyramid, integration testing"
-image: "/blog/default-cover.jpg"
-imageAlt: "Frontend testing strategies for 2025"
+image: "/blog/frontend-testing-cover.svg"
+imageAlt: "Frontend testing trophy model with layers for static analysis, integration tests, unit tests, and E2E tests"
 featured: true
 published: true
 readingTime: "14 min read"

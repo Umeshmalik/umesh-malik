@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "Career"
 tags: ["Career", "Frontend", "Software Engineering", "Growth"]
 keywords: "frontend career growth, junior to senior engineer, software engineer career path, frontend engineer promotion, career advice developers, engineering growth"
-image: "/blog/default-cover.jpg"
-imageAlt: "Frontend career growth from junior to senior"
+image: "/blog/frontend-career-cover.svg"
+imageAlt: "Frontend career growth timeline showing progression from Associate Engineer through to SDE-2 at Expedia Group"
 featured: true
 published: true
 readingTime: "12 min read"

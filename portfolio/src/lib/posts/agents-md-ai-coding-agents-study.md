@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "AI & Open Source"
 tags: ["AI", "Developer Experience", "Open Source", "Productivity", "Tools"]
 keywords: "AGENTS.md effectiveness 2026, AGENTS.md study, AI coding agents context files, AGENTS.md vs CLAUDE.md, coding agent instructions, AGENTS.md benchmark, AGENTbench, AI coding agent performance, repository context files AI, AGENTS.md best practices, coding agent documentation, AI developer tools 2026, LLM coding agent optimization, AGENTS.md OpenAI, coding agent context files study"
-image: "/blog/default-cover.jpg"
-imageAlt: "A visual showing an AGENTS.md file next to AI coding agent performance metrics and benchmark results"
+image: "/blog/agents-md-cover.svg"
+imageAlt: "AGENTS.md study results showing a document icon next to a declining performance chart from ETH Zurich's 138-repo benchmark"
 featured: true
 published: true
 readingTime: "15 min read"
@@ -244,6 +244,8 @@ The study showed that agents spend 14–22% more reasoning tokens when context f
 Target: **under 30 lines** of actual content. If you need more, your project probably needs better tooling, not more documentation.
 
 ## The Format War: AGENTS.md vs CLAUDE.md vs Everything Else
+
+![The context file format war comparing AGENTS.md, CLAUDE.md, Copilot Instructions, Cursor Rules, and Aider across AI coding tools](/blog/agents-md-format-war.svg)
 
 The elephant in the room: there is no single standard. Different tools read different files:
 

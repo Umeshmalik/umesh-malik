@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "DevOps & Infrastructure"
 tags: ["Docker", "Kubernetes", "DevOps", "Cloud Computing", "Infrastructure", "Cost Optimization"]
 keywords: "Docker Swarm vs Kubernetes 2026, Kubernetes cost comparison, Docker Swarm production, container orchestration cost, Kubernetes waste 87 percent CPU, DevOps infrastructure costs, Docker Swarm vs K8s, Kubernetes overprovisioned, K3s alternative, container management cost optimization, Kubernetes complexity tax, Docker orchestration production, microservices architecture cost, FinOps Kubernetes, cloud infrastructure spending 2026"
-image: "/blog/default-cover.jpg"
-imageAlt: "A split visual comparing Docker Swarm simplicity against Kubernetes infrastructure complexity and cost"
+image: "/blog/docker-swarm-vs-k8s-cover.svg"
+imageAlt: "Docker Swarm versus Kubernetes cost comparison: $166 per year simple setup versus $200K complex infrastructure"
 featured: true
 published: true
 readingTime: "22 min read"
@@ -164,6 +164,8 @@ And here is the kicker: the 92% of teams using Kubernetes for orchestration are 
 It is like buying a car (Docker), then buying a separate autonomous driving system (Kubernetes) to control the car you already own — when the car came with cruise control (Swarm) built in.
 
 ## The Real Comparison: 27 Lines vs 170+ Lines
+
+![YAML complexity comparison showing Docker Compose at 27 lines versus Docker Swarm at 42 lines versus Kubernetes at 170+ lines across 4-6 files](/blog/docker-swarm-yaml-comparison.svg)
 
 Let's look at what it actually takes to deploy the exact same application — a Node.js API with MongoDB — on each platform.
 

@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "React"
 tags: ["React", "Performance", "JavaScript", "Frontend"]
 keywords: "React performance, React optimization, React memo, useMemo, useCallback, code splitting, React virtualization, web performance"
-image: "/blog/default-cover.jpg"
-imageAlt: "React performance optimization techniques"
+image: "/blog/react-performance-cover.svg"
+imageAlt: "React performance optimization showing 10 techniques including memoization, code splitting, and virtualization"
 featured: true
 published: true
 readingTime: "12 min read"

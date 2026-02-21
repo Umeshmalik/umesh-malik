@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "Performance"
 tags: ["Performance", "Core Web Vitals", "SEO", "Frontend"]
 keywords: "Core Web Vitals, LCP optimization, INP optimization, CLS fix, web performance, Lighthouse score, page speed, frontend performance"
-image: "/blog/default-cover.jpg"
-imageAlt: "Core Web Vitals optimization guide"
+image: "/blog/core-web-vitals-cover.svg"
+imageAlt: "Core Web Vitals dashboard showing three gauge meters for LCP, INP, and CLS with before and after optimization results"
 featured: false
 published: true
 readingTime: "13 min read"

@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "Node.js"
 tags: ["Node.js", "Backend", "JavaScript", "TypeScript", "API"]
 keywords: "Node.js for frontend developers, Express.js tutorial, REST API Node.js, backend basics, fullstack JavaScript, Node.js TypeScript, API development"
-image: "/blog/default-cover.jpg"
-imageAlt: "Node.js backend for frontend developers"
+image: "/blog/nodejs-backend-cover.svg"
+imageAlt: "Node.js backend architecture showing Express server, middleware chain, REST API endpoints, and database layer"
 featured: false
 published: true
 readingTime: "14 min read"

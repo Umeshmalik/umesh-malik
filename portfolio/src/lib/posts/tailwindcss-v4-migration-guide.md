@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "CSS"
 tags: ["TailwindCSS", "CSS", "Frontend", "Migration"]
 keywords: "TailwindCSS v4, Tailwind migration, CSS-first config, TailwindCSS upgrade, Tailwind v3 to v4, TailwindCSS 4 changes"
-image: "/blog/default-cover.jpg"
-imageAlt: "TailwindCSS v4 migration guide"
+image: "/blog/tailwindcss-v4-cover.svg"
+imageAlt: "TailwindCSS v4 migration showing the shift from JavaScript config to CSS-first @theme configuration"
 featured: false
 published: true
 readingTime: "12 min read"

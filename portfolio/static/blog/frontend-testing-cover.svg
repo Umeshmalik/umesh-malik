@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="'Inter', 'SF Pro', system-ui, sans-serif">
+  <title>Frontend testing trophy model: layers showing static analysis, integration tests, unit tests, and E2E tests with tool recommendations</title>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000000"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <text x="600" y="50" fill="#C09E5A" font-size="14" font-weight="600" text-anchor="middle" letter-spacing="3">FRONTEND TESTING STRATEGIES 2025</text>
+  <text x="600" y="75" fill="rgba(255,255,255,0.55)" font-size="12" text-anchor="middle">The Testing Trophy — Not the Pyramid</text>
+
+  <!-- Trophy shape -->
+  <g transform="translate(100, 90)">
+    <!-- E2E (top, smallest) -->
+    <rect x="200" y="0" width="200" height="70" rx="10" fill="rgba(129,140,248,0.06)" stroke="#818CF8" stroke-opacity="0.4" stroke-width="1.5"/>
+    <text x="300" y="30" fill="#818CF8" font-size="14" font-weight="700" text-anchor="middle">E2E TESTS</text>
+    <text x="300" y="50" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">Critical flows only</text>
+    <text x="300" y="65" fill="#818CF8" font-size="10" text-anchor="middle">Playwright</text>
+
+    <!-- Unit (second, medium) -->
+    <rect x="140" y="80" width="320" height="70" rx="10" fill="rgba(192,158,90,0.06)" stroke="#C09E5A" stroke-opacity="0.4" stroke-width="1.5"/>
+    <text x="300" y="110" fill="#C09E5A" font-size="14" font-weight="700" text-anchor="middle">UNIT TESTS</text>
+    <text x="300" y="130" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">Pure logic, utilities, hooks</text>
+    <text x="300" y="145" fill="#C09E5A" font-size="10" text-anchor="middle">Vitest</text>
+
+    <!-- Integration (third, largest) -->
+    <rect x="60" y="160" width="480" height="100" rx="10" fill="rgba(74,222,128,0.08)" stroke="#4ADE80" stroke-opacity="0.5" stroke-width="2"/>
+    <text x="300" y="195" fill="#4ADE80" font-size="18" font-weight="700" text-anchor="middle">INTEGRATION TESTS</text>
+    <text x="300" y="220" fill="rgba(255,255,255,0.6)" font-size="12" text-anchor="middle">The largest layer — test behavior, not implementation</text>
+    <text x="300" y="250" fill="#4ADE80" font-size="11" text-anchor="middle">Vitest + Testing Library + MSW</text>
+
+    <!-- Static Analysis (base) -->
+    <rect x="120" y="270" width="360" height="60" rx="10" fill="rgba(56,189,248,0.06)" stroke="#38BDF8" stroke-opacity="0.4" stroke-width="1.5"/>
+    <text x="300" y="298" fill="#38BDF8" font-size="14" font-weight="700" text-anchor="middle">STATIC ANALYSIS</text>
+    <text x="300" y="318" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">TypeScript strict + ESLint</text>
+
+    <!-- Trophy stem -->
+    <rect x="270" y="340" width="60" height="30" fill="#2B2B2B" rx="3"/>
+    <rect x="240" y="370" width="120" height="16" rx="4" fill="#2B2B2B"/>
+  </g>
+
+  <!-- Tool stack on the right -->
+  <g transform="translate(700, 100)">
+    <text x="200" y="20" fill="#C09E5A" font-size="14" font-weight="600" text-anchor="middle" letter-spacing="2">TOOL STACK</text>
+
+    <g transform="translate(0, 40)">
+      <rect width="400" height="44" rx="8" fill="#111" stroke="#4ADE80" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="20" y="20" fill="#4ADE80" font-size="13" font-weight="600">Vitest + Testing Library</text>
+      <text x="20" y="36" fill="rgba(255,255,255,0.55)" font-size="11">Unit &amp; Integration testing</text>
+    </g>
+    <g transform="translate(0, 94)">
+      <rect width="400" height="44" rx="8" fill="#111" stroke="#818CF8" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="20" y="20" fill="#818CF8" font-size="13" font-weight="600">Playwright</text>
+      <text x="20" y="36" fill="rgba(255,255,255,0.55)" font-size="11">E2E &amp; visual regression</text>
+    </g>
+    <g transform="translate(0, 148)">
+      <rect width="400" height="44" rx="8" fill="#111" stroke="#C09E5A" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="20" y="20" fill="#C09E5A" font-size="13" font-weight="600">MSW (Mock Service Worker)</text>
+      <text x="20" y="36" fill="rgba(255,255,255,0.55)" font-size="11">Network-level API mocking</text>
+    </g>
+    <g transform="translate(0, 202)">
+      <rect width="400" height="44" rx="8" fill="#111" stroke="#38BDF8" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="20" y="20" fill="#38BDF8" font-size="13" font-weight="600">TypeScript Strict Mode</text>
+      <text x="20" y="36" fill="rgba(255,255,255,0.55)" font-size="11">First line of defense</text>
+    </g>
+
+    <!-- What NOT to test -->
+    <g transform="translate(0, 275)">
+      <rect width="400" height="120" rx="8" fill="#111" stroke="#FF4444" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="200" y="25" fill="#FF4444" font-size="13" font-weight="700" text-anchor="middle">DON'T TEST</text>
+      <text x="20" y="50" fill="rgba(255,255,255,0.55)" font-size="11">Styling (use visual regression instead)</text>
+      <text x="20" y="70" fill="rgba(255,255,255,0.55)" font-size="11">Third-party library internals</text>
+      <text x="20" y="90" fill="rgba(255,255,255,0.55)" font-size="11">Implementation details / internal state</text>
+      <text x="20" y="110" fill="rgba(255,255,255,0.55)" font-size="11">Constants and config values</text>
+    </g>
+  </g>
+
+  <!-- Bottom -->
+  <rect x="200" y="530" width="800" height="44" rx="8" fill="#111" stroke="#2B2B2B" stroke-width="1"/>
+  <text x="600" y="548" fill="rgba(255,255,255,0.55)" font-size="12" text-anchor="middle" font-style="italic">"A small number of well-written tests beats high coverage of shallow tests."</text>
+  <text x="600" y="566" fill="#C09E5A" font-size="11" text-anchor="middle" font-weight="600">Test behavior, not implementation</text>
+
+  <text x="600" y="610" fill="rgba(255,255,255,0.55)" font-size="10" text-anchor="middle" letter-spacing="1">INTEGRATION TESTS GIVE THE MOST CONFIDENCE PER LINE OF TEST CODE</text>
+</svg>

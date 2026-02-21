@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" font-family="'Inter', 'SF Pro', system-ui, sans-serif">
+  <title>AI video generator comparison table: Seedance 2.0 versus Sora 2 versus Veo 3.1 versus Kling 3.0 across resolution, watermark, safeguards, and licensing</title>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000000"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="400" fill="url(#bgGrad)"/>
+
+  <text x="600" y="35" fill="#C09E5A" font-size="13" font-weight="600" text-anchor="middle" letter-spacing="2">AI VIDEO GENERATOR LANDSCAPE — FEBRUARY 2026</text>
+
+  <!-- Column headers -->
+  <g transform="translate(60, 50)">
+    <rect width="200" height="40" rx="6" fill="#111" stroke="#2B2B2B" stroke-width="1"/>
+    <text x="100" y="27" fill="rgba(255,255,255,0.6)" font-size="12" font-weight="600" text-anchor="middle">Feature</text>
+  </g>
+  <g transform="translate(270, 50)">
+    <rect width="210" height="40" rx="6" fill="#FF4444" fill-opacity="0.06" stroke="#FF4444" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="105" y="27" fill="#FF6666" font-size="12" font-weight="700" text-anchor="middle">Seedance 2.0</text>
+  </g>
+  <g transform="translate(490, 50)">
+    <rect width="210" height="40" rx="6" fill="#111" stroke="#4ADE80" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="105" y="27" fill="#4ADE80" font-size="12" font-weight="600" text-anchor="middle">Sora 2 (OpenAI)</text>
+  </g>
+  <g transform="translate(710, 50)">
+    <rect width="210" height="40" rx="6" fill="#111" stroke="#38BDF8" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="105" y="27" fill="#38BDF8" font-size="12" font-weight="600" text-anchor="middle">Veo 3.1 (Google)</text>
+  </g>
+  <g transform="translate(930, 50)">
+    <rect width="210" height="40" rx="6" fill="#111" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="105" y="27" fill="rgba(255,255,255,0.6)" font-size="12" font-weight="600" text-anchor="middle">Kling 3.0</text>
+  </g>
+
+  <!-- Row: Resolution -->
+  <g transform="translate(60, 100)">
+    <rect width="200" height="36" rx="4" fill="#111" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="15" y="24" fill="rgba(255,255,255,0.55)" font-size="12">Resolution</text>
+  </g>
+  <g transform="translate(270, 100)">
+    <rect width="210" height="36" rx="4" fill="#FF4444" fill-opacity="0.04" stroke="#FF4444" stroke-opacity="0.2" stroke-width="0.5"/>
+    <text x="105" y="24" fill="#FF6666" font-size="12" font-weight="700" text-anchor="middle">2K native</text>
+  </g>
+  <g transform="translate(490, 100)">
+    <rect width="210" height="36" rx="4" fill="#111" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="rgba(255,255,255,0.55)" font-size="12" text-anchor="middle">1080p</text>
+  </g>
+  <g transform="translate(710, 100)">
+    <rect width="210" height="36" rx="4" fill="#111" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="rgba(255,255,255,0.55)" font-size="12" text-anchor="middle">1080p</text>
+  </g>
+  <g transform="translate(930, 100)">
+    <rect width="210" height="36" rx="4" fill="#111" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="rgba(255,255,255,0.55)" font-size="12" text-anchor="middle">1080p</text>
+  </g>
+
+  <!-- Row: Watermark -->
+  <g transform="translate(60, 145)">
+    <rect width="200" height="36" rx="4" fill="#111" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="15" y="24" fill="rgba(255,255,255,0.55)" font-size="12">Watermark</text>
+  </g>
+  <g transform="translate(270, 145)">
+    <rect width="210" height="36" rx="4" fill="#FF4444" fill-opacity="0.08" stroke="#FF4444" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="105" y="24" fill="#FF4444" font-size="12" font-weight="700" text-anchor="middle">NONE</text>
+  </g>
+  <g transform="translate(490, 145)">
+    <rect width="210" height="36" rx="4" fill="#4ADE80" fill-opacity="0.04" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="#4ADE80" font-size="12" text-anchor="middle">Yes</text>
+  </g>
+  <g transform="translate(710, 145)">
+    <rect width="210" height="36" rx="4" fill="#4ADE80" fill-opacity="0.04" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="#4ADE80" font-size="12" text-anchor="middle">Yes</text>
+  </g>
+  <g transform="translate(930, 145)">
+    <rect width="210" height="36" rx="4" fill="#4ADE80" fill-opacity="0.04" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="#4ADE80" font-size="12" text-anchor="middle">Yes</text>
+  </g>
+
+  <!-- Row: IP Safeguards -->
+  <g transform="translate(60, 190)">
+    <rect width="200" height="36" rx="4" fill="#111" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="15" y="24" fill="rgba(255,255,255,0.55)" font-size="12">IP Safeguards</text>
+  </g>
+  <g transform="translate(270, 190)">
+    <rect width="210" height="36" rx="4" fill="#FF4444" fill-opacity="0.08" stroke="#FF4444" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="105" y="24" fill="#FF4444" font-size="12" font-weight="700" text-anchor="middle">Minimal</text>
+  </g>
+  <g transform="translate(490, 190)">
+    <rect width="210" height="36" rx="4" fill="#4ADE80" fill-opacity="0.04" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="#4ADE80" font-size="12" text-anchor="middle">Extensive</text>
+  </g>
+  <g transform="translate(710, 190)">
+    <rect width="210" height="36" rx="4" fill="#4ADE80" fill-opacity="0.04" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="#4ADE80" font-size="12" text-anchor="middle">Extensive</text>
+  </g>
+  <g transform="translate(930, 190)">
+    <rect width="210" height="36" rx="4" fill="#111" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="rgba(255,255,255,0.55)" font-size="12" text-anchor="middle">Moderate</text>
+  </g>
+
+  <!-- Row: Studio Licensing -->
+  <g transform="translate(60, 235)">
+    <rect width="200" height="36" rx="4" fill="#111" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="15" y="24" fill="rgba(255,255,255,0.55)" font-size="12">Studio Licensing</text>
+  </g>
+  <g transform="translate(270, 235)">
+    <rect width="210" height="36" rx="4" fill="#FF4444" fill-opacity="0.08" stroke="#FF4444" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="105" y="24" fill="#FF4444" font-size="12" font-weight="700" text-anchor="middle">None</text>
+  </g>
+  <g transform="translate(490, 235)">
+    <rect width="210" height="36" rx="4" fill="#4ADE80" fill-opacity="0.04" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="#4ADE80" font-size="12" text-anchor="middle">Disney ($1B deal)</text>
+  </g>
+  <g transform="translate(710, 235)">
+    <rect width="210" height="36" rx="4" fill="#4ADE80" fill-opacity="0.04" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="#4ADE80" font-size="12" text-anchor="middle">Multiple deals</text>
+  </g>
+  <g transform="translate(930, 235)">
+    <rect width="210" height="36" rx="4" fill="#111" stroke="#2B2B2B" stroke-width="0.5"/>
+    <text x="105" y="24" fill="rgba(255,255,255,0.55)" font-size="12" text-anchor="middle">None</text>
+  </g>
+
+  <!-- Bottom callout -->
+  <rect x="200" y="300" width="800" height="70" rx="10" fill="#111" stroke="#FF4444" stroke-opacity="0.4" stroke-width="1"/>
+  <text x="600" y="328" fill="#FF4444" font-size="14" font-weight="700" text-anchor="middle">THE NUCLEAR COMBINATION</text>
+  <text x="600" y="352" fill="rgba(255,255,255,0.55)" font-size="12" text-anchor="middle">Watermark-free + 2K native + minimal safeguards + no licensing deals = Hollywood's worst nightmare</text>
+</svg>

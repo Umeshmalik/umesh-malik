@@ -7,8 +7,8 @@ author: "Umesh Malik"
 category: "Productivity"
 tags: ["Productivity", "Tools", "Developer Experience", "Workflow"]
 keywords: "developer productivity, senior engineer tools, developer workflow, coding productivity, engineering productivity, VS Code setup, terminal workflow"
-image: "/blog/default-cover.jpg"
-imageAlt: "Developer productivity tools for senior engineers"
+image: "/blog/dev-productivity-cover.svg"
+imageAlt: "Developer productivity workspace showing a terminal, editor, and organized workflow system for senior engineers"
 featured: false
 published: true
 readingTime: "11 min read"
