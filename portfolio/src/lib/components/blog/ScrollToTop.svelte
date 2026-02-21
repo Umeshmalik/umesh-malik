@@ -26,7 +26,7 @@
 </script>
 
 {#if visible}
-  <div class="scroll-to-top fixed right-6 bottom-6 z-40">
+  <div class="scroll-to-top fixed right-6 bottom-20 z-40">
     <Button
       variant="secondary"
       size="sm"
