@@ -46,11 +46,14 @@
     image.startsWith("http") ? image : `${siteConfig.url}${image}`,
   );
 
-  // Social platforms (LinkedIn, Facebook, X) don't support SVG — fall back to default JPEG
+  // Social platforms (LinkedIn, Facebook, X) don't support SVG.
+  // Auto-resolve SVG → PNG sibling; fall back to default JPEG only if no PNG exists.
   const ogImage = $derived(
     /\.(jpe?g|png|webp)$/i.test(absoluteImage)
       ? absoluteImage
-      : defaultOgImage,
+      : absoluteImage.endsWith(".svg")
+        ? absoluteImage.replace(/\.svg$/, ".png")
+        : defaultOgImage,
   );
 
   function getImageMimeType(url: string): string {
