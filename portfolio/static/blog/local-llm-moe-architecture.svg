@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="'Inter', 'SF Pro', system-ui, sans-serif">
+  <title>Mixture-of-Experts architecture: 512 total experts, only 10 activated per token, routing through a gating network</title>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000000"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C09E5A"/>
+      <stop offset="100%" stop-color="#8B7340"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#22C55E"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowGreen">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="600" y="42" fill="#C09E5A" font-size="14" font-weight="600" text-anchor="middle" letter-spacing="3">ULTRA-SPARSE MIXTURE-OF-EXPERTS ARCHITECTURE</text>
+  <text x="600" y="64" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">Qwen3-Coder-Next — 80B Total Parameters, 3B Active per Token</text>
+
+  <!-- LEFT: Input Token -->
+  <g transform="translate(60, 220)">
+    <rect width="120" height="100" rx="10" fill="#111" stroke="#C09E5A" stroke-opacity="0.6" stroke-width="1.5"/>
+    <text x="60" y="35" fill="#C09E5A" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1">INPUT</text>
+    <text x="60" y="55" fill="#FFFFFF" font-size="14" font-weight="700" text-anchor="middle">Token</text>
+    <text x="60" y="75" fill="rgba(255,255,255,0.5)" font-size="10" text-anchor="middle" font-family="'JetBrains Mono', monospace">dim: 2048</text>
+  </g>
+
+  <!-- Arrow: Input → Router -->
+  <line x1="180" y1="270" x2="230" y2="270" stroke="#C09E5A" stroke-width="1.5" opacity="0.6"/>
+  <polygon points="226,265 236,270 226,275" fill="#C09E5A" opacity="0.6"/>
+
+  <!-- CENTER-LEFT: Gating Router -->
+  <g transform="translate(240, 190)">
+    <rect width="140" height="160" rx="12" fill="#C09E5A" fill-opacity="0.08" stroke="#C09E5A" stroke-opacity="0.5" stroke-width="1.5"/>
+    <text x="70" y="28" fill="#C09E5A" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">GATING</text>
+    <text x="70" y="46" fill="#C09E5A" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">ROUTER</text>
+
+    <!-- Router visualization: softmax scores -->
+    <text x="70" y="72" fill="rgba(255,255,255,0.5)" font-size="9" text-anchor="middle">Top-K Selection</text>
+
+    <!-- Score bars -->
+    <rect x="15" y="84" width="110" height="8" rx="3" fill="#1A1A1A"/>
+    <rect x="15" y="84" width="105" height="8" rx="3" fill="#4ADE80" opacity="0.9"/>
+    <text x="15" y="80" fill="#4ADE80" font-size="8" font-weight="600">E.217 — 0.14</text>
+
+    <rect x="15" y="98" width="110" height="8" rx="3" fill="#1A1A1A"/>
+    <rect x="15" y="98" width="88" height="8" rx="3" fill="#4ADE80" opacity="0.8"/>
+    <text x="15" y="94" fill="#4ADE80" font-size="8" font-weight="600">E.041 — 0.11</text>
+
+    <rect x="15" y="112" width="110" height="8" rx="3" fill="#1A1A1A"/>
+    <rect x="15" y="112" width="72" height="8" rx="3" fill="#4ADE80" opacity="0.7"/>
+    <text x="15" y="108" fill="#4ADE80" font-size="8" font-weight="600">E.389 — 0.09</text>
+
+    <rect x="15" y="126" width="110" height="8" rx="3" fill="#1A1A1A"/>
+    <rect x="15" y="126" width="14" height="8" rx="3" fill="rgba(255,255,255,0.2)"/>
+    <text x="15" y="122" fill="rgba(255,255,255,0.35)" font-size="8">E.502 — 0.01</text>
+
+    <rect x="15" y="140" width="110" height="8" rx="3" fill="#1A1A1A"/>
+    <rect x="15" y="140" width="8" height="8" rx="3" fill="rgba(255,255,255,0.15)"/>
+    <text x="15" y="136" fill="rgba(255,255,255,0.35)" font-size="8">E.003 — 0.00</text>
+  </g>
+
+  <!-- CENTER: Expert Grid (512 experts) -->
+  <g transform="translate(440, 85)">
+    <text x="200" y="15" fill="rgba(255,255,255,0.55)" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1">512 EXPERT NETWORKS</text>
+
+    <!-- Expert grid - 16x16 = 256 shown (representing 512) -->
+    <!-- Row 1 -->
+    <g transform="translate(0, 28)">
+      <!-- Active experts (green) scattered among inactive (dark) -->
+      <!-- Row by row, 25 columns x 20 rows = 500 dots representing 512 -->
+      <!-- Active ones at specific positions to show sparsity -->
+
+      <!-- Generate grid of inactive experts -->
+      <g fill="rgba(255,255,255,0.08)">
+        <!-- Row 0 -->
+        <rect x="0" y="0" width="14" height="14" rx="2"/><rect x="18" y="0" width="14" height="14" rx="2"/><rect x="36" y="0" width="14" height="14" rx="2"/><rect x="54" y="0" width="14" height="14" rx="2"/><rect x="72" y="0" width="14" height="14" rx="2"/><rect x="90" y="0" width="14" height="14" rx="2"/><rect x="108" y="0" width="14" height="14" rx="2"/><rect x="126" y="0" width="14" height="14" rx="2"/><rect x="144" y="0" width="14" height="14" rx="2"/><rect x="162" y="0" width="14" height="14" rx="2"/><rect x="180" y="0" width="14" height="14" rx="2"/><rect x="198" y="0" width="14" height="14" rx="2"/><rect x="216" y="0" width="14" height="14" rx="2"/><rect x="234" y="0" width="14" height="14" rx="2"/><rect x="252" y="0" width="14" height="14" rx="2"/><rect x="270" y="0" width="14" height="14" rx="2"/><rect x="288" y="0" width="14" height="14" rx="2"/><rect x="306" y="0" width="14" height="14" rx="2"/><rect x="324" y="0" width="14" height="14" rx="2"/><rect x="342" y="0" width="14" height="14" rx="2"/><rect x="360" y="0" width="14" height="14" rx="2"/><rect x="378" y="0" width="14" height="14" rx="2"/>
+        <!-- Row 1 -->
+        <rect x="0" y="18" width="14" height="14" rx="2"/><rect x="18" y="18" width="14" height="14" rx="2"/><rect x="36" y="18" width="14" height="14" rx="2"/><rect x="54" y="18" width="14" height="14" rx="2"/><rect x="72" y="18" width="14" height="14" rx="2"/><rect x="90" y="18" width="14" height="14" rx="2"/><rect x="108" y="18" width="14" height="14" rx="2"/><rect x="126" y="18" width="14" height="14" rx="2"/><rect x="144" y="18" width="14" height="14" rx="2"/><rect x="162" y="18" width="14" height="14" rx="2"/><rect x="180" y="18" width="14" height="14" rx="2"/><rect x="198" y="18" width="14" height="14" rx="2"/><rect x="216" y="18" width="14" height="14" rx="2"/><rect x="234" y="18" width="14" height="14" rx="2"/><rect x="252" y="18" width="14" height="14" rx="2"/><rect x="270" y="18" width="14" height="14" rx="2"/><rect x="288" y="18" width="14" height="14" rx="2"/><rect x="306" y="18" width="14" height="14" rx="2"/><rect x="324" y="18" width="14" height="14" rx="2"/><rect x="342" y="18" width="14" height="14" rx="2"/><rect x="360" y="18" width="14" height="14" rx="2"/><rect x="378" y="18" width="14" height="14" rx="2"/>
+        <!-- Row 2 -->
+        <rect x="0" y="36" width="14" height="14" rx="2"/><rect x="18" y="36" width="14" height="14" rx="2"/><rect x="36" y="36" width="14" height="14" rx="2"/><rect x="54" y="36" width="14" height="14" rx="2"/><rect x="72" y="36" width="14" height="14" rx="2"/><rect x="90" y="36" width="14" height="14" rx="2"/><rect x="108" y="36" width="14" height="14" rx="2"/><rect x="126" y="36" width="14" height="14" rx="2"/><rect x="144" y="36" width="14" height="14" rx="2"/><rect x="162" y="36" width="14" height="14" rx="2"/><rect x="180" y="36" width="14" height="14" rx="2"/><rect x="198" y="36" width="14" height="14" rx="2"/><rect x="216" y="36" width="14" height="14" rx="2"/><rect x="234" y="36" width="14" height="14" rx="2"/><rect x="252" y="36" width="14" height="14" rx="2"/><rect x="270" y="36" width="14" height="14" rx="2"/><rect x="288" y="36" width="14" height="14" rx="2"/><rect x="306" y="36" width="14" height="14" rx="2"/><rect x="324" y="36" width="14" height="14" rx="2"/><rect x="342" y="36" width="14" height="14" rx="2"/><rect x="360" y="36" width="14" height="14" rx="2"/><rect x="378" y="36" width="14" height="14" rx="2"/>
+        <!-- Row 3 -->
+        <rect x="0" y="54" width="14" height="14" rx="2"/><rect x="18" y="54" width="14" height="14" rx="2"/><rect x="36" y="54" width="14" height="14" rx="2"/><rect x="54" y="54" width="14" height="14" rx="2"/><rect x="72" y="54" width="14" height="14" rx="2"/><rect x="90" y="54" width="14" height="14" rx="2"/><rect x="108" y="54" width="14" height="14" rx="2"/><rect x="126" y="54" width="14" height="14" rx="2"/><rect x="144" y="54" width="14" height="14" rx="2"/><rect x="162" y="54" width="14" height="14" rx="2"/><rect x="180" y="54" width="14" height="14" rx="2"/><rect x="198" y="54" width="14" height="14" rx="2"/><rect x="216" y="54" width="14" height="14" rx="2"/><rect x="234" y="54" width="14" height="14" rx="2"/><rect x="252" y="54" width="14" height="14" rx="2"/><rect x="270" y="54" width="14" height="14" rx="2"/><rect x="288" y="54" width="14" height="14" rx="2"/><rect x="306" y="54" width="14" height="14" rx="2"/><rect x="324" y="54" width="14" height="14" rx="2"/><rect x="342" y="54" width="14" height="14" rx="2"/><rect x="360" y="54" width="14" height="14" rx="2"/><rect x="378" y="54" width="14" height="14" rx="2"/>
+        <!-- Row 4 -->
+        <rect x="0" y="72" width="14" height="14" rx="2"/><rect x="18" y="72" width="14" height="14" rx="2"/><rect x="36" y="72" width="14" height="14" rx="2"/><rect x="54" y="72" width="14" height="14" rx="2"/><rect x="72" y="72" width="14" height="14" rx="2"/><rect x="90" y="72" width="14" height="14" rx="2"/><rect x="108" y="72" width="14" height="14" rx="2"/><rect x="126" y="72" width="14" height="14" rx="2"/><rect x="144" y="72" width="14" height="14" rx="2"/><rect x="162" y="72" width="14" height="14" rx="2"/><rect x="180" y="72" width="14" height="14" rx="2"/><rect x="198" y="72" width="14" height="14" rx="2"/><rect x="216" y="72" width="14" height="14" rx="2"/><rect x="234" y="72" width="14" height="14" rx="2"/><rect x="252" y="72" width="14" height="14" rx="2"/><rect x="270" y="72" width="14" height="14" rx="2"/><rect x="288" y="72" width="14" height="14" rx="2"/><rect x="306" y="72" width="14" height="14" rx="2"/><rect x="324" y="72" width="14" height="14" rx="2"/><rect x="342" y="72" width="14" height="14" rx="2"/><rect x="360" y="72" width="14" height="14" rx="2"/><rect x="378" y="72" width="14" height="14" rx="2"/>
+        <!-- Row 5 -->
+        <rect x="0" y="90" width="14" height="14" rx="2"/><rect x="18" y="90" width="14" height="14" rx="2"/><rect x="36" y="90" width="14" height="14" rx="2"/><rect x="54" y="90" width="14" height="14" rx="2"/><rect x="72" y="90" width="14" height="14" rx="2"/><rect x="90" y="90" width="14" height="14" rx="2"/><rect x="108" y="90" width="14" height="14" rx="2"/><rect x="126" y="90" width="14" height="14" rx="2"/><rect x="144" y="90" width="14" height="14" rx="2"/><rect x="162" y="90" width="14" height="14" rx="2"/><rect x="180" y="90" width="14" height="14" rx="2"/><rect x="198" y="90" width="14" height="14" rx="2"/><rect x="216" y="90" width="14" height="14" rx="2"/><rect x="234" y="90" width="14" height="14" rx="2"/><rect x="252" y="90" width="14" height="14" rx="2"/><rect x="270" y="90" width="14" height="14" rx="2"/><rect x="288" y="90" width="14" height="14" rx="2"/><rect x="306" y="90" width="14" height="14" rx="2"/><rect x="324" y="90" width="14" height="14" rx="2"/><rect x="342" y="90" width="14" height="14" rx="2"/><rect x="360" y="90" width="14" height="14" rx="2"/><rect x="378" y="90" width="14" height="14" rx="2"/>
+        <!-- Row 6 -->
+        <rect x="0" y="108" width="14" height="14" rx="2"/><rect x="18" y="108" width="14" height="14" rx="2"/><rect x="36" y="108" width="14" height="14" rx="2"/><rect x="54" y="108" width="14" height="14" rx="2"/><rect x="72" y="108" width="14" height="14" rx="2"/><rect x="90" y="108" width="14" height="14" rx="2"/><rect x="108" y="108" width="14" height="14" rx="2"/><rect x="126" y="108" width="14" height="14" rx="2"/><rect x="144" y="108" width="14" height="14" rx="2"/><rect x="162" y="108" width="14" height="14" rx="2"/><rect x="180" y="108" width="14" height="14" rx="2"/><rect x="198" y="108" width="14" height="14" rx="2"/><rect x="216" y="108" width="14" height="14" rx="2"/><rect x="234" y="108" width="14" height="14" rx="2"/><rect x="252" y="108" width="14" height="14" rx="2"/><rect x="270" y="108" width="14" height="14" rx="2"/><rect x="288" y="108" width="14" height="14" rx="2"/><rect x="306" y="108" width="14" height="14" rx="2"/><rect x="324" y="108" width="14" height="14" rx="2"/><rect x="342" y="108" width="14" height="14" rx="2"/><rect x="360" y="108" width="14" height="14" rx="2"/><rect x="378" y="108" width="14" height="14" rx="2"/>
+        <!-- Rows 7-12 (more dots) -->
+        <rect x="0" y="126" width="14" height="14" rx="2"/><rect x="18" y="126" width="14" height="14" rx="2"/><rect x="36" y="126" width="14" height="14" rx="2"/><rect x="54" y="126" width="14" height="14" rx="2"/><rect x="72" y="126" width="14" height="14" rx="2"/><rect x="90" y="126" width="14" height="14" rx="2"/><rect x="108" y="126" width="14" height="14" rx="2"/><rect x="126" y="126" width="14" height="14" rx="2"/><rect x="144" y="126" width="14" height="14" rx="2"/><rect x="162" y="126" width="14" height="14" rx="2"/><rect x="180" y="126" width="14" height="14" rx="2"/><rect x="198" y="126" width="14" height="14" rx="2"/><rect x="216" y="126" width="14" height="14" rx="2"/><rect x="234" y="126" width="14" height="14" rx="2"/><rect x="252" y="126" width="14" height="14" rx="2"/><rect x="270" y="126" width="14" height="14" rx="2"/><rect x="288" y="126" width="14" height="14" rx="2"/><rect x="306" y="126" width="14" height="14" rx="2"/><rect x="324" y="126" width="14" height="14" rx="2"/><rect x="342" y="126" width="14" height="14" rx="2"/><rect x="360" y="126" width="14" height="14" rx="2"/><rect x="378" y="126" width="14" height="14" rx="2"/>
+        <rect x="0" y="144" width="14" height="14" rx="2"/><rect x="18" y="144" width="14" height="14" rx="2"/><rect x="36" y="144" width="14" height="14" rx="2"/><rect x="54" y="144" width="14" height="14" rx="2"/><rect x="72" y="144" width="14" height="14" rx="2"/><rect x="90" y="144" width="14" height="14" rx="2"/><rect x="108" y="144" width="14" height="14" rx="2"/><rect x="126" y="144" width="14" height="14" rx="2"/><rect x="144" y="144" width="14" height="14" rx="2"/><rect x="162" y="144" width="14" height="14" rx="2"/><rect x="180" y="144" width="14" height="14" rx="2"/><rect x="198" y="144" width="14" height="14" rx="2"/><rect x="216" y="144" width="14" height="14" rx="2"/><rect x="234" y="144" width="14" height="14" rx="2"/><rect x="252" y="144" width="14" height="14" rx="2"/><rect x="270" y="144" width="14" height="14" rx="2"/><rect x="288" y="144" width="14" height="14" rx="2"/><rect x="306" y="144" width="14" height="14" rx="2"/><rect x="324" y="144" width="14" height="14" rx="2"/><rect x="342" y="144" width="14" height="14" rx="2"/><rect x="360" y="144" width="14" height="14" rx="2"/><rect x="378" y="144" width="14" height="14" rx="2"/>
+        <rect x="0" y="162" width="14" height="14" rx="2"/><rect x="18" y="162" width="14" height="14" rx="2"/><rect x="36" y="162" width="14" height="14" rx="2"/><rect x="54" y="162" width="14" height="14" rx="2"/><rect x="72" y="162" width="14" height="14" rx="2"/><rect x="90" y="162" width="14" height="14" rx="2"/><rect x="108" y="162" width="14" height="14" rx="2"/><rect x="126" y="162" width="14" height="14" rx="2"/><rect x="144" y="162" width="14" height="14" rx="2"/><rect x="162" y="162" width="14" height="14" rx="2"/><rect x="180" y="162" width="14" height="14" rx="2"/><rect x="198" y="162" width="14" height="14" rx="2"/><rect x="216" y="162" width="14" height="14" rx="2"/><rect x="234" y="162" width="14" height="14" rx="2"/><rect x="252" y="162" width="14" height="14" rx="2"/><rect x="270" y="162" width="14" height="14" rx="2"/><rect x="288" y="162" width="14" height="14" rx="2"/><rect x="306" y="162" width="14" height="14" rx="2"/><rect x="324" y="162" width="14" height="14" rx="2"/><rect x="342" y="162" width="14" height="14" rx="2"/><rect x="360" y="162" width="14" height="14" rx="2"/><rect x="378" y="162" width="14" height="14" rx="2"/>
+        <rect x="0" y="180" width="14" height="14" rx="2"/><rect x="18" y="180" width="14" height="14" rx="2"/><rect x="36" y="180" width="14" height="14" rx="2"/><rect x="54" y="180" width="14" height="14" rx="2"/><rect x="72" y="180" width="14" height="14" rx="2"/><rect x="90" y="180" width="14" height="14" rx="2"/><rect x="108" y="180" width="14" height="14" rx="2"/><rect x="126" y="180" width="14" height="14" rx="2"/><rect x="144" y="180" width="14" height="14" rx="2"/><rect x="162" y="180" width="14" height="14" rx="2"/><rect x="180" y="180" width="14" height="14" rx="2"/><rect x="198" y="180" width="14" height="14" rx="2"/><rect x="216" y="180" width="14" height="14" rx="2"/><rect x="234" y="180" width="14" height="14" rx="2"/><rect x="252" y="180" width="14" height="14" rx="2"/><rect x="270" y="180" width="14" height="14" rx="2"/><rect x="288" y="180" width="14" height="14" rx="2"/><rect x="306" y="180" width="14" height="14" rx="2"/><rect x="324" y="180" width="14" height="14" rx="2"/><rect x="342" y="180" width="14" height="14" rx="2"/><rect x="360" y="180" width="14" height="14" rx="2"/><rect x="378" y="180" width="14" height="14" rx="2"/>
+        <rect x="0" y="198" width="14" height="14" rx="2"/><rect x="18" y="198" width="14" height="14" rx="2"/><rect x="36" y="198" width="14" height="14" rx="2"/><rect x="54" y="198" width="14" height="14" rx="2"/><rect x="72" y="198" width="14" height="14" rx="2"/><rect x="90" y="198" width="14" height="14" rx="2"/><rect x="108" y="198" width="14" height="14" rx="2"/><rect x="126" y="198" width="14" height="14" rx="2"/><rect x="144" y="198" width="14" height="14" rx="2"/><rect x="162" y="198" width="14" height="14" rx="2"/><rect x="180" y="198" width="14" height="14" rx="2"/><rect x="198" y="198" width="14" height="14" rx="2"/><rect x="216" y="198" width="14" height="14" rx="2"/><rect x="234" y="198" width="14" height="14" rx="2"/><rect x="252" y="198" width="14" height="14" rx="2"/><rect x="270" y="198" width="14" height="14" rx="2"/><rect x="288" y="198" width="14" height="14" rx="2"/><rect x="306" y="198" width="14" height="14" rx="2"/><rect x="324" y="198" width="14" height="14" rx="2"/><rect x="342" y="198" width="14" height="14" rx="2"/><rect x="360" y="198" width="14" height="14" rx="2"/><rect x="378" y="198" width="14" height="14" rx="2"/>
+      </g>
+
+      <!-- 10 Active experts (bright green, scattered across grid) -->
+      <g filter="url(#glowGreen)">
+        <rect x="54" y="0" width="14" height="14" rx="2" fill="#4ADE80"/>
+        <rect x="234" y="18" width="14" height="14" rx="2" fill="#4ADE80"/>
+        <rect x="342" y="36" width="14" height="14" rx="2" fill="#4ADE80"/>
+        <rect x="90" y="72" width="14" height="14" rx="2" fill="#4ADE80"/>
+        <rect x="270" y="72" width="14" height="14" rx="2" fill="#4ADE80"/>
+        <rect x="162" y="108" width="14" height="14" rx="2" fill="#4ADE80"/>
+        <rect x="378" y="126" width="14" height="14" rx="2" fill="#4ADE80"/>
+        <rect x="36" y="162" width="14" height="14" rx="2" fill="#4ADE80"/>
+        <rect x="306" y="162" width="14" height="14" rx="2" fill="#4ADE80"/>
+        <rect x="180" y="198" width="14" height="14" rx="2" fill="#4ADE80"/>
+      </g>
+
+      <!-- 1 Shared expert (gold) -->
+      <rect x="198" y="108" width="14" height="14" rx="2" fill="#C09E5A" filter="url(#glow)"/>
+    </g>
+
+    <!-- Legend below grid -->
+    <g transform="translate(0, 244)">
+      <rect x="0" y="0" width="10" height="10" rx="2" fill="rgba(255,255,255,0.08)"/>
+      <text x="16" y="9" fill="rgba(255,255,255,0.45)" font-size="10">Inactive (502)</text>
+
+      <rect x="120" y="0" width="10" height="10" rx="2" fill="#4ADE80"/>
+      <text x="136" y="9" fill="#4ADE80" font-size="10" font-weight="600">Active (10)</text>
+
+      <rect x="230" y="0" width="10" height="10" rx="2" fill="#C09E5A"/>
+      <text x="246" y="9" fill="#C09E5A" font-size="10" font-weight="600">Shared (1)</text>
+    </g>
+  </g>
+
+  <!-- Arrows from router to active experts -->
+  <g stroke="#4ADE80" stroke-width="1" opacity="0.3">
+    <line x1="380" y1="260" x2="440" y2="200"/>
+    <line x1="380" y1="280" x2="440" y2="260"/>
+    <line x1="380" y1="300" x2="440" y2="320"/>
+  </g>
+
+  <!-- RIGHT: Output -->
+  <g transform="translate(880, 160)">
+    <!-- Combine box -->
+    <rect width="130" height="60" rx="10" fill="#C09E5A" fill-opacity="0.08" stroke="#C09E5A" stroke-opacity="0.5" stroke-width="1.5"/>
+    <text x="65" y="25" fill="#C09E5A" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1">WEIGHTED</text>
+    <text x="65" y="43" fill="#C09E5A" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1">SUM</text>
+  </g>
+
+  <!-- Arrow from grid to combine -->
+  <line x1="840" y1="250" x2="880" y2="200" stroke="#4ADE80" stroke-width="1.5" opacity="0.4"/>
+  <polygon points="876,204 884,196 882,207" fill="#4ADE80" opacity="0.4"/>
+
+  <!-- Arrow from combine to output -->
+  <line x1="945" y1="220" x2="945" y2="260" stroke="#C09E5A" stroke-width="1.5" opacity="0.6"/>
+  <polygon points="940,256 945,266 950,256" fill="#C09E5A" opacity="0.6"/>
+
+  <!-- Output Token -->
+  <g transform="translate(880, 270)">
+    <rect width="130" height="70" rx="10" fill="#111" stroke="#4ADE80" stroke-opacity="0.6" stroke-width="1.5"/>
+    <text x="65" y="28" fill="#4ADE80" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1">OUTPUT</text>
+    <text x="65" y="50" fill="#FFFFFF" font-size="14" font-weight="700" text-anchor="middle">Token</text>
+  </g>
+
+  <!-- Bottom stat boxes -->
+  <g transform="translate(60, 470)">
+    <rect width="250" height="68" rx="10" fill="#111" stroke="#4ADE80" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="125" y="26" fill="#4ADE80" font-size="22" font-weight="700" text-anchor="middle">3B</text>
+    <text x="125" y="44" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">Active Parameters per Token</text>
+    <text x="125" y="58" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle">96% of parameters skip every token</text>
+  </g>
+  <g transform="translate(340, 470)">
+    <rect width="250" height="68" rx="10" fill="#111" stroke="#C09E5A" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="125" y="26" fill="#C09E5A" font-size="22" font-weight="700" text-anchor="middle">80B</text>
+    <text x="125" y="44" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">Total Knowledge Stored</text>
+    <text x="125" y="58" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle">Full frontier-scale knowledge base</text>
+  </g>
+  <g transform="translate(620, 470)">
+    <rect width="250" height="68" rx="10" fill="#111" stroke="#C09E5A" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="125" y="26" fill="#C09E5A" font-size="22" font-weight="700" text-anchor="middle">512 → 11</text>
+    <text x="125" y="44" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">Expert Selection per Token</text>
+    <text x="125" y="58" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle">10 routed + 1 shared expert</text>
+  </g>
+  <g transform="translate(900, 470)">
+    <rect width="250" height="68" rx="10" fill="#111" stroke="#C09E5A" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="125" y="26" fill="#C09E5A" font-size="22" font-weight="700" text-anchor="middle">256K</text>
+    <text x="125" y="44" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">Context Window</text>
+    <text x="125" y="58" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle">262,144 tokens native</text>
+  </g>
+
+  <!-- Bottom tagline -->
+  <text x="600" y="570" fill="rgba(255,255,255,0.45)" font-size="10" text-anchor="middle" letter-spacing="1.5">KNOWS LIKE AN 80B MODEL — THINKS AS FAST AS A 3B MODEL</text>
+
+  <!-- Subtle frame -->
+  <rect x="40" y="80" width="830" height="370" rx="12" fill="none" stroke="#2B2B2B" stroke-width="0.5" opacity="0.3"/>
+</svg>

@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="'Inter', 'SF Pro', system-ui, sans-serif">
+  <title>Quantization quality versus model size trade-off chart showing Q8 as near-lossless and Q4 as the sweet spot for consumer hardware</title>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000000"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+    <linearGradient id="barFP16" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C09E5A"/>
+      <stop offset="100%" stop-color="#D4B06A"/>
+    </linearGradient>
+    <linearGradient id="barQ8" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#6AEE96"/>
+    </linearGradient>
+    <linearGradient id="barQ4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#FCD34D"/>
+    </linearGradient>
+    <linearGradient id="barQ2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF4444"/>
+      <stop offset="100%" stop-color="#FF6666"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="600" y="42" fill="#C09E5A" font-size="14" font-weight="600" text-anchor="middle" letter-spacing="3">THE QUANTIZATION TRADE-OFF</text>
+  <text x="600" y="64" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">Qwen3-Coder-Next 80B — Model Size vs. Quality at Different Quantization Levels</text>
+
+  <!-- LEFT SIDE: Model Size Bars -->
+  <g transform="translate(80, 95)">
+    <text x="220" y="15" fill="rgba(255,255,255,0.6)" font-size="12" font-weight="600" text-anchor="middle" letter-spacing="1">MODEL SIZE (GB)</text>
+
+    <!-- FP16 bar -->
+    <g transform="translate(0, 35)">
+      <text x="55" y="14" fill="#C09E5A" font-size="13" font-weight="700" text-anchor="end">FP16</text>
+      <text x="55" y="30" fill="rgba(255,255,255,0.4)" font-size="9" text-anchor="end">Full Precision</text>
+      <rect x="65" y="2" width="370" height="28" rx="4" fill="url(#barFP16)" opacity="0.85"/>
+      <text x="442" y="22" fill="#C09E5A" font-size="13" font-weight="700">160 GB</text>
+      <!-- Red X - won't fit -->
+      <g transform="translate(400, 5)">
+        <line x1="0" y1="0" x2="16" y2="16" stroke="#FF4444" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="16" y1="0" x2="0" y2="16" stroke="#FF4444" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+      </g>
+    </g>
+
+    <!-- Q8 bar -->
+    <g transform="translate(0, 95)">
+      <text x="55" y="14" fill="#4ADE80" font-size="13" font-weight="700" text-anchor="end">Q8</text>
+      <text x="55" y="30" fill="rgba(255,255,255,0.4)" font-size="9" text-anchor="end">8-bit Integer</text>
+      <rect x="65" y="2" width="196" height="28" rx="4" fill="url(#barQ8)" opacity="0.85"/>
+      <text x="268" y="22" fill="#4ADE80" font-size="13" font-weight="700">85 GB</text>
+      <!-- Green check -->
+      <g transform="translate(225, 8)">
+        <path d="M0,8 L5,13 L14,2" fill="none" stroke="#4ADE80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+
+    <!-- Q4 bar -->
+    <g transform="translate(0, 155)">
+      <text x="55" y="14" fill="#FBBF24" font-size="13" font-weight="700" text-anchor="end">Q4</text>
+      <text x="55" y="30" fill="rgba(255,255,255,0.4)" font-size="9" text-anchor="end">4-bit Integer</text>
+      <rect x="65" y="2" width="106" height="28" rx="4" fill="url(#barQ4)" opacity="0.85"/>
+      <text x="178" y="22" fill="#FBBF24" font-size="13" font-weight="700">46 GB</text>
+      <!-- Star / sweet spot marker -->
+      <g transform="translate(135, 8)">
+        <path d="M0,8 L5,13 L14,2" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+
+    <!-- Q2 bar -->
+    <g transform="translate(0, 215)">
+      <text x="55" y="14" fill="#FF4444" font-size="13" font-weight="700" text-anchor="end">Q2</text>
+      <text x="55" y="30" fill="rgba(255,255,255,0.4)" font-size="9" text-anchor="end">2-bit Integer</text>
+      <rect x="65" y="2" width="53" height="28" rx="4" fill="url(#barQ2)" opacity="0.85"/>
+      <text x="125" y="22" fill="#FF4444" font-size="13" font-weight="700">23 GB</text>
+      <!-- Warning triangle -->
+      <g transform="translate(96, 6)">
+        <text x="0" y="14" fill="#FF4444" font-size="16">&#9888;</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- RIGHT SIDE: Quality Meter -->
+  <g transform="translate(600, 95)">
+    <text x="260" y="15" fill="rgba(255,255,255,0.6)" font-size="12" font-weight="600" text-anchor="middle" letter-spacing="1">CODING QUALITY RETAINED</text>
+
+    <!-- FP16 quality -->
+    <g transform="translate(0, 35)">
+      <text x="55" y="20" fill="#C09E5A" font-size="12" font-weight="600" text-anchor="end">FP16</text>
+      <rect x="65" y="6" width="400" height="22" rx="4" fill="#1A1A1A"/>
+      <rect x="65" y="6" width="400" height="22" rx="4" fill="#C09E5A" opacity="0.7"/>
+      <text x="475" y="22" fill="#C09E5A" font-size="12" font-weight="700">100%</text>
+      <text x="520" y="22" fill="rgba(255,255,255,0.4)" font-size="10">Baseline</text>
+    </g>
+
+    <!-- Q8 quality -->
+    <g transform="translate(0, 95)">
+      <text x="55" y="20" fill="#4ADE80" font-size="12" font-weight="600" text-anchor="end">Q8</text>
+      <rect x="65" y="6" width="400" height="22" rx="4" fill="#1A1A1A"/>
+      <rect x="65" y="6" width="396" height="22" rx="4" fill="#4ADE80" opacity="0.7"/>
+      <text x="471" y="22" fill="#4ADE80" font-size="12" font-weight="700">~99%</text>
+      <text x="520" y="22" fill="rgba(255,255,255,0.4)" font-size="10">Near-lossless</text>
+    </g>
+
+    <!-- Q4 quality -->
+    <g transform="translate(0, 155)">
+      <text x="55" y="20" fill="#FBBF24" font-size="12" font-weight="600" text-anchor="end">Q4</text>
+      <rect x="65" y="6" width="400" height="22" rx="4" fill="#1A1A1A"/>
+      <rect x="65" y="6" width="376" height="22" rx="4" fill="#FBBF24" opacity="0.7"/>
+      <text x="451" y="22" fill="#FBBF24" font-size="12" font-weight="700">~95%</text>
+      <text x="520" y="22" fill="rgba(255,255,255,0.4)" font-size="10">Sweet spot</text>
+    </g>
+
+    <!-- Q2 quality -->
+    <g transform="translate(0, 215)">
+      <text x="55" y="20" fill="#FF4444" font-size="12" font-weight="600" text-anchor="end">Q2</text>
+      <rect x="65" y="6" width="400" height="22" rx="4" fill="#1A1A1A"/>
+      <rect x="65" y="6" width="320" height="22" rx="4" fill="#FF4444" opacity="0.7"/>
+      <text x="395" y="22" fill="#FF4444" font-size="12" font-weight="700">~80%</text>
+      <text x="520" y="22" fill="rgba(255,255,255,0.4)" font-size="10">Hallucinations</text>
+    </g>
+  </g>
+
+  <!-- Divider -->
+  <line x1="580" y1="115" x2="580" y2="350" stroke="#2B2B2B" stroke-width="1"/>
+
+  <!-- SWEET SPOT annotation -->
+  <g transform="translate(330, 253)">
+    <rect x="-100" y="-14" width="500" height="30" rx="6" fill="#FBBF24" fill-opacity="0.06" stroke="#FBBF24" stroke-opacity="0.3" stroke-width="1" stroke-dasharray="6,4"/>
+    <text x="150" y="5" fill="#FBBF24" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">RECOMMENDED: Q4 — 75% smaller, 95% quality retained</text>
+  </g>
+
+  <!-- Hardware compatibility section -->
+  <g transform="translate(80, 400)">
+    <text x="520" y="0" fill="rgba(255,255,255,0.6)" font-size="12" font-weight="600" text-anchor="middle" letter-spacing="1">WHAT FITS WHERE</text>
+
+    <!-- FP16 -->
+    <g transform="translate(0, 20)">
+      <rect width="240" height="70" rx="8" fill="#111" stroke="#C09E5A" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="120" y="22" fill="#C09E5A" font-size="12" font-weight="700" text-anchor="middle">FP16 — 160 GB</text>
+      <text x="120" y="40" fill="rgba(255,255,255,0.5)" font-size="10" text-anchor="middle">Multi-GPU server only</text>
+      <text x="120" y="56" fill="rgba(255,255,255,0.35)" font-size="10" text-anchor="middle">2x A100 80GB or similar</text>
+    </g>
+
+    <!-- Q8 -->
+    <g transform="translate(260, 20)">
+      <rect width="240" height="70" rx="8" fill="#111" stroke="#4ADE80" stroke-opacity="0.4" stroke-width="1"/>
+      <text x="120" y="22" fill="#4ADE80" font-size="12" font-weight="700" text-anchor="middle">Q8 — 85 GB</text>
+      <text x="120" y="40" fill="rgba(255,255,255,0.5)" font-size="10" text-anchor="middle">ThinkStation PGX / M4 Ultra</text>
+      <text x="120" y="56" fill="rgba(255,255,255,0.35)" font-size="10" text-anchor="middle">128 GB unified memory</text>
+    </g>
+
+    <!-- Q4 -->
+    <g transform="translate(520, 20)">
+      <rect width="240" height="70" rx="8" fill="#111" stroke="#FBBF24" stroke-opacity="0.4" stroke-width="1.5"/>
+      <text x="120" y="22" fill="#FBBF24" font-size="12" font-weight="700" text-anchor="middle">Q4 — 46 GB</text>
+      <text x="120" y="40" fill="rgba(255,255,255,0.5)" font-size="10" text-anchor="middle">A6000 / Dual RTX 4090</text>
+      <text x="120" y="56" fill="rgba(255,255,255,0.35)" font-size="10" text-anchor="middle">48-64 GB VRAM</text>
+    </g>
+
+    <!-- Q2 -->
+    <g transform="translate(780, 20)">
+      <rect width="240" height="70" rx="8" fill="#111" stroke="#FF4444" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="120" y="22" fill="#FF4444" font-size="12" font-weight="700" text-anchor="middle">Q2 — 23 GB</text>
+      <text x="120" y="40" fill="rgba(255,255,255,0.5)" font-size="10" text-anchor="middle">RTX 4090 / M4 Pro</text>
+      <text x="120" y="56" fill="rgba(255,255,255,0.35)" font-size="10" text-anchor="middle">24 GB — not recommended</text>
+    </g>
+  </g>
+
+  <!-- Bottom insight -->
+  <g transform="translate(200, 520)">
+    <rect width="800" height="44" rx="8" fill="#111" stroke="#2B2B2B" stroke-width="1"/>
+    <text x="400" y="18" fill="rgba(255,255,255,0.6)" font-size="11" text-anchor="middle" font-style="italic">"You give up 5% quality to cut the model size by 75%.</text>
+    <text x="400" y="35" fill="#FBBF24" font-size="12" text-anchor="middle" font-weight="600">That is not a compromise. That is an engineering win."</text>
+  </g>
+
+  <!-- Bottom tagline -->
+  <text x="600" y="600" fill="rgba(255,255,255,0.45)" font-size="10" text-anchor="middle" letter-spacing="1.5">Q4 IS THE SWEET SPOT — 95% QUALITY AT 25% THE SIZE</text>
+</svg>

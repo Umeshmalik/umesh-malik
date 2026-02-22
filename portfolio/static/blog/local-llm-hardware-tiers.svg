@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="'Inter', 'SF Pro', system-ui, sans-serif">
+  <title>Hardware tier comparison showing which GPUs can run which local coding LLMs, from consumer RTX 4070 to workstation ThinkStation PGX</title>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000000"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+    <linearGradient id="tier1Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#4ADE80" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="tier2Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C09E5A" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#C09E5A" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="tier3Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#FBBF24" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="tier4Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.3)" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.3)" stop-opacity="0.02"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="600" y="42" fill="#C09E5A" font-size="14" font-weight="600" text-anchor="middle" letter-spacing="3">HARDWARE TIER GUIDE: WHAT RUNS WHERE</text>
+  <text x="600" y="64" fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">Matching Your Hardware to the Best Local Coding Model in 2026</text>
+
+  <!-- Column headers -->
+  <g transform="translate(0, 80)">
+    <text x="140" y="16" fill="rgba(255,255,255,0.6)" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1">HARDWARE</text>
+    <text x="380" y="16" fill="rgba(255,255,255,0.6)" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1">MEMORY</text>
+    <text x="590" y="16" fill="rgba(255,255,255,0.6)" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1">BEST MODEL</text>
+    <text x="810" y="16" fill="rgba(255,255,255,0.6)" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1">CAPABILITY</text>
+    <text x="1050" y="16" fill="rgba(255,255,255,0.6)" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1">EST. COST</text>
+  </g>
+
+  <line x1="40" y1="102" x2="1160" y2="102" stroke="#2B2B2B" stroke-width="1"/>
+
+  <!-- TIER 1: Workstation (Green - Best) -->
+  <g transform="translate(40, 112)">
+    <rect width="1120" height="110" rx="10" fill="url(#tier1Grad)" stroke="#4ADE80" stroke-opacity="0.35" stroke-width="1.5"/>
+
+    <!-- Tier badge -->
+    <rect x="12" y="10" width="50" height="22" rx="4" fill="#4ADE80" fill-opacity="0.15" stroke="#4ADE80" stroke-opacity="0.5" stroke-width="1"/>
+    <text x="37" y="25" fill="#4ADE80" font-size="10" font-weight="700" text-anchor="middle">BEST</text>
+
+    <!-- Hardware -->
+    <text x="100" y="50" fill="#FFFFFF" font-size="13" font-weight="600">ThinkStation PGX</text>
+    <text x="100" y="68" fill="rgba(255,255,255,0.5)" font-size="10">NVIDIA GB10 Grace Blackwell</text>
+    <text x="100" y="84" fill="rgba(255,255,255,0.5)" font-size="10">Apple M4 Ultra (192 GB)</text>
+
+    <!-- Memory -->
+    <text x="340" y="50" fill="#4ADE80" font-size="22" font-weight="700">128 GB</text>
+    <text x="340" y="68" fill="rgba(255,255,255,0.45)" font-size="10">Unified LPDDR5x</text>
+    <text x="340" y="84" fill="rgba(255,255,255,0.45)" font-size="10">No PCIe bottleneck</text>
+
+    <!-- Model -->
+    <text x="550" y="46" fill="#FFFFFF" font-size="13" font-weight="600">Qwen3-Coder-Next 80B</text>
+    <text x="550" y="64" fill="rgba(255,255,255,0.5)" font-size="10">Q8 quantization (85 GB)</text>
+    <text x="550" y="80" fill="rgba(255,255,255,0.5)" font-size="10">170K context window</text>
+    <text x="550" y="96" fill="#4ADE80" font-size="10" font-weight="600">Full agentic workflows</text>
+
+    <!-- Capability bar -->
+    <rect x="770" y="38" width="200" height="12" rx="4" fill="#1A1A1A"/>
+    <rect x="770" y="38" width="190" height="12" rx="4" fill="#4ADE80" opacity="0.8"/>
+    <text x="770" y="68" fill="#4ADE80" font-size="11" font-weight="600">95% of cloud quality</text>
+    <text x="770" y="84" fill="rgba(255,255,255,0.45)" font-size="10">Frontier-adjacent</text>
+
+    <!-- Cost -->
+    <text x="1010" y="50" fill="#FFFFFF" font-size="16" font-weight="700">$3-5K</text>
+    <text x="1010" y="68" fill="rgba(255,255,255,0.45)" font-size="10">One-time purchase</text>
+    <text x="1010" y="84" fill="#4ADE80" font-size="10" font-weight="600">$0/token after</text>
+  </g>
+
+  <!-- TIER 2: Pro GPU (Gold) -->
+  <g transform="translate(40, 232)">
+    <rect width="1120" height="110" rx="10" fill="url(#tier2Grad)" stroke="#C09E5A" stroke-opacity="0.35" stroke-width="1.5"/>
+
+    <!-- Tier badge -->
+    <rect x="12" y="10" width="50" height="22" rx="4" fill="#C09E5A" fill-opacity="0.15" stroke="#C09E5A" stroke-opacity="0.5" stroke-width="1"/>
+    <text x="37" y="25" fill="#C09E5A" font-size="10" font-weight="700" text-anchor="middle">PRO</text>
+
+    <!-- Hardware -->
+    <text x="100" y="50" fill="#FFFFFF" font-size="13" font-weight="600">A6000 / Dual 4090</text>
+    <text x="100" y="68" fill="rgba(255,255,255,0.5)" font-size="10">Professional workstation GPU</text>
+    <text x="100" y="84" fill="rgba(255,255,255,0.5)" font-size="10">Apple M4 Max (96-128 GB)</text>
+
+    <!-- Memory -->
+    <text x="340" y="50" fill="#C09E5A" font-size="22" font-weight="700">48-80 GB</text>
+    <text x="340" y="68" fill="rgba(255,255,255,0.45)" font-size="10">VRAM or unified</text>
+    <text x="340" y="84" fill="rgba(255,255,255,0.45)" font-size="10">Enough for Q4 80B</text>
+
+    <!-- Model -->
+    <text x="550" y="46" fill="#FFFFFF" font-size="13" font-weight="600">Qwen3-Coder-Next 80B</text>
+    <text x="550" y="64" fill="rgba(255,255,255,0.5)" font-size="10">Q4 quantization (46 GB)</text>
+    <text x="550" y="80" fill="rgba(255,255,255,0.5)" font-size="10">or Qwen2.5-Coder 32B at Q8</text>
+    <text x="550" y="96" fill="#C09E5A" font-size="10" font-weight="600">Strong agentic capability</text>
+
+    <!-- Capability bar -->
+    <rect x="770" y="38" width="200" height="12" rx="4" fill="#1A1A1A"/>
+    <rect x="770" y="38" width="170" height="12" rx="4" fill="#C09E5A" opacity="0.8"/>
+    <text x="770" y="68" fill="#C09E5A" font-size="11" font-weight="600">85-90% of cloud quality</text>
+    <text x="770" y="84" fill="rgba(255,255,255,0.45)" font-size="10">Excellent for daily use</text>
+
+    <!-- Cost -->
+    <text x="1010" y="50" fill="#FFFFFF" font-size="16" font-weight="700">$2-5K</text>
+    <text x="1010" y="68" fill="rgba(255,255,255,0.45)" font-size="10">GPU + system</text>
+    <text x="1010" y="84" fill="#C09E5A" font-size="10" font-weight="600">$0/token after</text>
+  </g>
+
+  <!-- TIER 3: Consumer GPU (Amber) -->
+  <g transform="translate(40, 352)">
+    <rect width="1120" height="110" rx="10" fill="url(#tier3Grad)" stroke="#FBBF24" stroke-opacity="0.35" stroke-width="1.5"/>
+
+    <!-- Tier badge -->
+    <rect x="12" y="10" width="70" height="22" rx="4" fill="#FBBF24" fill-opacity="0.15" stroke="#FBBF24" stroke-opacity="0.5" stroke-width="1"/>
+    <text x="47" y="25" fill="#FBBF24" font-size="10" font-weight="700" text-anchor="middle">BUDGET</text>
+
+    <!-- Hardware -->
+    <text x="100" y="50" fill="#FFFFFF" font-size="13" font-weight="600">RTX 4090 / A5000</text>
+    <text x="100" y="68" fill="rgba(255,255,255,0.5)" font-size="10">High-end consumer GPU</text>
+    <text x="100" y="84" fill="rgba(255,255,255,0.5)" font-size="10">Used RTX 3090 ($800-1K)</text>
+
+    <!-- Memory -->
+    <text x="340" y="50" fill="#FBBF24" font-size="22" font-weight="700">24 GB</text>
+    <text x="340" y="68" fill="rgba(255,255,255,0.45)" font-size="10">VRAM (discrete)</text>
+    <text x="340" y="84" fill="rgba(255,255,255,0.45)" font-size="10">PCIe bandwidth limited</text>
+
+    <!-- Model -->
+    <text x="550" y="46" fill="#FFFFFF" font-size="13" font-weight="600">Qwen2.5-Coder 32B</text>
+    <text x="550" y="64" fill="rgba(255,255,255,0.5)" font-size="10">Q4 quantization (~18 GB)</text>
+    <text x="550" y="80" fill="rgba(255,255,255,0.5)" font-size="10">or Codestral 22B at Q4</text>
+    <text x="550" y="96" fill="#FBBF24" font-size="10" font-weight="600">Good for most daily tasks</text>
+
+    <!-- Capability bar -->
+    <rect x="770" y="38" width="200" height="12" rx="4" fill="#1A1A1A"/>
+    <rect x="770" y="38" width="140" height="12" rx="4" fill="#FBBF24" opacity="0.8"/>
+    <text x="770" y="68" fill="#FBBF24" font-size="11" font-weight="600">70-80% of cloud quality</text>
+    <text x="770" y="84" fill="rgba(255,255,255,0.45)" font-size="10">Solid for routine work</text>
+
+    <!-- Cost -->
+    <text x="1010" y="50" fill="#FFFFFF" font-size="16" font-weight="700">$800-2K</text>
+    <text x="1010" y="68" fill="rgba(255,255,255,0.45)" font-size="10">GPU only (used)</text>
+    <text x="1010" y="84" fill="#FBBF24" font-size="10" font-weight="600">$0/token after</text>
+  </g>
+
+  <!-- TIER 4: Entry / Not Recommended (Gray/Red) -->
+  <g transform="translate(40, 472)">
+    <rect width="1120" height="90" rx="10" fill="url(#tier4Grad)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+
+    <!-- Tier badge -->
+    <rect x="12" y="10" width="70" height="22" rx="4" fill="#FF4444" fill-opacity="0.1" stroke="#FF4444" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="47" y="25" fill="#FF4444" font-size="10" font-weight="700" text-anchor="middle">ENTRY</text>
+
+    <!-- Hardware -->
+    <text x="100" y="46" fill="rgba(255,255,255,0.7)" font-size="13" font-weight="600">RTX 4070 Ti / 3080</text>
+    <text x="100" y="64" fill="rgba(255,255,255,0.4)" font-size="10">Entry consumer GPU</text>
+
+    <!-- Memory -->
+    <text x="340" y="46" fill="rgba(255,255,255,0.5)" font-size="22" font-weight="700">16 GB</text>
+    <text x="340" y="64" fill="rgba(255,255,255,0.35)" font-size="10">Tight for coding LLMs</text>
+
+    <!-- Model -->
+    <text x="550" y="46" fill="rgba(255,255,255,0.7)" font-size="13" font-weight="600">Codestral 22B (Q4)</text>
+    <text x="550" y="64" fill="rgba(255,255,255,0.4)" font-size="10">Autocomplete tier only</text>
+    <text x="550" y="80" fill="#FF4444" font-size="10" font-weight="600" opacity="0.7">Consider cloud APIs instead</text>
+
+    <!-- Capability bar -->
+    <rect x="770" y="34" width="200" height="12" rx="4" fill="#1A1A1A"/>
+    <rect x="770" y="34" width="90" height="12" rx="4" fill="rgba(255,255,255,0.2)"/>
+    <text x="770" y="62" fill="rgba(255,255,255,0.45)" font-size="11">50-60% of cloud quality</text>
+
+    <!-- Cost -->
+    <text x="1010" y="46" fill="rgba(255,255,255,0.7)" font-size="16" font-weight="700">$600-1K</text>
+    <text x="1010" y="64" fill="rgba(255,255,255,0.35)" font-size="10">May not justify the trade-off</text>
+  </g>
+
+  <!-- Bottom tagline -->
+  <text x="600" y="600" fill="rgba(255,255,255,0.45)" font-size="10" text-anchor="middle" letter-spacing="1.5">A USED RTX 3090 FOR $800 GETS YOU INTO THE GAME — A THINKSTATION PGX WINS IT</text>
+</svg>
