@@ -17,6 +17,7 @@ export interface BlogPost {
 	tags: string[];
 	keywords: string;
 	image: string;
+	ogImage: string;
 	imageAlt: string;
 	featured: boolean;
 	published: boolean;

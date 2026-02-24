@@ -1,11 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="160" height="40" viewBox="0 0 160 40">
-  <!-- Logomark: U. in corner brackets -->
+  <!-- Logomark: U. in circle -->
   <g>
-    <!-- Corner brackets -->
-    <path d="M2 12 L2 2 L12 2" fill="none" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
-    <path d="M28 2 L38 2 L38 12" fill="none" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
-    <path d="M38 28 L38 38 L28 38" fill="none" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
-    <path d="M12 38 L2 38 L2 28" fill="none" stroke="#C09E5A" stroke-width="1.5" stroke-linecap="square"/>
+    <!-- Circle border -->
+    <circle cx="20" cy="20" r="18" fill="none" stroke="#C09E5A" stroke-width="1.5"/>
     <!-- U letter -->
     <text x="12" y="28" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="22" fill="#ffffff">U</text>
     <!-- Gold dot -->

@@ -64,10 +64,24 @@
 
   const ogImageType = $derived(getImageMimeType(ogImage));
 
-  const jsonLd = {
+  const webPageSchema = $derived({
+    "@type": "WebPage",
+    "@id": canonicalUrl,
+    url: canonicalUrl,
+    name: title,
+    description,
+    isPartOf: { "@id": `${siteConfig.url}/#website` },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: ogImage,
+    },
+    inLanguage: "en-US",
+  });
+
+  const jsonLd = $derived({
     "@context": "https://schema.org",
-    "@graph": [personSchema, websiteSchema, organizationSchema],
-  };
+    "@graph": [personSchema, websiteSchema, organizationSchema, webPageSchema],
+  });
 </script>
 
 <svelte:head>
@@ -128,7 +142,7 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="en_US" />
-  <meta property="og:site_name" content="Umesh Malik" />
+  <meta property="og:site_name" content="⚡ Umesh Malik" />
 
   <!-- Article-specific OG tags -->
   {#if type === "article" && publishDate}

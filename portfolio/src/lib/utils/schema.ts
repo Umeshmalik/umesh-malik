@@ -143,10 +143,12 @@ export function createArticleSchema(post: {
 	category: string;
 	tags: string[];
 	image: string;
+	ogImage?: string;
 	imageAlt: string;
 	readingTime: string;
 }) {
 	const wordCount = estimateWordCount(post.readingTime);
+	const rasterImage = post.ogImage || post.image;
 	return {
 		'@context': 'https://schema.org',
 		'@type': 'BlogPosting',
@@ -154,10 +156,10 @@ export function createArticleSchema(post: {
 		description: post.description,
 		image: {
 			'@type': 'ImageObject',
-			url: post.image
-				? post.image.startsWith('http')
-					? post.image
-					: `${baseUrl}${post.image}`
+			url: rasterImage
+				? rasterImage.startsWith('http')
+					? rasterImage
+					: `${baseUrl}${rasterImage}`
 				: `${baseUrl}${S.ogImage}`,
 			caption: post.imageAlt || post.title
 		},

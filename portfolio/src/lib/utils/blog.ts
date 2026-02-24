@@ -16,6 +16,16 @@ function resolveImage(image: string | undefined): string {
 	return image && availableBlogImages.has(image) ? image : DEFAULT_COVER_IMAGE;
 }
 
+/** Resolve a raster OG image for social/Google — SVGs need a .png sibling, else default */
+function resolveOgImage(image: string): string {
+	if (/\.(jpe?g|png|webp)$/i.test(image)) return image;
+	if (image.endsWith('.svg')) {
+		const pngPath = image.replace(/\.svg$/, '.png');
+		if (availableBlogImages.has(pngPath)) return pngPath;
+	}
+	return DEFAULT_COVER_IMAGE;
+}
+
 /** Create a URL-safe slug from a string */
 export function slugify(str: string): string {
 	return str
@@ -46,9 +56,11 @@ export function getAllPosts(): BlogPost[] {
 		const slug = path.split('/').pop()?.replace('.md', '');
 
 		if (meta?.published) {
+			const image = resolveImage(meta.image);
 			posts.push({
 				...meta,
-				image: resolveImage(meta.image),
+				image,
+				ogImage: resolveOgImage(image),
 				slug: slug ?? ''
 			});
 		}
@@ -76,9 +88,11 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
 			throw error(404, 'Post not found');
 		}
 
+		const image = resolveImage(post.metadata.image);
 		return {
 			...post.metadata,
-			image: resolveImage(post.metadata.image),
+			image,
+			ogImage: resolveOgImage(image),
 			slug,
 			content: post.default ?? ''
 		};

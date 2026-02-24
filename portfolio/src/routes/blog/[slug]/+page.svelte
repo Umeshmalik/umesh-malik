@@ -30,6 +30,7 @@
       category: data.post.category,
       tags: data.post.tags,
       image: data.post.image,
+      ogImage: data.post.image,
       imageAlt: data.post.imageAlt,
       readingTime: data.post.readingTime,
     }),
@@ -94,7 +95,9 @@
         </a>
       </li>
       <li class="mx-1">/</li>
-      <li class="text-brand-text-primary" aria-current="page">{data.post.title}</li>
+      <li class="text-brand-text-primary" aria-current="page">
+        {data.post.title}
+      </li>
     </ol>
   </nav>
 
@@ -108,7 +111,9 @@
       </a>
     </div>
 
-    <h1 class="mb-6 text-4xl font-medium leading-tight text-brand-text-primary md:text-5xl">
+    <h1
+      class="mb-6 text-4xl font-medium leading-tight text-brand-text-primary md:text-5xl"
+    >
       {data.post.title}
     </h1>
 
@@ -169,19 +174,22 @@
           href="https://x.com/lumeshmalik"
           class="label-mono text-brand-accent hover:underline"
           target="_blank"
-          rel="noopener noreferrer">X<span class="sr-only"> (opens in new tab)</span></a
+          rel="noopener noreferrer"
+          >X<span class="sr-only"> (opens in new tab)</span></a
         >
         <a
           href="https://linkedin.com/in/umesh-malik"
           class="label-mono text-brand-accent hover:underline"
           target="_blank"
-          rel="noopener noreferrer">LinkedIn<span class="sr-only"> (opens in new tab)</span></a
+          rel="noopener noreferrer"
+          >LinkedIn<span class="sr-only"> (opens in new tab)</span></a
         >
         <a
           href="https://github.com/Umeshmalik"
           class="label-mono text-brand-accent hover:underline"
           target="_blank"
-          rel="noopener noreferrer">GitHub<span class="sr-only"> (opens in new tab)</span></a
+          rel="noopener noreferrer"
+          >GitHub<span class="sr-only"> (opens in new tab)</span></a
         >
       </div>
     </div>
