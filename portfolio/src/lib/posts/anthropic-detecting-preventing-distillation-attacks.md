@@ -7,7 +7,7 @@ author: "Umesh Malik"
 category: "AI & Security"
 tags: ["AI", "Security", "Machine Learning", "AI Safety", "National Security", "DeepSeek"]
 keywords: "Anthropic distillation attacks 2026, DeepSeek Claude theft, Moonshot AI model stealing, MiniMax distillation attack, AI model theft China, Claude model distillation, hydra cluster proxy attacks, AI national security threat, model distillation detection, Anthropic security breach 2026, DeepSeek Claude clone, AI model extraction attacks, Chinese AI labs Claude, distillation attack prevention, AI model theft techniques, AI espionage, DeepSeek controversy, export controls AI chips"
-image: "/blog/distillation-attacks-cover.png"
+image: "/blog/distillation-attacks-cover.svg"
 imageAlt: "A glowing AI brain being extracted through a network of fraudulent connections representing the massive distillation attack on Claude"
 featured: true
 published: true
@@ -123,7 +123,7 @@ Anthropic's forensic analysis revealed a three-phase operation that went well be
 
 ### Phase 1: Access Acquisition — The Hydra Network
 
-![A sprawling network of connected nodes representing the hydra cluster proxy architecture used to evade detection](/blog/hydra-network-proxy-attacks.png)
+![A sprawling network of connected nodes representing the hydra cluster proxy architecture used to evade detection](/blog/hydra-network-proxy-attacks.svg)
 
 Here is the problem the attackers faced: Claude is not officially available in China. Anthropic blocked Chinese IP addresses for "legal, regulatory, and national security concerns."
 
@@ -373,7 +373,7 @@ The result: all three operations were detected, documented, and shut down.
 
 ## The National Security Nightmare
 
-![A military-style AI command center with world maps showing threat vectors from distilled AI models](/blog/ai-national-security-threat.png)
+![A military-style AI command center with world maps showing threat vectors from distilled AI models](/blog/ai-national-security-threat.svg)
 
 Here is where the story gets genuinely terrifying.
 
