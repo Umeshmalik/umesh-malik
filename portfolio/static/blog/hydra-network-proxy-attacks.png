@@ -1,0 +1,110 @@
+<svg width="1200" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#0A0A0A"/>
+
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid2" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="redGlow">
+      <stop offset="0%" stop-color="#FF4444" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#FF4444" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#grid2)"/>
+
+  <!-- Central hydra core -->
+  <g transform="translate(600, 300)">
+    <circle cx="0" cy="0" r="60" fill="#FF4444" opacity="0.1"/>
+    <circle cx="0" cy="0" r="40" fill="#0A0A0A" stroke="#FF4444" stroke-width="3"/>
+    <text x="0" y="8" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700" fill="#FF4444" text-anchor="middle">
+      HYDRA
+    </text>
+    <text x="0" y="25" font-family="JetBrains Mono, monospace" font-size="10" fill="rgba(255,68,68,0.8)" text-anchor="middle">
+      CORE
+    </text>
+  </g>
+
+  <!-- Proxy nodes in rings -->
+  <g opacity="0.9">
+    <!-- Inner ring (8 nodes) -->
+    <circle cx="600" cy="180" r="18" fill="#FF4444" opacity="0.6"/>
+    <circle cx="730" cy="230" r="18" fill="#FF4444" opacity="0.6"/>
+    <circle cx="770" cy="300" r="18" fill="#FF4444" opacity="0.6"/>
+    <circle cx="730" cy="370" r="18" fill="#FF4444" opacity="0.6"/>
+    <circle cx="600" cy="420" r="18" fill="#FF4444" opacity="0.6"/>
+    <circle cx="470" cy="370" r="18" fill="#FF4444" opacity="0.6"/>
+    <circle cx="430" cy="300" r="18" fill="#FF4444" opacity="0.6"/>
+    <circle cx="470" cy="230" r="18" fill="#FF4444" opacity="0.6"/>
+
+    <!-- Outer ring (16 nodes) -->
+    <circle cx="600" cy="80" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="680" cy="105" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="735" cy="155" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="805" cy="210" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="850" cy="270" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="850" cy="330" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="805" cy="390" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="735" cy="445" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="680" cy="495" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="600" cy="520" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="520" cy="495" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="465" cy="445" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="395" cy="390" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="350" cy="330" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="350" cy="270" r="12" fill="#C09E5A" opacity="0.7"/>
+    <circle cx="395" cy="210" r="12" fill="#C09E5A" opacity="0.7"/>
+  </g>
+
+  <!-- Connection lines from core to proxies -->
+  <g opacity="0.3" stroke="#FF4444" stroke-width="1.5">
+    <line x1="600" y1="300" x2="600" y2="180"/>
+    <line x1="600" y1="300" x2="730" y2="230"/>
+    <line x1="600" y1="300" x2="770" y2="300"/>
+    <line x1="600" y1="300" x2="730" y2="370"/>
+    <line x1="600" y1="300" x2="600" y2="420"/>
+    <line x1="600" y1="300" x2="470" y2="370"/>
+    <line x1="600" y1="300" x2="430" y2="300"/>
+    <line x1="600" y1="300" x2="470" y2="230"/>
+  </g>
+
+  <!-- Title and stats -->
+  <text x="100" y="80" font-family="Inter, sans-serif" font-size="42" font-weight="700" fill="#FFFFFF">
+    Hydra Network Architecture
+  </text>
+  <text x="100" y="120" font-family="Inter, sans-serif" font-size="20" fill="rgba(255,255,255,0.7)">
+    How 20,000+ Fraudulent Accounts Evade Detection
+  </text>
+
+  <!-- Stats boxes -->
+  <g transform="translate(100, 160)">
+    <rect width="250" height="80" fill="rgba(255,68,68,0.1)" stroke="#FF4444" stroke-width="2" rx="5"/>
+    <text x="20" y="30" font-family="JetBrains Mono, monospace" font-size="28" font-weight="700" fill="#FF4444">
+      20,000+
+    </text>
+    <text x="20" y="55" font-family="Inter, sans-serif" font-size="14" fill="rgba(255,255,255,0.8)">
+      Simultaneous Accounts
+    </text>
+  </g>
+
+  <g transform="translate(100, 260)">
+    <rect width="250" height="80" fill="rgba(192,158,90,0.1)" stroke="#C09E5A" stroke-width="2" rx="5"/>
+    <text x="20" y="30" font-family="JetBrains Mono, monospace" font-size="28" font-weight="700" fill="#C09E5A">
+      16M+
+    </text>
+    <text x="20" y="55" font-family="Inter, sans-serif" font-size="14" fill="rgba(255,255,255,0.8)">
+      API Calls Extracted
+    </text>
+  </g>
+
+  <g transform="translate(100, 360)">
+    <rect width="250" height="80" fill="rgba(192,158,90,0.1)" stroke="#C09E5A" stroke-width="2" rx="5"/>
+    <text x="20" y="30" font-family="JetBrains Mono, monospace" font-size="28" font-weight="700" fill="#C09E5A">
+      3 Labs
+    </text>
+    <text x="20" y="55" font-family="Inter, sans-serif" font-size="14" fill="rgba(255,255,255,0.8)">
+      DeepSeek, Moonshot, MiniMax
+    </text>
+  </g>
+</svg>

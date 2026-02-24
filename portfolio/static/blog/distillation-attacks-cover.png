@@ -1,0 +1,64 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#000000"/>
+
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2B2B2B" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.3"/>
+
+  <!-- Central AI brain visualization -->
+  <g transform="translate(600, 315)">
+    <!-- Main brain circle with glow -->
+    <circle cx="0" cy="0" r="140" fill="none" stroke="#C09E5A" stroke-width="3" opacity="0.3"/>
+    <circle cx="0" cy="0" r="120" fill="none" stroke="#C09E5A" stroke-width="2"/>
+    <circle cx="0" cy="0" r="100" fill="#0A0A0A" stroke="#C09E5A" stroke-width="3"/>
+
+    <!-- Neural network nodes inside -->
+    <circle cx="-40" cy="-30" r="8" fill="#C09E5A" opacity="0.8"/>
+    <circle cx="40" cy="-30" r="8" fill="#C09E5A" opacity="0.8"/>
+    <circle cx="-40" cy="30" r="8" fill="#C09E5A" opacity="0.8"/>
+    <circle cx="40" cy="30" r="8" fill="#C09E5A" opacity="0.8"/>
+    <circle cx="0" cy="0" r="8" fill="#C09E5A"/>
+
+    <!-- Connections -->
+    <line x1="-40" y1="-30" x2="0" y2="0" stroke="#C09E5A" stroke-width="1.5" opacity="0.6"/>
+    <line x1="40" y1="-30" x2="0" y2="0" stroke="#C09E5A" stroke-width="1.5" opacity="0.6"/>
+    <line x1="-40" y1="30" x2="0" y2="0" stroke="#C09E5A" stroke-width="1.5" opacity="0.6"/>
+    <line x1="40" y1="30" x2="0" y2="0" stroke="#C09E5A" stroke-width="1.5" opacity="0.6"/>
+  </g>
+
+  <!-- Extraction lines radiating out -->
+  <g opacity="0.4">
+    <line x1="600" y1="315" x2="200" y2="100" stroke="#FF4444" stroke-width="2" stroke-dasharray="5,5"/>
+    <line x1="600" y1="315" x2="200" y2="315" stroke="#FF4444" stroke-width="2" stroke-dasharray="5,5"/>
+    <line x1="600" y1="315" x2="200" y2="530" stroke="#FF4444" stroke-width="2" stroke-dasharray="5,5"/>
+    <line x1="600" y1="315" x2="1000" y2="100" stroke="#FF4444" stroke-width="2" stroke-dasharray="5,5"/>
+    <line x1="600" y1="315" x2="1000" y2="315" stroke="#FF4444" stroke-width="2" stroke-dasharray="5,5"/>
+    <line x1="600" y1="315" x2="1000" y2="530" stroke="#FF4444" stroke-width="2" stroke-dasharray="5,5"/>
+  </g>
+
+  <!-- External nodes (fraudulent accounts) -->
+  <circle cx="200" cy="100" r="12" fill="#FF4444" opacity="0.7"/>
+  <circle cx="200" cy="315" r="12" fill="#FF4444" opacity="0.7"/>
+  <circle cx="200" cy="530" r="12" fill="#FF4444" opacity="0.7"/>
+  <circle cx="1000" cy="100" r="12" fill="#FF4444" opacity="0.7"/>
+  <circle cx="1000" cy="315" r="12" fill="#FF4444" opacity="0.7"/>
+  <circle cx="1000" cy="530" r="12" fill="#FF4444" opacity="0.7"/>
+
+  <!-- Title text -->
+  <text x="600" y="520" font-family="Inter, sans-serif" font-size="48" font-weight="700" fill="#FFFFFF" text-anchor="middle">
+    THE $100M AI HEIST
+  </text>
+  <text x="600" y="565" font-family="Inter, sans-serif" font-size="24" fill="rgba(255,255,255,0.8)" text-anchor="middle">
+    16 Million Stolen Exchanges • 24,000 Fake Accounts
+  </text>
+
+  <!-- Top label -->
+  <text x="600" y="80" font-family="JetBrains Mono, monospace" font-size="16" font-weight="500" fill="#C09E5A" text-anchor="middle" letter-spacing="2">
+    BREAKING: ANTHROPIC EXPOSES INDUSTRIAL AI THEFT
+  </text>
+</svg>
