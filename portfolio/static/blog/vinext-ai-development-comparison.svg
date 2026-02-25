@@ -1,0 +1,164 @@
+<svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="600" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="500" y="40" font-family="'Inter', sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">
+    Traditional vs AI-Assisted Development
+  </text>
+
+  <!-- Traditional Team Development (Left) -->
+  <g transform="translate(150, 100)">
+    <rect x="0" y="0" width="280" height="420" rx="8" fill="rgba(255,255,255,0.05)" stroke="#2B2B2B" stroke-width="2"/>
+
+    <!-- Header -->
+    <rect x="0" y="0" width="280" height="50" rx="8" fill="rgba(255,100,100,0.1)"/>
+    <text x="140" y="32" font-family="'Inter', sans-serif" font-size="18" font-weight="600" fill="#ff6b6b" text-anchor="middle">
+      Traditional Team
+    </text>
+
+    <!-- Team members -->
+    <g transform="translate(20, 80)">
+      <!-- 5 developer icons -->
+      <circle cx="30" cy="0" r="20" fill="#444" stroke="#666" stroke-width="2"/>
+      <circle cx="30" cy="0" r="8" fill="#888"/>
+
+      <circle cx="90" cy="0" r="20" fill="#444" stroke="#666" stroke-width="2"/>
+      <circle cx="90" cy="0" r="8" fill="#888"/>
+
+      <circle cx="150" cy="0" r="20" fill="#444" stroke="#666" stroke-width="2"/>
+      <circle cx="150" cy="0" r="8" fill="#888"/>
+
+      <circle cx="210" cy="0" r="20" fill="#444" stroke="#666" stroke-width="2"/>
+      <circle cx="210" cy="0" r="8" fill="#888"/>
+
+      <circle cx="120" cy="60" r="20" fill="#444" stroke="#666" stroke-width="2"/>
+      <circle cx="120" cy="60" r="8" fill="#888"/>
+    </g>
+
+    <!-- Stats -->
+    <text x="20" y="180" font-family="'JetBrains Mono', monospace" font-size="14" fill="rgba(255,255,255,0.9)" font-weight="600">
+      Team Size:
+    </text>
+    <text x="260" y="180" font-family="'JetBrains Mono', monospace" font-size="16" fill="#ff6b6b" text-anchor="end" font-weight="700">
+      5 Engineers
+    </text>
+
+    <text x="20" y="220" font-family="'JetBrains Mono', monospace" font-size="14" fill="rgba(255,255,255,0.9)" font-weight="600">
+      Timeline:
+    </text>
+    <text x="260" y="220" font-family="'JetBrains Mono', monospace" font-size="16" fill="#ff6b6b" text-anchor="end" font-weight="700">
+      6-12 months
+    </text>
+
+    <text x="20" y="260" font-family="'JetBrains Mono', monospace" font-size="14" fill="rgba(255,255,255,0.9)" font-weight="600">
+      Cost:
+    </text>
+    <text x="260" y="260" font-family="'JetBrains Mono', monospace" font-size="16" fill="#ff6b6b" text-anchor="end" font-weight="700">
+      $500k-$1M+
+    </text>
+
+    <text x="20" y="300" font-family="'JetBrains Mono', monospace" font-size="14" fill="rgba(255,255,255,0.9)" font-weight="600">
+      Overhead:
+    </text>
+    <text x="260" y="300" font-family="'JetBrains Mono', monospace" font-size="16" fill="#ff6b6b" text-anchor="end" font-weight="700">
+      Meetings, sync
+    </text>
+
+    <!-- Bottom note -->
+    <text x="140" y="380" font-family="'Inter', sans-serif" font-size="13" fill="rgba(255,255,255,0.6)" text-anchor="middle">
+      Years of development
+    </text>
+    <text x="140" y="400" font-family="'Inter', sans-serif" font-size="13" fill="rgba(255,255,255,0.6)" text-anchor="middle">
+      Multiple iterations
+    </text>
+  </g>
+
+  <!-- VS Divider -->
+  <text x="500" y="320" font-family="'Inter', sans-serif" font-size="32" font-weight="700" fill="#C09E5A" text-anchor="middle">
+    VS
+  </text>
+
+  <!-- AI-Assisted Development (Right) -->
+  <g transform="translate(570, 100)">
+    <rect x="0" y="0" width="280" height="420" rx="8" fill="rgba(255,255,255,0.05)" stroke="#2B2B2B" stroke-width="2"/>
+
+    <!-- Header -->
+    <rect x="0" y="0" width="280" height="50" rx="8" fill="rgba(192,158,90,0.2)"/>
+    <text x="140" y="32" font-family="'Inter', sans-serif" font-size="18" font-weight="600" fill="#C09E5A" text-anchor="middle">
+      AI-Assisted Solo
+    </text>
+
+    <!-- Developer + AI -->
+    <g transform="translate(60, 80)">
+      <!-- Human developer -->
+      <circle cx="40" cy="0" r="25" fill="#444" stroke="#C09E5A" stroke-width="3"/>
+      <circle cx="40" cy="0" r="10" fill="#C09E5A"/>
+
+      <!-- Plus sign -->
+      <text x="90" y="8" font-family="'Inter', sans-serif" font-size="32" font-weight="300" fill="rgba(255,255,255,0.5)">
+        +
+      </text>
+
+      <!-- AI brain -->
+      <circle cx="140" cy="0" r="25" fill="#1a1a1a" stroke="#FFD700" stroke-width="3"/>
+      <path d="M 130,-5 L 135,0 L 130,5 M 140,-8 L 140,8 M 150,-5 L 145,0 L 150,5"
+            stroke="#FFD700" stroke-width="2" fill="none"/>
+      <text x="140" y="-30" font-family="'Inter', sans-serif" font-size="11" fill="#FFD700" text-anchor="middle" font-weight="600">
+        Claude AI
+      </text>
+    </g>
+
+    <!-- Stats -->
+    <text x="20" y="180" font-family="'JetBrains Mono', monospace" font-size="14" fill="rgba(255,255,255,0.9)" font-weight="600">
+      Team Size:
+    </text>
+    <text x="260" y="180" font-family="'JetBrains Mono', monospace" font-size="16" fill="#C09E5A" text-anchor="end" font-weight="700">
+      1 Engineer
+    </text>
+
+    <text x="20" y="220" font-family="'JetBrains Mono', monospace" font-size="14" fill="rgba(255,255,255,0.9)" font-weight="600">
+      Timeline:
+    </text>
+    <text x="260" y="220" font-family="'JetBrains Mono', monospace" font-size="16" fill="#C09E5A" text-anchor="end" font-weight="700">
+      Days to weeks
+    </text>
+
+    <text x="20" y="260" font-family="'JetBrains Mono', monospace" font-size="14" fill="rgba(255,255,255,0.9)" font-weight="600">
+      Cost:
+    </text>
+    <text x="260" y="260" font-family="'JetBrains Mono', monospace" font-size="16" fill="#C09E5A" text-anchor="end" font-weight="700">
+      ~$1,100
+    </text>
+
+    <text x="20" y="300" font-family="'JetBrains Mono', monospace" font-size="14" fill="rgba(255,255,255,0.9)" font-weight="600">
+      Overhead:
+    </text>
+    <text x="260" y="300" font-family="'JetBrains Mono', monospace" font-size="16" fill="#C09E5A" text-anchor="end" font-weight="700">
+      Minimal
+    </text>
+
+    <!-- Bottom note -->
+    <text x="140" y="370" font-family="'Inter', sans-serif" font-size="13" fill="rgba(192,158,90,0.9)" text-anchor="middle" font-weight="600">
+      ✓ 94% API Coverage
+    </text>
+    <text x="140" y="390" font-family="'Inter', sans-serif" font-size="13" fill="rgba(192,158,90,0.9)" text-anchor="middle" font-weight="600">
+      ✓ 1,700+ Tests
+    </text>
+    <text x="140" y="410" font-family="'Inter', sans-serif" font-size="13" fill="rgba(192,158,90,0.9)" text-anchor="middle" font-weight="600">
+      ✓ Production Ready
+    </text>
+  </g>
+
+  <!-- Bottom conclusion -->
+  <text x="500" y="570" font-family="'Inter', sans-serif" font-size="16" fill="rgba(255,255,255,0.7)" text-anchor="middle" font-style="italic">
+    The economics of infrastructure development just changed forever
+  </text>
+</svg>
