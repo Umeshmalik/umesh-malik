@@ -74,8 +74,8 @@ const STATIC_PAGES = [
 ];
 
 function sourceFileToUrls(filePath) {
-	if (filePath.match(/^portfolio\/src\/lib\/posts\/(.+)\.md$/)) {
-		const slug = filePath.match(/^portfolio\/src\/lib\/posts\/(.+)\.md$/)[1];
+	if (filePath.match(/^portfolio\/src\/lib\/posts\/(.+)\.(md|mdx|svx)$/)) {
+		const slug = filePath.match(/^portfolio\/src\/lib\/posts\/(.+)\.(md|mdx|svx)$/)[1];
 		return [`/blog/${slug}`, '/blog'];
 	}
 
@@ -122,8 +122,8 @@ function getBlogPostPaths() {
 	for (const dir of ['portfolio/src/lib/posts', 'src/lib/posts']) {
 		try {
 			return readdirSync(resolve(process.cwd(), dir))
-				.filter((f) => f.endsWith('.md'))
-				.map((f) => `/blog/${f.replace('.md', '')}`);
+				.filter((f) => /\.(md|mdx|svx)$/i.test(f))
+				.map((f) => `/blog/${f.replace(/\.(md|mdx|svx)$/i, '')}`);
 		} catch {
 			/* try next */
 		}

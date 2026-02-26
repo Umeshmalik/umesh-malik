@@ -29,6 +29,7 @@ import { createHmac, randomBytes } from 'node:crypto';
 const SITE_URL = 'https://umesh-malik.com';
 const POSTS_DIR = 'portfolio/src/lib/posts';
 const DEFAULT_COVER_IMAGE = '/blog/default-cover.jpg';
+const POST_EXTENSIONS = ['.md', '.mdx', '.svx'];
 
 const DEV_TO_API_KEY = process.env.DEV_TO_API_KEY || '';
 const HASHNODE_TOKEN = process.env.HASHNODE_TOKEN || '';
@@ -64,20 +65,53 @@ function parseFrontmatter(raw) {
 	const yamlBlock = match[1];
 	const body = raw.slice(match[0].length).trim();
 	const meta = {};
+	const lines = yamlBlock.split('\n');
 
-	for (const line of yamlBlock.split('\n')) {
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
 		const kvMatch = line.match(/^(\w+):\s*(.*)$/);
 		if (!kvMatch) continue;
 
 		const [, key, rawVal] = kvMatch;
 		let val = rawVal.trim();
 
+		// YAML list style:
+		// tags:
+		//   - one
+		//   - two
+		if (val === '') {
+			const listItems = [];
+			let j = i + 1;
+			while (j < lines.length) {
+				const listMatch = lines[j].match(/^\s*-\s+(.*)$/);
+				if (!listMatch) break;
+				listItems.push(listMatch[1].trim().replace(/^["']|["']$/g, ''));
+				j++;
+			}
+			if (listItems.length > 0) {
+				meta[key] = listItems;
+				i = j - 1;
+				continue;
+			}
+		}
+
+		// Continuation lines for wrapped values
+		let j = i + 1;
+		while (j < lines.length && /^\s{2,}\S/.test(lines[j])) {
+			val += ` ${lines[j].trim()}`;
+			j++;
+		}
+		if (j > i + 1) i = j - 1;
+
 		// JSON array: ["Tag1", "Tag2"]
 		if (val.startsWith('[')) {
 			try {
 				val = JSON.parse(val);
 			} catch {
-				val = val.replace(/^\[|\]$/g, '').split(',').map((s) => s.trim().replace(/^["']|["']$/g, ''));
+				val = val
+					.replace(/^\[|\]$/g, '')
+					.split(',')
+					.map((s) => s.trim().replace(/^["']|["']$/g, ''));
 			}
 		}
 		// Quoted string
@@ -107,6 +141,53 @@ function makeAbsoluteUrls(markdown) {
 	);
 }
 
+function getAttr(attrs, name) {
+	const match = attrs.match(new RegExp(`${name}=(?:"([^"]*)"|'([^']*)')`));
+	return match ? (match[1] ?? match[2] ?? '').trim() : '';
+}
+
+/**
+ * Convert mdsvex-only syntax/components to plain Markdown for external platforms.
+ */
+function transformMdxForSyndication(markdown) {
+	let output = markdown;
+
+	// Remove mdsvex import blocks (not valid on Dev.to/Hashnode Markdown renderers)
+	output = output.replace(/<script[\s\S]*?<\/script>/g, '').trim();
+
+	// Convert custom video embeds into readable links
+	output = output.replace(/<VideoEmbed\b([\s\S]*?)\/>/g, (_, attrs) => {
+		const src = getAttr(attrs, 'src');
+		const title = getAttr(attrs, 'title') || 'Video';
+		const caption = getAttr(attrs, 'caption');
+		const lines = [`🎥 **${title}**`];
+		if (caption) lines.push(caption);
+		if (src) lines.push(`Watch: ${src}`);
+		return `\n${lines.join('\n')}\n`;
+	});
+
+	// Convert folder-tree component to a fenced text block
+	output = output.replace(/<FolderTree\b[^>]*>([\s\S]*?)<\/FolderTree>/g, (_, tree) => {
+		const cleanedTree = tree.replace(/^\s*\n/, '').replace(/\n\s*$/, '');
+		return `\n\`\`\`text\n${cleanedTree}\n\`\`\`\n`;
+	});
+
+	// Convert callouts to blockquotes
+	output = output.replace(/<Callout\b([^>]*)>([\s\S]*?)<\/Callout>/g, (_, attrs, body) => {
+		const title = getAttr(attrs, 'title') || 'Note';
+		const quoteBody = body.trim().replace(/\n/g, '\n> ');
+		return `\n> **${title}**\n> ${quoteBody}\n`;
+	});
+
+	// Remove any remaining PascalCase component tags if present
+	output = output.replace(/<\/?[A-Z][A-Za-z0-9]*\b[^>]*\/?>/g, '');
+
+	// Prevent large blank gaps after replacements
+	output = output.replace(/\n{3,}/g, '\n\n');
+
+	return output;
+}
+
 function appendBacklink(body, canonicalUrl) {
 	return `${body}\n\n---\n\n*Originally published at [umesh-malik.com](${canonicalUrl})*`;
 }
@@ -128,7 +209,7 @@ function resolveImage(imagePath) {
 }
 
 // ---------------------------------------------------------------------------
-// Git diff detection — only NEW .md files (not edits)
+// Git diff detection — only NEW markdown files (not edits)
 // ---------------------------------------------------------------------------
 
 function getNewPostSlugs(beforeRef) {
@@ -144,8 +225,8 @@ function getNewPostSlugs(beforeRef) {
 		return output
 			.split('\n')
 			.filter(Boolean)
-			.filter((f) => f.match(new RegExp(`^${POSTS_DIR}/(.+)\\.md$`)))
-			.map((f) => f.match(new RegExp(`^${POSTS_DIR}/(.+)\\.md$`))[1]);
+			.filter((f) => f.match(new RegExp(`^${POSTS_DIR}/(.+)\\.(md|mdx|svx)$`)))
+			.map((f) => f.match(new RegExp(`^${POSTS_DIR}/(.+)\\.(md|mdx|svx)$`))[1]);
 	} catch (e) {
 		console.warn(`[warn] git diff failed: ${e.message}`);
 		return [];
@@ -160,22 +241,24 @@ function readPost(slug) {
 	const possibleDirs = ['portfolio/src/lib/posts', 'src/lib/posts'];
 
 	for (const dir of possibleDirs) {
-		try {
-			const filePath = resolve(process.cwd(), dir, `${slug}.md`);
-			const raw = readFileSync(filePath, 'utf8');
-			const { meta, body } = parseFrontmatter(raw);
-			return {
-				slug,
-				title: meta.title || slug,
-				description: meta.description || '',
-				tags: Array.isArray(meta.tags) ? meta.tags : [],
-				image: resolveImage(meta.image),
-				publishDate: meta.publishDate || '',
-				canonicalUrl: `${SITE_URL}/blog/${meta.slug || slug}`,
-				body: makeAbsoluteUrls(body)
-			};
-		} catch {
-			/* try next directory */
+		for (const ext of POST_EXTENSIONS) {
+			try {
+				const filePath = resolve(process.cwd(), dir, `${slug}${ext}`);
+				const raw = readFileSync(filePath, 'utf8');
+				const { meta, body } = parseFrontmatter(raw);
+				return {
+					slug,
+					title: meta.title || slug,
+					description: meta.description || '',
+					tags: Array.isArray(meta.tags) ? meta.tags : [],
+					image: resolveImage(meta.image),
+					publishDate: meta.publishDate || '',
+					canonicalUrl: `${SITE_URL}/blog/${meta.slug || slug}`,
+					body: makeAbsoluteUrls(transformMdxForSyndication(body))
+				};
+			} catch {
+				/* try next extension */
+			}
 		}
 	}
 

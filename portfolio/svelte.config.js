@@ -48,7 +48,7 @@ function rehypeExtractHeadings() {
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
-	extensions: ['.md', '.svx'],
+	extensions: ['.md', '.mdx', '.svx'],
 	smartypants: {
 		dashes: 'oldschool'
 	},
@@ -67,7 +67,7 @@ const mdsvexOptions = {
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	extensions: ['.svelte', '.md', '.svx'],
+	extensions: ['.svelte', '.md', '.mdx', '.svx'],
 
 	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions)],
 

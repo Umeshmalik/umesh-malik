@@ -36,24 +36,24 @@ export function slugify(str: string): string {
 
 // Eagerly import only metadata from all posts (tiny, no content/component)
 // This avoids sequential async imports and makes getAllPosts synchronous at runtime
-const postMetadataModules = import.meta.glob('$lib/posts/*.md', {
+const postMetadataModules = import.meta.glob('$lib/posts/*.{md,mdx,svx}', {
 	eager: true,
 	import: 'metadata'
 });
 
 // Lazy imports for full post modules (content + metadata) — only used for single post loading
-const postContentModules = import.meta.glob('$lib/posts/*.md');
+const postContentModules = import.meta.glob('$lib/posts/*.{md,mdx,svx}');
 
 let _cachedPosts: BlogPost[] | null = null;
 
 export function getAllPosts(): BlogPost[] {
-	if (_cachedPosts) return _cachedPosts;
+	if (!import.meta.env.DEV && _cachedPosts) return _cachedPosts;
 
 	const posts: BlogPost[] = [];
 
 	for (const [path, metadata] of Object.entries(postMetadataModules)) {
 		const meta = metadata as BlogPost;
-		const slug = path.split('/').pop()?.replace('.md', '');
+		const slug = path.split('/').pop()?.replace(/\.(md|mdx|svx)$/, '');
 
 		if (meta?.published) {
 			const image = resolveImage(meta.image);
@@ -66,16 +66,22 @@ export function getAllPosts(): BlogPost[] {
 		}
 	}
 
-	_cachedPosts = posts.sort(
+	const sortedPosts = posts.sort(
 		(a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
 	);
-	return _cachedPosts;
+	if (!import.meta.env.DEV) {
+		_cachedPosts = sortedPosts;
+	}
+	return sortedPosts;
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost> {
 	try {
-		const matchingPath = Object.keys(postContentModules).find((path) =>
-			path.endsWith(`/${slug}.md`)
+		const matchingPath = Object.keys(postContentModules).find(
+			(path) =>
+				path.endsWith(`/${slug}.md`) ||
+				path.endsWith(`/${slug}.mdx`) ||
+				path.endsWith(`/${slug}.svx`)
 		);
 
 		if (!matchingPath) {
