@@ -145,6 +145,20 @@ function getAttr(attrs, name) {
 	return match ? (match[1] ?? match[2] ?? '').trim() : '';
 }
 
+function extractYouTubeId(url) {
+	if (!url) return '';
+	const m =
+		url.match(/youtube\.com\/embed\/([^?&/]+)/i) ||
+		url.match(/youtube\.com\/watch\?v=([^?&/]+)/i) ||
+		url.match(/youtu\.be\/([^?&/]+)/i);
+	return m ? m[1] : '';
+}
+
+function toWatchUrl(url) {
+	const id = extractYouTubeId(url);
+	return id ? `https://www.youtube.com/watch?v=${id}` : url;
+}
+
 /**
  * Convert mdsvex-only syntax/components to plain Markdown for external platforms.
  */
@@ -159,9 +173,14 @@ function transformMdxForSyndication(markdown) {
 		const src = getAttr(attrs, 'src');
 		const title = getAttr(attrs, 'title') || 'Video';
 		const caption = getAttr(attrs, 'caption');
+		const watchUrl = toWatchUrl(src);
+		const youtubeId = extractYouTubeId(src);
 		const lines = [`🎥 **${title}**`];
 		if (caption) lines.push(caption);
-		if (src) lines.push(`Watch: ${src}`);
+		if (youtubeId) {
+			lines.push(`\n[![${title}](https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg)](${watchUrl})`);
+		}
+		if (watchUrl) lines.push(`Watch: ${watchUrl}`);
 		return `\n${lines.join('\n')}\n`;
 	});
 
@@ -193,8 +212,13 @@ function transformMdxForSyndication(markdown) {
 		'- [$1](' + SITE_URL + '/blog)'
 	);
 
-	// Dev.to commonly has issues rendering remote SVG embeds; keep them as clickable links
-	output = output.replace(/!\[([^\]]*)\]\(([^)\s]+\.svg)\)/gi, '[$1]($2)');
+	// Force SVGs to render as images on external platforms via HTML img tags.
+	// This avoids markdown renderers treating .svg links inconsistently.
+	output = output.replace(
+		/!\[([^\]]*)\]\(([^)\s]+\.svg)(?:\s+"([^"]*)")?\)/gi,
+		(_, alt, src, title) =>
+			`<img src="${src}" alt="${alt || 'image'}"${title ? ` title="${title}"` : ''} loading="lazy" style="max-width:100%;height:auto;" />`
+	);
 
 	// Prevent large blank gaps after replacements
 	output = output.replace(/\n{3,}/g, '\n\n');
