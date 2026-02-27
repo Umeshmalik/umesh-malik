@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" font-family="'Inter', 'SF Pro', system-ui, sans-serif">
+  <title>Decision tree for choosing prompt only, RAG, fine-tuning, or hybrid</title>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070A10"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="820" fill="url(#bg)"/>
+  <text x="600" y="64" fill="#FFFFFF" font-size="34" font-weight="760" text-anchor="middle">LLM Strategy Decision Tree (2026)</text>
+  <text x="600" y="92" fill="rgba(255,255,255,0.66)" font-size="16" text-anchor="middle">Pick the adaptation strategy by failure mode, not by hype</text>
+
+  <rect x="360" y="126" width="480" height="92" rx="14" fill="#111827" stroke="#6B7280"/>
+  <text x="600" y="164" fill="#FFFFFF" font-size="21" font-weight="700" text-anchor="middle">Do you need external or changing knowledge?</text>
+  <text x="600" y="190" fill="rgba(255,255,255,0.65)" font-size="14" text-anchor="middle">Docs, policies, inventory, support data, releases</text>
+
+  <rect x="120" y="286" width="420" height="92" rx="14" fill="rgba(6,182,212,0.12)" stroke="#22D3EE" stroke-width="2"/>
+  <text x="330" y="324" fill="#22D3EE" font-size="20" font-weight="700" text-anchor="middle">Yes -> Start with RAG</text>
+  <text x="330" y="350" fill="rgba(255,255,255,0.72)" font-size="14" text-anchor="middle">Add semantic + lexical retrieval, then reranking</text>
+
+  <rect x="660" y="286" width="420" height="92" rx="14" fill="rgba(245,158,11,0.12)" stroke="#F59E0B" stroke-width="2"/>
+  <text x="870" y="324" fill="#F59E0B" font-size="20" font-weight="700" text-anchor="middle">No -> Prompt + Eval first</text>
+  <text x="870" y="350" fill="rgba(255,255,255,0.72)" font-size="14" text-anchor="middle">Do not train before proving baseline limits</text>
+
+  <rect x="120" y="454" width="420" height="92" rx="14" fill="#0C1D2A" stroke="#22D3EE" stroke-opacity="0.75"/>
+  <text x="330" y="492" fill="#A5F3FC" font-size="19" font-weight="700" text-anchor="middle">Behavior still inconsistent?</text>
+  <text x="330" y="518" fill="rgba(255,255,255,0.72)" font-size="14" text-anchor="middle">Format drift, tone drift, weak classification</text>
+
+  <rect x="660" y="454" width="420" height="92" rx="14" fill="#2A1C08" stroke="#F59E0B" stroke-opacity="0.80"/>
+  <text x="870" y="492" fill="#FCD34D" font-size="19" font-weight="700" text-anchor="middle">Need strict style/policy control?</text>
+  <text x="870" y="518" fill="rgba(255,255,255,0.72)" font-size="14" text-anchor="middle">Consistent schema, tone, and deterministic behavior</text>
+
+  <rect x="60" y="640" width="330" height="110" rx="14" fill="#082F49" stroke="#38BDF8"/>
+  <text x="225" y="680" fill="#7DD3FC" font-size="19" font-weight="700" text-anchor="middle">RAG-Only</text>
+  <text x="225" y="706" fill="rgba(255,255,255,0.75)" font-size="14" text-anchor="middle">Best for freshness + citations</text>
+  <text x="225" y="728" fill="rgba(255,255,255,0.58)" font-size="12" text-anchor="middle">Use when behavior is already good</text>
+
+  <rect x="435" y="640" width="330" height="110" rx="14" fill="#3F2A0B" stroke="#F59E0B"/>
+  <text x="600" y="680" fill="#FCD34D" font-size="19" font-weight="700" text-anchor="middle">Fine-Tune</text>
+  <text x="600" y="706" fill="rgba(255,255,255,0.75)" font-size="14" text-anchor="middle">Best for behavior + format control</text>
+  <text x="600" y="728" fill="rgba(255,255,255,0.58)" font-size="12" text-anchor="middle">Use PEFT first (LoRA/QLoRA)</text>
+
+  <rect x="810" y="640" width="330" height="110" rx="14" fill="#052E2B" stroke="#14B8A6"/>
+  <text x="975" y="680" fill="#5EEAD4" font-size="19" font-weight="700" text-anchor="middle">Hybrid (Default)</text>
+  <text x="975" y="706" fill="rgba(255,255,255,0.75)" font-size="14" text-anchor="middle">RAG for facts + tuning for behavior</text>
+  <text x="975" y="728" fill="rgba(255,255,255,0.58)" font-size="12" text-anchor="middle">Most robust production setup</text>
+
+  <path d="M600 218 L600 286" stroke="#D1D5DB" stroke-width="2.5"/>
+  <path d="M600 252 L330 286" stroke="#7DD3FC" stroke-width="2"/>
+  <path d="M600 252 L870 286" stroke="#FCD34D" stroke-width="2"/>
+  <path d="M330 378 L330 454" stroke="#7DD3FC" stroke-width="2"/>
+  <path d="M870 378 L870 454" stroke="#FCD34D" stroke-width="2"/>
+  <path d="M330 546 L225 640" stroke="#38BDF8" stroke-width="2"/>
+  <path d="M330 546 L975 640" stroke="#14B8A6" stroke-width="2"/>
+  <path d="M870 546 L600 640" stroke="#F59E0B" stroke-width="2"/>
+  <path d="M870 546 L975 640" stroke="#14B8A6" stroke-width="2"/>
+</svg>
