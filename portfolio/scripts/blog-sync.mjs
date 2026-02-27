@@ -47,6 +47,7 @@ const hasFlag = (flag) => args.includes(flag);
 
 const platformArg = getArg('--platform') || 'all'; // devto | hashnode | all
 const dryRun = hasFlag('--dry-run');
+const DEVTO_MAX_RETRIES = 3;
 
 // ---------------------------------------------------------------------------
 // Frontmatter parser (duplicated from blog-syndicate.mjs)
@@ -323,6 +324,69 @@ function normalizeContent(text) {
 	return text.replace(/\r\n/g, '\n').trim();
 }
 
+function sleep(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isPastDate(dateStr) {
+	if (!dateStr) return false;
+	const dt = new Date(dateStr);
+	if (Number.isNaN(dt.getTime())) return false;
+	return dt.getTime() <= Date.now();
+}
+
+async function parseResponse(resp) {
+	const text = await resp.text();
+	let json = null;
+	try {
+		json = text ? JSON.parse(text) : null;
+	} catch {
+		// Some APIs return plain text for transient errors (e.g., "Retry later")
+	}
+	return { text, json };
+}
+
+function shouldRetryDevTo(resp, text) {
+	if (resp.status === 429 || resp.status >= 500) return true;
+	return /retry later|rate limit|too many requests/i.test(text || '');
+}
+
+async function devToRequest(method, url, payload) {
+	let lastError = null;
+
+	for (let attempt = 1; attempt <= DEVTO_MAX_RETRIES; attempt++) {
+		try {
+			const resp = await fetch(url, {
+				method,
+				headers: {
+					'Content-Type': 'application/json',
+					'api-key': DEV_TO_API_KEY
+				},
+				body: JSON.stringify(payload)
+			});
+
+			const { text, json } = await parseResponse(resp);
+			if (resp.ok) return { text, json };
+
+			if (attempt < DEVTO_MAX_RETRIES && shouldRetryDevTo(resp, text)) {
+				await sleep(500 * 2 ** (attempt - 1));
+				continue;
+			}
+
+			const errBody = json ? JSON.stringify(json) : (text || '(empty response)');
+			throw new Error(`HTTP ${resp.status}: ${errBody}`);
+		} catch (e) {
+			lastError = e;
+			if (attempt < DEVTO_MAX_RETRIES) {
+				await sleep(500 * 2 ** (attempt - 1));
+				continue;
+			}
+		}
+	}
+
+	throw lastError || new Error('Dev.to request failed');
+}
+
 // ---------------------------------------------------------------------------
 // Dev.to — fetch existing articles
 // ---------------------------------------------------------------------------
@@ -384,23 +448,8 @@ function buildDevToPayload(post) {
 
 async function createDevToArticle(post) {
 	const payload = buildDevToPayload(post);
-
-	const resp = await fetch('https://dev.to/api/articles', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			'api-key': DEV_TO_API_KEY
-		},
-		body: JSON.stringify(payload)
-	});
-
-	const data = await resp.json();
-
-	if (!resp.ok) {
-		throw new Error(`HTTP ${resp.status}: ${JSON.stringify(data)}`);
-	}
-
-	return data.url;
+	const { json, text } = await devToRequest('POST', 'https://dev.to/api/articles', payload);
+	return json?.url || text;
 }
 
 // ---------------------------------------------------------------------------
@@ -409,23 +458,8 @@ async function createDevToArticle(post) {
 
 async function updateDevToArticle(articleId, post) {
 	const payload = buildDevToPayload(post);
-
-	const resp = await fetch(`https://dev.to/api/articles/${articleId}`, {
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json',
-			'api-key': DEV_TO_API_KEY
-		},
-		body: JSON.stringify(payload)
-	});
-
-	const data = await resp.json();
-
-	if (!resp.ok) {
-		throw new Error(`HTTP ${resp.status}: ${JSON.stringify(data)}`);
-	}
-
-	return data.url;
+	const { json, text } = await devToRequest('PUT', `https://dev.to/api/articles/${articleId}`, payload);
+	return json?.url || text;
 }
 
 // ---------------------------------------------------------------------------
@@ -592,7 +626,8 @@ async function fetchHashnodePosts() {
 // Hashnode — build input
 // ---------------------------------------------------------------------------
 
-function buildHashnodeInput(post) {
+function buildHashnodeInput(post, options = {}) {
+	const { includePublishedAt = false } = options;
 	const tags = post.tags.map((t) => ({
 		slug: t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
 		name: t
@@ -606,9 +641,13 @@ function buildHashnodeInput(post) {
 		title: post.title,
 		contentMarkdown: appendBacklink(bodyWithCover, post.canonicalUrl),
 		tags,
-		originalArticleURL: post.canonicalUrl,
-		...(post.publishDate ? { publishedAt: new Date(post.publishDate).toISOString() } : {})
+		originalArticleURL: post.canonicalUrl
 	};
+
+	// Hashnode rejects future publish dates; only send for new posts when safely in the past.
+	if (includePublishedAt && isPastDate(post.publishDate)) {
+		input.publishedAt = new Date(post.publishDate).toISOString();
+	}
 
 	if (syndicationImageUrl) {
 		input.coverImageOptions = { coverImageURL: syndicationImageUrl };
@@ -635,7 +674,7 @@ async function createHashnodePost(post) {
 	`;
 
 	const input = {
-		...buildHashnodeInput(post),
+		...buildHashnodeInput(post, { includePublishedAt: true }),
 		publicationId: HASHNODE_PUBLICATION_ID
 	};
 
@@ -675,7 +714,7 @@ async function updateHashnodePost(postId, post) {
 	`;
 
 	const input = {
-		...buildHashnodeInput(post),
+		...buildHashnodeInput(post, { includePublishedAt: false }),
 		id: postId
 	};
 

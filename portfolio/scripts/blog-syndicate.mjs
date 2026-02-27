@@ -54,6 +54,7 @@ const hasFlag = (flag) => args.includes(flag);
 const slugArg = getArg('--slug');
 const beforeSha = getArg('--before');
 const dryRun = hasFlag('--dry-run');
+const DEVTO_MAX_RETRIES = 3;
 
 // ---------------------------------------------------------------------------
 // Frontmatter parser
@@ -215,6 +216,69 @@ function appendBacklink(body, canonicalUrl) {
 	return `${body}\n\n---\n\n*Originally published at [umesh-malik.com](${canonicalUrl})*`;
 }
 
+function sleep(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isPastDate(dateStr) {
+	if (!dateStr) return false;
+	const dt = new Date(dateStr);
+	if (Number.isNaN(dt.getTime())) return false;
+	return dt.getTime() <= Date.now();
+}
+
+async function parseResponse(resp) {
+	const text = await resp.text();
+	let json = null;
+	try {
+		json = text ? JSON.parse(text) : null;
+	} catch {
+		// Non-JSON response on transient upstream errors
+	}
+	return { text, json };
+}
+
+function shouldRetryDevTo(resp, text) {
+	if (resp.status === 429 || resp.status >= 500) return true;
+	return /retry later|rate limit|too many requests/i.test(text || '');
+}
+
+async function devToRequest(payload) {
+	let lastError = null;
+
+	for (let attempt = 1; attempt <= DEVTO_MAX_RETRIES; attempt++) {
+		try {
+			const resp = await fetch('https://dev.to/api/articles', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'api-key': DEV_TO_API_KEY
+				},
+				body: JSON.stringify(payload)
+			});
+
+			const { text, json } = await parseResponse(resp);
+			if (resp.ok) return { text, json };
+
+			if (attempt < DEVTO_MAX_RETRIES && shouldRetryDevTo(resp, text)) {
+				await sleep(500 * 2 ** (attempt - 1));
+				continue;
+			}
+
+			const errBody = json ? JSON.stringify(json) : (text || '(empty response)');
+			throw new Error(`HTTP ${resp.status}: ${errBody}`);
+		} catch (e) {
+			lastError = e;
+			if (attempt < DEVTO_MAX_RETRIES) {
+				await sleep(500 * 2 ** (attempt - 1));
+				continue;
+			}
+		}
+	}
+
+	throw lastError || new Error('Dev.to request failed');
+}
+
 /**
  * Check if a frontmatter image actually exists on disk.
  * Returns the image path if it exists, or DEFAULT_COVER_IMAGE if not.
@@ -359,24 +423,11 @@ async function postToDevTo(post) {
 	}
 
 	try {
-		const resp = await fetch('https://dev.to/api/articles', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'api-key': DEV_TO_API_KEY
-			},
-			body: JSON.stringify(payload)
-		});
+		const { json, text } = await devToRequest(payload);
+		const data = json ?? {};
 
-		const data = await resp.json();
-
-		if (!resp.ok) {
-			console.error(`  [error] Dev.to → HTTP ${resp.status}: ${JSON.stringify(data)}`);
-			return null;
-		}
-
-		console.log(`  [ok] Dev.to → ${data.url}`);
-		return { platform: 'devto', url: data.url };
+		console.log(`  [ok] Dev.to → ${data.url || text || '(posted)'}`);
+		return { platform: 'devto', url: data.url || null };
 	} catch (e) {
 		console.error(`  [error] Dev.to → ${e.message}`);
 		return null;
@@ -421,7 +472,7 @@ async function postToHashnode(post) {
 			publicationId: HASHNODE_PUBLICATION_ID,
 			tags,
 			originalArticleURL: post.canonicalUrl,
-			...(post.publishDate ? { publishedAt: new Date(post.publishDate).toISOString() } : {})
+			...(isPastDate(post.publishDate) ? { publishedAt: new Date(post.publishDate).toISOString() } : {})
 		}
 	};
 	if (syndicationImageUrl) {
