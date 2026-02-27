@@ -162,7 +162,24 @@ function toWatchUrl(url) {
 /**
  * Convert mdsvex-only syntax/components to plain Markdown for external platforms.
  */
-function transformMdxForSyndication(markdown) {
+function toRelativeSitePath(url) {
+	if (!url) return '';
+	if (url.startsWith(SITE_URL)) return url.slice(SITE_URL.length);
+	return url;
+}
+
+function svgToPngIfAvailable(url) {
+	if (!/\.svg(\?[^)\s"]*)?$/i.test(url)) return url;
+	const candidate = url.replace(/\.svg(\?[^)\s"]*)?$/i, '.png$1');
+	const candidatePath = toRelativeSitePath(candidate);
+	if (candidatePath.startsWith('/')) {
+		const resolved = resolveImage(candidatePath);
+		if (resolved) return candidate;
+	}
+	return url;
+}
+
+function transformMdxForSyndication(markdown, platform = 'generic') {
 	let output = markdown;
 
 	// Remove mdsvex import blocks (not valid on Dev.to/Hashnode Markdown renderers)
@@ -175,11 +192,17 @@ function transformMdxForSyndication(markdown) {
 		const caption = getAttr(attrs, 'caption');
 		const watchUrl = toWatchUrl(src);
 		const youtubeId = extractYouTubeId(src);
+		if (platform === 'devto' && youtubeId) {
+			const lines = [];
+			if (caption) lines.push(caption);
+			lines.push(`{% youtube ${youtubeId} %}`);
+			if (watchUrl) lines.push(`Watch: ${watchUrl}`);
+			return `\n${lines.join('\n\n')}\n`;
+		}
+
 		const lines = [`🎥 **${title}**`];
 		if (caption) lines.push(caption);
-		if (youtubeId) {
-			lines.push(`\n[![${title}](https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg)](${watchUrl})`);
-		}
+		if (youtubeId) lines.push(`\n[![${title}](https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg)](${watchUrl})`);
 		if (watchUrl) lines.push(`Watch: ${watchUrl}`);
 		return `\n${lines.join('\n')}\n`;
 	});
@@ -212,18 +235,24 @@ function transformMdxForSyndication(markdown) {
 		'- [$1](' + SITE_URL + '/blog)'
 	);
 
-	// Force SVGs to render as images on external platforms via HTML img tags.
-	// This avoids markdown renderers treating .svg links inconsistently.
-	output = output.replace(
-		/!\[([^\]]*)\]\(([^)\s]+\.svg)(?:\s+"([^"]*)")?\)/gi,
-		(_, alt, src, title) =>
-			`<img src="${src}" alt="${alt || 'image'}"${title ? ` title="${title}"` : ''} loading="lazy" style="max-width:100%;height:auto;" />`
-	);
+	if (platform === 'devto') {
+		output = output.replace(
+			/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g,
+			(_, alt, src, title) => {
+				const fixedSrc = svgToPngIfAvailable(src);
+				return `![${alt}](${fixedSrc}${title ? ` "${title}"` : ''})`;
+			}
+		);
+	}
 
 	// Prevent large blank gaps after replacements
 	output = output.replace(/\n{3,}/g, '\n\n');
 
 	return output;
+}
+
+function renderBodyForPlatform(rawBody, platform) {
+	return makeAbsoluteUrls(transformMdxForSyndication(rawBody, platform));
 }
 
 function appendBacklink(body, canonicalUrl) {
@@ -286,7 +315,7 @@ function readPost(slug) {
 					publishDate: meta.publishDate || '',
 					published: meta.published !== false,
 					canonicalUrl: `${SITE_URL}/blog/${meta.slug || slug}`,
-					body: makeAbsoluteUrls(transformMdxForSyndication(body))
+					rawBody: body
 				};
 			} catch {
 				/* try next extension */
@@ -450,11 +479,12 @@ function buildDevToPayload(post) {
 		.map((t) => t.toLowerCase().replace(/[^a-z0-9]/g, ''));
 
 	const syndicationImageUrl = getSyndicationImageUrl(post.image);
+	const devtoBody = renderBodyForPlatform(post.rawBody, 'devto');
 
 	const payload = {
 		article: {
 			title: post.title,
-			body_markdown: appendBacklink(post.body, post.canonicalUrl),
+			body_markdown: appendBacklink(devtoBody, post.canonicalUrl),
 			published: true,
 			canonical_url: post.canonicalUrl,
 			description: post.description,
@@ -541,7 +571,9 @@ async function syncDevTo(posts) {
 			}
 		} else {
 			// Compare content (include backlink footer so uploaded body matches)
-			const localBody = normalizeContent(appendBacklink(post.body, post.canonicalUrl));
+			const localBody = normalizeContent(
+				appendBacklink(renderBodyForPlatform(post.rawBody, 'devto'), post.canonicalUrl)
+			);
 			const remoteBody = normalizeContent(match.body_markdown || '');
 			const bodyChanged = localBody !== remoteBody;
 
@@ -657,9 +689,10 @@ function buildHashnodeInput(post, options = {}) {
 		name: t
 	}));
 
+	const hashnodeBody = renderBodyForPlatform(post.rawBody, 'hashnode');
 	const syndicationImageUrl = getSyndicationImageUrl(post.image);
 	// Prepend cover image in body so Hashnode always shows it as thumbnail
-	const bodyWithCover = syndicationImageUrl ? `![cover](${syndicationImageUrl})\n\n${post.body}` : post.body;
+	const bodyWithCover = syndicationImageUrl ? `![cover](${syndicationImageUrl})\n\n${hashnodeBody}` : hashnodeBody;
 
 	const input = {
 		title: post.title,
@@ -816,7 +849,8 @@ async function syncHashnode(posts) {
 		} else {
 			// Compare content — Hashnode body includes prepended cover image + backlink
 			const syndicationImageUrl = getSyndicationImageUrl(post.image);
-			const bodyWithCover = syndicationImageUrl ? `![cover](${syndicationImageUrl})\n\n${post.body}` : post.body;
+			const hashnodeBody = renderBodyForPlatform(post.rawBody, 'hashnode');
+			const bodyWithCover = syndicationImageUrl ? `![cover](${syndicationImageUrl})\n\n${hashnodeBody}` : hashnodeBody;
 			const localBody = normalizeContent(appendBacklink(bodyWithCover, post.canonicalUrl));
 			const remoteBody = normalizeContent(match.content?.markdown || '');
 			const bodyChanged = localBody !== remoteBody;

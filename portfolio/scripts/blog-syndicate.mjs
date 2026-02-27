@@ -172,7 +172,24 @@ function toWatchUrl(url) {
 /**
  * Convert mdsvex-only syntax/components to plain Markdown for external platforms.
  */
-function transformMdxForSyndication(markdown) {
+function toRelativeSitePath(url) {
+	if (!url) return '';
+	if (url.startsWith(SITE_URL)) return url.slice(SITE_URL.length);
+	return url;
+}
+
+function svgToPngIfAvailable(url) {
+	if (!/\.svg(\?[^)\s"]*)?$/i.test(url)) return url;
+	const candidate = url.replace(/\.svg(\?[^)\s"]*)?$/i, '.png$1');
+	const candidatePath = toRelativeSitePath(candidate);
+	if (candidatePath.startsWith('/')) {
+		const resolved = resolveImage(candidatePath);
+		if (resolved) return candidate;
+	}
+	return url;
+}
+
+function transformMdxForSyndication(markdown, platform = 'generic') {
 	let output = markdown;
 
 	// Remove mdsvex import blocks (not valid on Dev.to/Hashnode Markdown renderers)
@@ -185,11 +202,19 @@ function transformMdxForSyndication(markdown) {
 		const caption = getAttr(attrs, 'caption');
 		const watchUrl = toWatchUrl(src);
 		const youtubeId = extractYouTubeId(src);
+
+		// Dev.to supports native YouTube embeds via liquid tags.
+		if (platform === 'devto' && youtubeId) {
+			const lines = [];
+			if (caption) lines.push(caption);
+			lines.push(`{% youtube ${youtubeId} %}`);
+			if (watchUrl) lines.push(`Watch: ${watchUrl}`);
+			return `\n${lines.join('\n\n')}\n`;
+		}
+
 		const lines = [`🎥 **${title}**`];
 		if (caption) lines.push(caption);
-		if (youtubeId) {
-			lines.push(`\n[![${title}](https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg)](${watchUrl})`);
-		}
+		if (youtubeId) lines.push(`\n[![${title}](https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg)](${watchUrl})`);
 		if (watchUrl) lines.push(`Watch: ${watchUrl}`);
 		return `\n${lines.join('\n')}\n`;
 	});
@@ -222,18 +247,26 @@ function transformMdxForSyndication(markdown) {
 		'- [$1](' + SITE_URL + '/blog)'
 	);
 
-	// Force SVGs to render as images on external platforms via HTML img tags.
-	// This avoids markdown renderers treating .svg links inconsistently.
-	output = output.replace(
-		/!\[([^\]]*)\]\(([^)\s]+\.svg)(?:\s+"([^"]*)")?\)/gi,
-		(_, alt, src, title) =>
-			`<img src="${src}" alt="${alt || 'image'}"${title ? ` title="${title}"` : ''} loading="lazy" style="max-width:100%;height:auto;" />`
-	);
+	// Dev.to often fails to render remote SVG markdown images.
+	// Prefer png siblings when available; keep markdown image syntax.
+	if (platform === 'devto') {
+		output = output.replace(
+			/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g,
+			(_, alt, src, title) => {
+				const fixedSrc = svgToPngIfAvailable(src);
+				return `![${alt}](${fixedSrc}${title ? ` "${title}"` : ''})`;
+			}
+		);
+	}
 
 	// Prevent large blank gaps after replacements
 	output = output.replace(/\n{3,}/g, '\n\n');
 
 	return output;
+}
+
+function renderBodyForPlatform(rawBody, platform) {
+	return makeAbsoluteUrls(transformMdxForSyndication(rawBody, platform));
 }
 
 function appendBacklink(body, canonicalUrl) {
@@ -395,7 +428,7 @@ function readPost(slug) {
 					image: resolveImage(meta.image),
 					publishDate: meta.publishDate || '',
 					canonicalUrl: `${SITE_URL}/blog/${meta.slug || slug}`,
-					body: makeAbsoluteUrls(transformMdxForSyndication(body))
+					rawBody: body
 				};
 			} catch {
 				/* try next extension */
@@ -427,7 +460,7 @@ async function postToDevTo(post) {
 	const payload = {
 		article: {
 			title: post.title,
-			body_markdown: appendBacklink(post.body, post.canonicalUrl),
+			body_markdown: appendBacklink(renderBodyForPlatform(post.rawBody, 'devto'), post.canonicalUrl),
 			published: true,
 			canonical_url: post.canonicalUrl,
 			description: post.description,
@@ -437,11 +470,12 @@ async function postToDevTo(post) {
 	if (syndicationImageUrl) payload.article.main_image = syndicationImageUrl;
 
 	if (dryRun) {
+		const devtoBody = renderBodyForPlatform(post.rawBody, 'devto');
 		console.log('  [dry-run] Dev.to:');
 		console.log(`    Title: ${post.title}`);
 		console.log(`    Canonical: ${post.canonicalUrl}`);
 		console.log(`    Tags: ${tags.join(', ')}`);
-		console.log(`    Body length: ${post.body.length} chars`);
+		console.log(`    Body length: ${devtoBody.length} chars`);
 		console.log(`    Cover: ${syndicationImageUrl ?? '(none)'}`);
 		return { platform: 'devto', dryRun: true };
 	}
@@ -486,8 +520,9 @@ async function postToHashnode(post) {
 	`;
 
 	const syndicationImageUrl = getSyndicationImageUrl(post.image);
+	const hashnodeBody = renderBodyForPlatform(post.rawBody, 'hashnode');
 	// Prepend cover image in body so Hashnode always shows it as thumbnail
-	const bodyWithCover = syndicationImageUrl ? `![cover](${syndicationImageUrl})\n\n${post.body}` : post.body;
+	const bodyWithCover = syndicationImageUrl ? `![cover](${syndicationImageUrl})\n\n${hashnodeBody}` : hashnodeBody;
 
 	const variables = {
 		input: {
@@ -508,7 +543,7 @@ async function postToHashnode(post) {
 		console.log(`    Title: ${post.title}`);
 		console.log(`    Original URL: ${post.canonicalUrl}`);
 		console.log(`    Tags: ${tags.map((t) => t.name).join(', ')}`);
-		console.log(`    Body length: ${post.body.length} chars`);
+		console.log(`    Body length: ${hashnodeBody.length} chars`);
 		console.log(`    Cover: ${syndicationImageUrl ?? '(none)'}`);
 		return { platform: 'hashnode', dryRun: true };
 	}
