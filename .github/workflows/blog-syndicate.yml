@@ -35,7 +35,10 @@ jobs:
       - name: Check for new blog posts
         id: check
         run: |
-          NEW_POSTS=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- 'portfolio/src/lib/posts/*.md' || true)
+          NEW_POSTS=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- \
+            'portfolio/src/lib/posts/*.md' \
+            'portfolio/src/lib/posts/*.mdx' \
+            'portfolio/src/lib/posts/*.svx' || true)
           if [ -z "$NEW_POSTS" ] && [ -z "${{ inputs.slug }}" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             echo "No new blog posts detected."

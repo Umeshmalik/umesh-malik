@@ -28,6 +28,7 @@ import { createHmac, randomBytes } from 'node:crypto';
 
 const SITE_URL = 'https://umesh-malik.com';
 const POSTS_DIR = 'portfolio/src/lib/posts';
+const POSSIBLE_POST_DIRS = ['portfolio/src/lib/posts', 'src/lib/posts'];
 const DEFAULT_COVER_IMAGE = '/blog/default-cover.jpg';
 const POST_EXTENSIONS = ['.md', '.mdx', '.svx'];
 
@@ -208,6 +209,22 @@ function resolveImage(imagePath) {
 	return DEFAULT_COVER_IMAGE;
 }
 
+/**
+ * External platforms are stricter with cover image formats.
+ * Prefer raster (jpg/png/webp). If frontmatter points to SVG, try png sibling.
+ */
+function resolveSyndicationImage(imagePath) {
+	const resolved = resolveImage(imagePath);
+	if (/\.(jpe?g|png|webp)$/i.test(resolved)) return resolved;
+
+	if (resolved.endsWith('.svg')) {
+		const pngSibling = resolved.replace(/\.svg$/i, '.png');
+		if (resolveImage(pngSibling) !== DEFAULT_COVER_IMAGE) return pngSibling;
+	}
+
+	return DEFAULT_COVER_IMAGE;
+}
+
 // ---------------------------------------------------------------------------
 // Git diff detection — only NEW markdown files (not edits)
 // ---------------------------------------------------------------------------
@@ -222,11 +239,20 @@ function getNewPostSlugs(beforeRef) {
 
 		if (!output) return [];
 
-		return output
+		const filePattern = new RegExp(
+			`^(?:${POSSIBLE_POST_DIRS.map((d) => d.replace(/\//g, '\\/')).join('|')})\\/(.+)\\.(md|mdx|svx)$`
+		);
+
+		const slugs = output
 			.split('\n')
 			.filter(Boolean)
-			.filter((f) => f.match(new RegExp(`^${POSTS_DIR}/(.+)\\.(md|mdx|svx)$`)))
-			.map((f) => f.match(new RegExp(`^${POSTS_DIR}/(.+)\\.(md|mdx|svx)$`))[1]);
+			.map((f) => {
+				const match = f.match(filePattern);
+				return match ? match[1] : null;
+			})
+			.filter(Boolean);
+
+		return Array.from(new Set(slugs));
 	} catch (e) {
 		console.warn(`[warn] git diff failed: ${e.message}`);
 		return [];
@@ -238,7 +264,7 @@ function getNewPostSlugs(beforeRef) {
 // ---------------------------------------------------------------------------
 
 function readPost(slug) {
-	const possibleDirs = ['portfolio/src/lib/posts', 'src/lib/posts'];
+	const possibleDirs = POSSIBLE_POST_DIRS;
 
 	for (const dir of possibleDirs) {
 		for (const ext of POST_EXTENSIONS) {
@@ -281,6 +307,8 @@ async function postToDevTo(post) {
 		.slice(0, 4)
 		.map((t) => t.toLowerCase().replace(/[^a-z0-9]/g, ''));
 
+	const syndicationImage = resolveSyndicationImage(post.image);
+
 	const payload = {
 		article: {
 			title: post.title,
@@ -289,7 +317,7 @@ async function postToDevTo(post) {
 			canonical_url: post.canonicalUrl,
 			description: post.description,
 			tags,
-			main_image: `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`
+			main_image: `${SITE_URL}${syndicationImage}`
 		}
 	};
 
@@ -299,7 +327,7 @@ async function postToDevTo(post) {
 		console.log(`    Canonical: ${post.canonicalUrl}`);
 		console.log(`    Tags: ${tags.join(', ')}`);
 		console.log(`    Body length: ${post.body.length} chars`);
-		console.log(`    Cover: ${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`);
+		console.log(`    Cover: ${SITE_URL}${syndicationImage}`);
 		return { platform: 'devto', dryRun: true };
 	}
 
@@ -355,7 +383,8 @@ async function postToHashnode(post) {
 		}
 	`;
 
-	const coverUrl = `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`;
+	const syndicationImage = resolveSyndicationImage(post.image);
+	const coverUrl = `${SITE_URL}${syndicationImage}`;
 	// Prepend cover image in body so Hashnode always shows it as thumbnail
 	const bodyWithCover = `![cover](${coverUrl})\n\n${post.body}`;
 
