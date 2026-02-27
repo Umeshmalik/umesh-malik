@@ -19,7 +19,7 @@ export const siteConfig = {
 		linkedin: 'https://linkedin.com/in/umesh-malik',
 		github: 'https://github.com/Umeshmalik'
 	},
-	ogImage: '/blog/default-cover.jpg',
+	ogImage: '/blog/default-cover.png',
 	logo: '/logo.svg',
 	copyright: (year: number) => `Copyright ${year} Umesh Malik`,
 	/** Static pages and their sitemap metadata */

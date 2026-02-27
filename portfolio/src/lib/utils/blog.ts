@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 import type { BlogPost, BlogCategory, BlogPostModule } from '$lib/types/blog';
 import { siteConfig } from '$lib/config/site';
 
-const DEFAULT_COVER_IMAGE = '/blog/default-cover.jpg';
+const DEFAULT_COVER_IMAGE = '/blog/default-cover.png';
 
 // Detect available blog images at build time via Vite glob
 const availableBlogImages = new Set(

@@ -30,7 +30,7 @@
       category: data.post.category,
       tags: data.post.tags,
       image: data.post.image,
-      ogImage: data.post.image,
+      ogImage: data.post.ogImage,
       imageAlt: data.post.imageAlt,
       readingTime: data.post.readingTime,
     }),
@@ -59,6 +59,7 @@
   description={data.post.description}
   keywords={data.post.keywords}
   image={data.post.image}
+  ogImage={data.post.ogImage}
   imageAlt={data.post.imageAlt || data.post.title}
   type="article"
   publishDate={data.post.publishDate}

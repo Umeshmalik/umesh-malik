@@ -12,6 +12,7 @@
     description?: string;
     keywords?: string;
     image?: string;
+    ogImage?: string;
     imageAlt?: string;
     type?: string;
     publishDate?: string;
@@ -24,6 +25,7 @@
     description = "Senior Frontend Engineer specializing in React, TypeScript, and modern web architecture. Building scalable systems at Expedia Group. 4+ years experience in fintech, automotive, and travel domains.",
     keywords = "Umesh Malik, Frontend Engineer, React Developer, TypeScript Expert, Senior Software Engineer, Web Developer, Gurugram, India, Expedia Group, SvelteKit, Next.js",
     image = `${siteConfig.url}${siteConfig.ogImage}`,
+    ogImage = "",
     imageAlt = "Umesh Malik - Senior Frontend Engineer",
     type = "website",
     publishDate = "",
@@ -40,29 +42,30 @@
   );
 
   const defaultOgImage = `${siteConfig.url}${siteConfig.ogImage}`;
+  const rawOgImage = $derived(ogImage || image);
 
   /** Ensure image URL is absolute for meta tags */
   const absoluteImage = $derived(
-    image.startsWith("http") ? image : `${siteConfig.url}${image}`,
+    rawOgImage.startsWith("http")
+      ? rawOgImage
+      : `${siteConfig.url}${rawOgImage}`,
   );
 
-  // Social platforms (LinkedIn, Facebook, X) don't support SVG.
-  // Auto-resolve SVG → PNG sibling; fall back to default JPEG only if no PNG exists.
-  const ogImage = $derived(
-    /\.(jpe?g|png|webp)$/i.test(absoluteImage)
+  // Keep OG image valid and absolute. If an unknown extension is passed, use site default.
+  const resolvedOgImage = $derived(
+    /\.(jpe?g|png|webp|svg)$/i.test(absoluteImage)
       ? absoluteImage
-      : absoluteImage.endsWith(".svg")
-        ? absoluteImage.replace(/\.svg$/, ".png")
-        : defaultOgImage,
+      : defaultOgImage,
   );
 
   function getImageMimeType(url: string): string {
+    if (url.endsWith(".svg")) return "image/svg+xml";
     if (url.endsWith(".png")) return "image/png";
     if (url.endsWith(".webp")) return "image/webp";
     return "image/jpeg";
   }
 
-  const ogImageType = $derived(getImageMimeType(ogImage));
+  const ogImageType = $derived(getImageMimeType(resolvedOgImage));
 
   const webPageSchema = $derived({
     "@type": "WebPage",
@@ -73,7 +76,7 @@
     isPartOf: { "@id": `${siteConfig.url}/#website` },
     primaryImageOfPage: {
       "@type": "ImageObject",
-      url: ogImage,
+      url: resolvedOgImage,
     },
     inLanguage: "en-US",
   });
@@ -134,9 +137,9 @@
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={ogImage} />
-  <meta property="og:image:url" content={ogImage} />
-  <meta property="og:image:secure_url" content={ogImage} />
+  <meta property="og:image" content={resolvedOgImage} />
+  <meta property="og:image:url" content={resolvedOgImage} />
+  <meta property="og:image:secure_url" content={resolvedOgImage} />
   <meta property="og:image:type" content={ogImageType} />
   <meta property="og:image:alt" content={imageAlt} />
   <meta property="og:image:width" content="1200" />
@@ -159,7 +162,7 @@
   <meta name="twitter:url" content={canonicalUrl} />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={ogImage} />
+  <meta name="twitter:image" content={resolvedOgImage} />
   <meta name="twitter:image:alt" content={imageAlt} />
   <meta name="twitter:creator" content="@lumeshmalik" />
   <meta name="twitter:site" content="@lumeshmalik" />
