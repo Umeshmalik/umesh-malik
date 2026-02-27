@@ -27,7 +27,7 @@ import { resolve } from 'node:path';
 // ---------------------------------------------------------------------------
 
 const SITE_URL = 'https://umesh-malik.com';
-const DEFAULT_COVER_IMAGE = '/blog/default-cover.jpg';
+const DEFAULT_COVER_IMAGE = '';
 const POST_EXTENSIONS = ['.md', '.mdx', '.svx'];
 
 const DEV_TO_API_KEY = process.env.DEV_TO_API_KEY || '';
@@ -127,10 +127,16 @@ function parseFrontmatter(raw) {
 // ---------------------------------------------------------------------------
 
 function makeAbsoluteUrls(markdown) {
-	return markdown.replace(
+	let output = markdown.replace(
 		/(\]\()(\/(.*?))\)/g,
 		(_, prefix, path) => `${prefix}${SITE_URL}${path})`
 	);
+
+	output = output.replace(/\b(src|href)=["']\/([^"']+)["']/g, (_, attr, path) => {
+		return `${attr}="${SITE_URL}/${path}"`;
+	});
+
+	return output;
 }
 
 function getAttr(attrs, name) {
@@ -174,6 +180,21 @@ function transformMdxForSyndication(markdown) {
 	// Remove any remaining PascalCase component tags if present
 	output = output.replace(/<\/?[A-Z][A-Za-z0-9]*\b[^>]*\/?>/g, '');
 
+	// Convert author-only external link placeholders into real markdown links
+	output = output.replace(
+		/\[EXTERNAL LINK:\s*(.*?)\s*→\s*(https?:\/\/[^\]\s]+)\s*\]/g,
+		'- [$1]($2)'
+	);
+
+	// Convert internal-link placeholders to a working blog link
+	output = output.replace(
+		/\[INTERNAL LINK:\s*(.*?)\s*→\s*([^\]]+)\]/g,
+		'- [$1](' + SITE_URL + '/blog)'
+	);
+
+	// Dev.to commonly has issues rendering remote SVG embeds; keep them as clickable links
+	output = output.replace(/!\[([^\]]*)\]\(([^)\s]+\.svg)\)/gi, '[$1]($2)');
+
 	// Prevent large blank gaps after replacements
 	output = output.replace(/\n{3,}/g, '\n\n');
 
@@ -199,6 +220,23 @@ function resolveImage(imagePath) {
 	}
 
 	return DEFAULT_COVER_IMAGE;
+}
+
+function resolveSyndicationImage(imagePath) {
+	const resolved = resolveImage(imagePath);
+	if (/\.(jpe?g|png|webp)$/i.test(resolved)) return resolved;
+
+	if (resolved.endsWith('.svg')) {
+		const pngSibling = resolved.replace(/\.svg$/i, '.png');
+		if (resolveImage(pngSibling) !== DEFAULT_COVER_IMAGE) return pngSibling;
+	}
+
+	return '';
+}
+
+function getSyndicationImageUrl(imagePath) {
+	const path = resolveSyndicationImage(imagePath);
+	return path ? `${SITE_URL}${path}` : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -323,17 +361,21 @@ function buildDevToPayload(post) {
 		.slice(0, 4)
 		.map((t) => t.toLowerCase().replace(/[^a-z0-9]/g, ''));
 
-	return {
+	const syndicationImageUrl = getSyndicationImageUrl(post.image);
+
+	const payload = {
 		article: {
 			title: post.title,
 			body_markdown: appendBacklink(post.body, post.canonicalUrl),
 			published: true,
 			canonical_url: post.canonicalUrl,
 			description: post.description,
-			tags,
-			main_image: `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`
+			tags
 		}
 	};
+
+	if (syndicationImageUrl) payload.article.main_image = syndicationImageUrl;
+	return payload;
 }
 
 // ---------------------------------------------------------------------------
@@ -556,18 +598,23 @@ function buildHashnodeInput(post) {
 		name: t
 	}));
 
-	const coverUrl = `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`;
+	const syndicationImageUrl = getSyndicationImageUrl(post.image);
 	// Prepend cover image in body so Hashnode always shows it as thumbnail
-	const bodyWithCover = `![cover](${coverUrl})\n\n${post.body}`;
+	const bodyWithCover = syndicationImageUrl ? `![cover](${syndicationImageUrl})\n\n${post.body}` : post.body;
 
-	return {
+	const input = {
 		title: post.title,
 		contentMarkdown: appendBacklink(bodyWithCover, post.canonicalUrl),
 		tags,
 		originalArticleURL: post.canonicalUrl,
-		coverImageOptions: { coverImageURL: coverUrl },
 		...(post.publishDate ? { publishedAt: new Date(post.publishDate).toISOString() } : {})
 	};
+
+	if (syndicationImageUrl) {
+		input.coverImageOptions = { coverImageURL: syndicationImageUrl };
+	}
+
+	return input;
 }
 
 // ---------------------------------------------------------------------------
@@ -705,8 +752,8 @@ async function syncHashnode(posts) {
 			}
 		} else {
 			// Compare content — Hashnode body includes prepended cover image + backlink
-			const coverUrl = `${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`;
-			const bodyWithCover = `![cover](${coverUrl})\n\n${post.body}`;
+			const syndicationImageUrl = getSyndicationImageUrl(post.image);
+			const bodyWithCover = syndicationImageUrl ? `![cover](${syndicationImageUrl})\n\n${post.body}` : post.body;
 			const localBody = normalizeContent(appendBacklink(bodyWithCover, post.canonicalUrl));
 			const remoteBody = normalizeContent(match.content?.markdown || '');
 			const bodyChanged = localBody !== remoteBody;

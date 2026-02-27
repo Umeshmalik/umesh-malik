@@ -29,7 +29,7 @@ import { createHmac, randomBytes } from 'node:crypto';
 const SITE_URL = 'https://umesh-malik.com';
 const POSTS_DIR = 'portfolio/src/lib/posts';
 const POSSIBLE_POST_DIRS = ['portfolio/src/lib/posts', 'src/lib/posts'];
-const DEFAULT_COVER_IMAGE = '/blog/default-cover.jpg';
+const DEFAULT_COVER_IMAGE = '';
 const POST_EXTENSIONS = ['.md', '.mdx', '.svx'];
 
 const DEV_TO_API_KEY = process.env.DEV_TO_API_KEY || '';
@@ -136,10 +136,17 @@ function parseFrontmatter(raw) {
 function makeAbsoluteUrls(markdown) {
 	// Convert relative image/link paths to absolute URLs
 	// Handles: ![alt](/blog/img.jpg) and [text](/path)
-	return markdown.replace(
+	let output = markdown.replace(
 		/(\]\()(\/(.*?))\)/g,
 		(_, prefix, path) => `${prefix}${SITE_URL}${path})`
 	);
+
+	// Convert raw HTML src/href="/..." URLs to absolute for external renderers
+	output = output.replace(/\b(src|href)=["']\/([^"']+)["']/g, (_, attr, path) => {
+		return `${attr}="${SITE_URL}/${path}"`;
+	});
+
+	return output;
 }
 
 function getAttr(attrs, name) {
@@ -183,6 +190,21 @@ function transformMdxForSyndication(markdown) {
 	// Remove any remaining PascalCase component tags if present
 	output = output.replace(/<\/?[A-Z][A-Za-z0-9]*\b[^>]*\/?>/g, '');
 
+	// Convert author-only external link placeholders into real markdown links
+	output = output.replace(
+		/\[EXTERNAL LINK:\s*(.*?)\s*→\s*(https?:\/\/[^\]\s]+)\s*\]/g,
+		'- [$1]($2)'
+	);
+
+	// Convert internal-link placeholders to working links on the blog index
+	output = output.replace(
+		/\[INTERNAL LINK:\s*(.*?)\s*→\s*([^\]]+)\]/g,
+		'- [$1](' + SITE_URL + '/blog)'
+	);
+
+	// Dev.to commonly has issues rendering remote SVG embeds; keep them as clickable links
+	output = output.replace(/!\[([^\]]*)\]\(([^)\s]+\.svg)\)/gi, '[$1]($2)');
+
 	// Prevent large blank gaps after replacements
 	output = output.replace(/\n{3,}/g, '\n\n');
 
@@ -222,7 +244,12 @@ function resolveSyndicationImage(imagePath) {
 		if (resolveImage(pngSibling) !== DEFAULT_COVER_IMAGE) return pngSibling;
 	}
 
-	return DEFAULT_COVER_IMAGE;
+	return '';
+}
+
+function getSyndicationImageUrl(imagePath) {
+	const path = resolveSyndicationImage(imagePath);
+	return path ? `${SITE_URL}${path}` : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -307,7 +334,7 @@ async function postToDevTo(post) {
 		.slice(0, 4)
 		.map((t) => t.toLowerCase().replace(/[^a-z0-9]/g, ''));
 
-	const syndicationImage = resolveSyndicationImage(post.image);
+	const syndicationImageUrl = getSyndicationImageUrl(post.image);
 
 	const payload = {
 		article: {
@@ -316,10 +343,10 @@ async function postToDevTo(post) {
 			published: true,
 			canonical_url: post.canonicalUrl,
 			description: post.description,
-			tags,
-			main_image: `${SITE_URL}${syndicationImage}`
+			tags
 		}
 	};
+	if (syndicationImageUrl) payload.article.main_image = syndicationImageUrl;
 
 	if (dryRun) {
 		console.log('  [dry-run] Dev.to:');
@@ -327,7 +354,7 @@ async function postToDevTo(post) {
 		console.log(`    Canonical: ${post.canonicalUrl}`);
 		console.log(`    Tags: ${tags.join(', ')}`);
 		console.log(`    Body length: ${post.body.length} chars`);
-		console.log(`    Cover: ${SITE_URL}${syndicationImage}`);
+		console.log(`    Cover: ${syndicationImageUrl ?? '(none)'}`);
 		return { platform: 'devto', dryRun: true };
 	}
 
@@ -383,10 +410,9 @@ async function postToHashnode(post) {
 		}
 	`;
 
-	const syndicationImage = resolveSyndicationImage(post.image);
-	const coverUrl = `${SITE_URL}${syndicationImage}`;
+	const syndicationImageUrl = getSyndicationImageUrl(post.image);
 	// Prepend cover image in body so Hashnode always shows it as thumbnail
-	const bodyWithCover = `![cover](${coverUrl})\n\n${post.body}`;
+	const bodyWithCover = syndicationImageUrl ? `![cover](${syndicationImageUrl})\n\n${post.body}` : post.body;
 
 	const variables = {
 		input: {
@@ -395,10 +421,12 @@ async function postToHashnode(post) {
 			publicationId: HASHNODE_PUBLICATION_ID,
 			tags,
 			originalArticleURL: post.canonicalUrl,
-			coverImageOptions: { coverImageURL: coverUrl },
 			...(post.publishDate ? { publishedAt: new Date(post.publishDate).toISOString() } : {})
 		}
 	};
+	if (syndicationImageUrl) {
+		variables.input.coverImageOptions = { coverImageURL: syndicationImageUrl };
+	}
 
 	if (dryRun) {
 		console.log('  [dry-run] Hashnode:');
@@ -406,7 +434,7 @@ async function postToHashnode(post) {
 		console.log(`    Original URL: ${post.canonicalUrl}`);
 		console.log(`    Tags: ${tags.map((t) => t.name).join(', ')}`);
 		console.log(`    Body length: ${post.body.length} chars`);
-		console.log(`    Cover: ${SITE_URL}${post.image || DEFAULT_COVER_IMAGE}`);
+		console.log(`    Cover: ${syndicationImageUrl ?? '(none)'}`);
 		return { platform: 'hashnode', dryRun: true };
 	}
 
