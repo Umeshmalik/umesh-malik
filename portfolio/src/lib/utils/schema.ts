@@ -12,7 +12,7 @@ export const personSchema = {
 	alternateName: ['Umesh Kumar Malik', 'Lucky Umesh Malik'],
 	jobTitle: S.author.jobTitle,
 	description:
-		'Senior Frontend Engineer specializing in React, TypeScript, and modern web architecture with 4+ years of experience building scalable applications.',
+		'Software Engineer specializing in React, TypeScript, and modern web architecture with 4+ years of experience building scalable applications.',
 	image: `${baseUrl}/images/umesh-malik.jpg`,
 	url: baseUrl,
 	sameAs: [S.author.linkedin, S.author.github, 'https://x.com/lumeshmalik'],
@@ -40,6 +40,17 @@ export const personSchema = {
 		'TypeScript',
 		'JavaScript',
 		'Frontend Development',
+		'Backend Development',
+		'Full Stack Development',
+		'Database Development',
+		'API Development',
+		'Testing',
+		'DevOps',
+		'CI/CD',
+		'Docker',
+		'Kubernetes',
+		'Cloud Computing',
+		'Cloudflare',
 		'Web Development',
 		'SvelteKit',
 		'Next.js',
@@ -53,12 +64,12 @@ export const personSchema = {
 	award: 'Performer of the Quarter - Think & Learn Pvt. Ltd. (January 2022)',
 	hasOccupation: {
 		'@type': 'Occupation',
-		name: 'Frontend Engineer',
+		name: 'Software Engineer',
 		occupationLocation: {
 			'@type': 'Country',
 			name: 'India'
 		},
-		skills: 'React, TypeScript, JavaScript, Next.js, SvelteKit, Vue.js, Node.js, TailwindCSS'
+		skills: 'React, TypeScript, JavaScript, Next.js, SvelteKit, Vue.js, Node.js, TailwindCSS, Express.js, MongoDB, PostgreSQL'
 	}
 };
 

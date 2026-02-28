@@ -13,7 +13,7 @@
 </script>
 
 <SEO
-  title="Projects - Umesh Malik | Frontend Engineering Work"
+  title="Projects - Umesh Malik | Software Engineering Work"
   description="Explore Umesh Malik's engineering projects including enterprise workflow platforms, finance modules, and payment systems built with React and TypeScript."
 />
 
@@ -49,7 +49,9 @@
           <p class="label-mono text-brand-text-muted">
             {project.company}
           </p>
-          <h2 class="mt-3 text-2xl font-medium text-brand-text-primary">{project.title}</h2>
+          <h2 class="mt-3 text-2xl font-medium text-brand-text-primary">
+            {project.title}
+          </h2>
           {#if project.featured}
             <span
               class="label-mono mt-3 inline-block border border-brand-accent px-2 py-1 text-brand-accent"

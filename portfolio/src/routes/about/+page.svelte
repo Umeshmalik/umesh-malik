@@ -55,7 +55,7 @@
       {#if visibleSections["who"]}
         <h2 in:fly={{ y: 20, duration: 500 }}>Who I Am</h2>
         <p in:fly={{ y: 20, duration: 500, delay: 100 }}>
-          I'm <strong>Umesh Malik</strong>, a Senior Frontend Engineer based in
+          I'm <strong>Umesh Malik</strong>, a Software Engineer based in
           <strong>Gurugram, Haryana, India</strong>. I specialize in building
           scalable, high-performance web applications with a focus on React,
           TypeScript, and modern web architecture.

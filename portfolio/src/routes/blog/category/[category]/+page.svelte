@@ -23,7 +23,7 @@
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: `${data.category} Articles`,
-    description: `Read ${data.category} articles and tutorials by Umesh Malik, Senior Frontend Engineer at Expedia Group. In-depth guides, best practices, and practical tips.`,
+    description: `Read ${data.category} articles and tutorials by Umesh Malik, Software Engineer at Expedia Group. In-depth guides, best practices, and practical tips.`,
     url: `${siteConfig.url}/blog/category/${slugify(data.category)}`,
     isPartOf: {
       "@type": "Blog",
@@ -63,7 +63,9 @@
         >
       </li>
       <li class="mx-1">/</li>
-      <li class="text-brand-text-primary" aria-current="page">{data.category}</li>
+      <li class="text-brand-text-primary" aria-current="page">
+        {data.category}
+      </li>
     </ol>
   </nav>
 

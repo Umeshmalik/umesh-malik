@@ -24,7 +24,9 @@
   <div class="mx-auto max-w-[1440px] px-6 py-20 lg:px-12">
     <div class="grid gap-12 md:grid-cols-3">
       <div>
-        <h2 class="mb-4 flex items-center gap-2 text-lg font-medium text-brand-text-primary">
+        <h2
+          class="mb-4 flex items-center gap-2 text-lg font-medium text-brand-text-primary"
+        >
           <svg
             width="24"
             height="24"
@@ -70,7 +72,7 @@
           Umesh Malik<span class="text-brand-accent">.</span>
         </h2>
         <p class="body-medium text-brand-text-secondary">
-          Senior Frontend Engineer at Expedia Group. Building scalable web
+          Full Stack Engineer at Expedia Group. Building scalable web
           applications with React, TypeScript, and modern architecture.
         </p>
       </div>

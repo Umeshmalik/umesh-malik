@@ -21,7 +21,7 @@
 </script>
 
 <SEO
-  title="Resume - Umesh Malik | Senior Frontend Engineer"
+  title="Resume - Umesh Malik | Software Development Engineer 2"
   description="View Umesh Malik's professional resume. 4+ years of software engineering experience at Expedia Group, Tekion Corp, and BYJU'S with expertise in React and TypeScript."
 />
 
@@ -45,7 +45,7 @@
     <div>
       <h1 class="section-title mb-4 text-brand-text-primary">Umesh Malik</h1>
       <p class="body-large text-brand-text-secondary">
-        Senior Frontend Engineer
+        Software Development Engineer 2
       </p>
       <p class="mt-1 text-sm text-brand-text-muted">Gurugram, Haryana, India</p>
     </div>
@@ -80,7 +80,9 @@
   <section
     class="mb-16"
     use:inview={{ threshold: 0.1 }}
-    oninview_change={(e) => { if (e.detail.inView) expVisible = true; }}
+    oninview_change={(e) => {
+      if (e.detail.inView) expVisible = true;
+    }}
   >
     <h2
       class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-brand-text-primary"
@@ -90,8 +92,13 @@
     {#if expVisible}
       <div class="space-y-10">
         {#each experience as job, i}
-          <div class="border-l-2 border-brand-accent pl-6" in:fly={{ y: 30, duration: 500, delay: i * 120 }}>
-            <h3 class="text-lg font-medium text-brand-text-primary">{job.role}</h3>
+          <div
+            class="border-l-2 border-brand-accent pl-6"
+            in:fly={{ y: 30, duration: 500, delay: i * 120 }}
+          >
+            <h3 class="text-lg font-medium text-brand-text-primary">
+              {job.role}
+            </h3>
             <p class="label-mono mt-1 text-brand-accent">{job.company}</p>
             <p class="mt-2 text-sm text-brand-text-muted">{job.period}</p>
             <p class="text-sm text-brand-text-muted">{job.location}</p>
@@ -117,7 +124,9 @@
   <section
     class="mb-16"
     use:inview={{ threshold: 0.2 }}
-    oninview_change={(e) => { if (e.detail.inView) eduVisible = true; }}
+    oninview_change={(e) => {
+      if (e.detail.inView) eduVisible = true;
+    }}
   >
     <h2
       class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-brand-text-primary"
@@ -127,7 +136,10 @@
     {#if eduVisible}
       <div class="space-y-6">
         {#each education as edu, i}
-          <div class="border-l-2 border-brand-accent pl-6" in:fly={{ y: 30, duration: 500, delay: i * 120 }}>
+          <div
+            class="border-l-2 border-brand-accent pl-6"
+            in:fly={{ y: 30, duration: 500, delay: i * 120 }}
+          >
             <h3 class="font-medium text-brand-text-primary">{edu.degree}</h3>
             <p class="label-mono mt-1 text-brand-accent">{edu.field}</p>
             <p class="mt-2 text-sm text-brand-text-secondary">
@@ -143,7 +155,9 @@
   <!-- Skills -->
   <section
     use:inview={{ threshold: 0.2 }}
-    oninview_change={(e) => { if (e.detail.inView) skillsVisible = true; }}
+    oninview_change={(e) => {
+      if (e.detail.inView) skillsVisible = true;
+    }}
   >
     <h2
       class="mb-10 border-b border-brand-accent pb-3 text-2xl font-medium text-brand-text-primary"

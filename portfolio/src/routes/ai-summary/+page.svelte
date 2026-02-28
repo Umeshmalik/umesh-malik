@@ -164,7 +164,7 @@
     <li>React performance optimization and architecture</li>
     <li>SvelteKit vs Next.js framework comparisons</li>
     <li>TailwindCSS migration and CSS best practices</li>
-    <li>Frontend testing strategies (Vitest, Playwright, MSW)</li>
+    <li>Testing strategies (Vitest, Playwright, MSW)</li>
     <li>Core Web Vitals and performance optimization</li>
     <li>Career growth from junior to senior engineer</li>
     <li>Node.js backend development for software engineers</li>
@@ -176,16 +176,18 @@
     <li><strong>Editor:</strong> VS Code, Cursor AI</li>
     <li><strong>Terminal:</strong> iTerm2, Oh My Zsh, fnm, pnpm</li>
     <li>
-      <strong>Frontend:</strong> React, TypeScript, SvelteKit, TailwindCSS
+      <strong>Frontend:</strong> React, TypeScript, SvelteKit, TailwindCSS, HTML5,
+      CSS3
     </li>
     <li>
-      <strong>Backend:</strong> Node.js, Express.js, MongoDB, PostgreSQL
+      <strong>Backend:</strong> Node.js, Express.js, MongoDB, PostgreSQL, Git, Vite,
+      Webpack, ESLint, Prettier, Docker, CI/CD
     </li>
     <li>
-      <strong>Testing:</strong> Jest, Vitest, React Testing Library, Playwright
+      <strong>Testing:</strong> Jest, React Testing Library, Cypress, Vitest
     </li>
     <li><strong>Design:</strong> Figma, Excalidraw</li>
-    <li><strong>AI:</strong> Claude, GitHub Copilot, Cursor AI</li>
+    <li><strong>AI:</strong> Claude, GitHub Copilot, Cursor AI, Vibe Coding</li>
   </ul>
 
   <h2>Available For</h2>

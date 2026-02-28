@@ -5,15 +5,15 @@
 export const siteConfig = {
 	url: 'https://umesh-malik.com',
 	alternateUrl: 'https://umesh-malik.in',
-	title: 'Umesh Malik - Senior Frontend Engineer',
+	title: 'Umesh Malik - Software Engineer',
 	description:
-		'Portfolio and professional website of Umesh Malik, Senior Frontend Engineer at Expedia Group',
+		'Portfolio and professional website of Umesh Malik, Software Engineer at Expedia Group',
 	language: 'en-US',
 	locale: 'en_US',
 	author: {
 		name: 'Umesh Malik',
 		email: 'ask@umesh-malik.com',
-		jobTitle: 'Senior Frontend Engineer',
+		jobTitle: 'Software Engineer',
 		company: 'Expedia Group',
 		x: '@lumeshmalik',
 		linkedin: 'https://linkedin.com/in/umesh-malik',

@@ -167,8 +167,8 @@
         Written by Umesh Malik
       </h2>
       <p class="body-medium mb-3 text-brand-text-secondary">
-        Senior Frontend Engineer at Expedia Group. Passionate about React,
-        TypeScript, and building scalable web applications.
+        Software Engineer at Expedia Group. Passionate about React, TypeScript,
+        and building scalable web applications.
       </p>
       <div class="flex gap-3">
         <a

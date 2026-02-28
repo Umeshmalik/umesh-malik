@@ -1,45 +1,50 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#C09E5A" stop-opacity="0.08"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#C09E5A" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
     </radialGradient>
   </defs>
 
   <!-- Background -->
-  <rect width="1200" height="630" fill="#000000"/>
+  <rect width="1200" height="630" fill="#000000" />
 
   <!-- Subtle gold radial glow -->
-  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow)" />
 
   <!-- Thin gold border -->
-  <rect x="24" y="24" width="1152" height="582" rx="2" fill="none" stroke="#C09E5A" stroke-opacity="0.2" stroke-width="1"/>
+  <rect x="24" y="24" width="1152" height="582" rx="2" fill="none" stroke="#C09E5A" stroke-opacity="0.2"
+    stroke-width="1" />
 
   <!-- Corner brackets (large, decorative) -->
-  <path d="M48 120 L48 48 L120 48" fill="none" stroke="#C09E5A" stroke-width="2" stroke-linecap="square"/>
-  <path d="M1080 48 L1152 48 L1152 120" fill="none" stroke="#C09E5A" stroke-width="2" stroke-linecap="square"/>
-  <path d="M1152 510 L1152 582 L1080 582" fill="none" stroke="#C09E5A" stroke-width="2" stroke-linecap="square"/>
-  <path d="M120 582 L48 582 L48 510" fill="none" stroke="#C09E5A" stroke-width="2" stroke-linecap="square"/>
+  <path d="M48 120 L48 48 L120 48" fill="none" stroke="#C09E5A" stroke-width="2" stroke-linecap="square" />
+  <path d="M1080 48 L1152 48 L1152 120" fill="none" stroke="#C09E5A" stroke-width="2" stroke-linecap="square" />
+  <path d="M1152 510 L1152 582 L1080 582" fill="none" stroke="#C09E5A" stroke-width="2" stroke-linecap="square" />
+  <path d="M120 582 L48 582 L48 510" fill="none" stroke="#C09E5A" stroke-width="2" stroke-linecap="square" />
 
   <!-- Logo mark: U. in small corner brackets -->
   <g transform="translate(540, 160)">
-    <path d="M0 30 L0 0 L30 0" fill="none" stroke="#C09E5A" stroke-width="2.5" stroke-linecap="square"/>
-    <path d="M90 0 L120 0 L120 30" fill="none" stroke="#C09E5A" stroke-width="2.5" stroke-linecap="square"/>
-    <path d="M120 90 L120 120 L90 120" fill="none" stroke="#C09E5A" stroke-width="2.5" stroke-linecap="square"/>
-    <path d="M30 120 L0 120 L0 90" fill="none" stroke="#C09E5A" stroke-width="2.5" stroke-linecap="square"/>
-    <text x="32" y="90" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="72" fill="#ffffff">U</text>
-    <circle cx="92" cy="86" r="8" fill="#C09E5A"/>
+    <path d="M0 30 L0 0 L30 0" fill="none" stroke="#C09E5A" stroke-width="2.5" stroke-linecap="square" />
+    <path d="M90 0 L120 0 L120 30" fill="none" stroke="#C09E5A" stroke-width="2.5" stroke-linecap="square" />
+    <path d="M120 90 L120 120 L90 120" fill="none" stroke="#C09E5A" stroke-width="2.5" stroke-linecap="square" />
+    <path d="M30 120 L0 120 L0 90" fill="none" stroke="#C09E5A" stroke-width="2.5" stroke-linecap="square" />
+    <text x="32" y="90" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="72"
+      fill="#ffffff">U</text>
+    <circle cx="92" cy="86" r="8" fill="#C09E5A" />
   </g>
 
   <!-- Name -->
-  <text x="600" y="360" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="48" letter-spacing="-1" fill="#ffffff">Umesh Malik</text>
+  <text x="600" y="360" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="48"
+    letter-spacing="-1" fill="#ffffff">Umesh Malik</text>
 
   <!-- Title -->
-  <text x="600" y="410" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="400" font-size="16" letter-spacing="4" text-transform="uppercase" fill="#C09E5A">SENIOR FRONTEND ENGINEER</text>
+  <text x="600" y="410" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="400" font-size="16"
+    letter-spacing="4" text-transform="uppercase" fill="#C09E5A">SOFTWARE DEVELOPMENT ENGINEER</text>
 
   <!-- Separator line -->
-  <line x1="520" y1="440" x2="680" y2="440" stroke="#C09E5A" stroke-opacity="0.3" stroke-width="1"/>
+  <line x1="520" y1="440" x2="680" y2="440" stroke="#C09E5A" stroke-opacity="0.3" stroke-width="1" />
 
   <!-- URL -->
-  <text x="600" y="480" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="400" font-size="14" letter-spacing="2" fill="rgba(255,255,255,0.4)">UMESH-MALIK.COM</text>
+  <text x="600" y="480" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="400" font-size="14"
+    letter-spacing="2" fill="rgba(255,255,255,0.4)">UMESH-MALIK.COM</text>
 </svg>

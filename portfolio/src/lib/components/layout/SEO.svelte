@@ -21,12 +21,12 @@
   }
 
   let {
-    title = "Umesh Malik | Senior Frontend Engineer at Expedia Group",
-    description = "Senior Frontend Engineer specializing in React, TypeScript, and modern web architecture. Building scalable systems at Expedia Group. 4+ years experience in fintech, automotive, and travel domains.",
-    keywords = "Umesh Malik, Frontend Engineer, React Developer, TypeScript Expert, Senior Software Engineer, Web Developer, Gurugram, India, Expedia Group, SvelteKit, Next.js",
+    title = "Umesh Malik | Software Engineer at Expedia Group",
+    description = "Full Stack Engineer specializing in React, TypeScript, and modern web architecture. Building scalable systems at Expedia Group. 4+ years experience in fintech, automotive, and travel domains.",
+    keywords = "Umesh Malik, Software Engineer, Frontend Engineer, Full Stack Engineer, Backend Engineer, React Developer, TypeScript Expert, Senior Software Engineer, Web Developer, Gurugram, India, Expedia Group, SvelteKit, Next.js",
     image = `${siteConfig.url}${siteConfig.ogImage}`,
     ogImage = "",
-    imageAlt = "Umesh Malik - Senior Frontend Engineer",
+    imageAlt = "Umesh Malik - Software Engineer",
     type = "website",
     publishDate = "",
     modifiedDate = "",
